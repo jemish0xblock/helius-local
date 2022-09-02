@@ -1,0 +1,177 @@
+.h_card_wrapper {
+  padding: 30px;
+  border-top: 0.5px solid @gray-color;
+
+  display: flex;
+  .user_icon {
+    width: 60px;
+    height: 60px;
+    border: 2px solid #ffffff;
+    position: relative;
+    margin-right: 21px;
+    &:after {
+      content: " ";
+      background: #389b48;
+      border: 2px solid white;
+      border-radius: 5px;
+      position: absolute;
+      // bottom: 2px;
+      // right: 0;
+      bottom: 0px;
+      right: -2px;
+      height: 10px;
+      width: 10px;
+    }
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 100%;
+    }
+  }
+
+  .h_user_content {
+    width: 100%;
+    .h_user_name {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 24px;
+      color: @primary-color;
+      display: flex;
+      align-items: center;
+      .h_name {
+        cursor: pointer;
+      }
+      .h_verified_svg {
+        margin: auto 10px;
+      }
+      .h_user_available_main {
+        display: flex;
+        align-items: center;
+        color: @primary-color;
+        border: 0.5px solid @primary-color;
+        border-radius: 3px;
+        padding: 2px 3px;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 16px;
+        i {
+          margin-right: 3px;
+          height: 6px;
+          svg {
+            width: 100%;
+            height: 100%;
+            display: flex;
+          }
+        }
+      }
+    }
+
+    .h_user_description {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      .h_user_roles {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 24px;
+        color: @gray-color5;
+      }
+      .h_user_actions {
+        display: flex;
+        align-items: center;
+        .h_user_rated {
+          display: flex;
+          align-items: center;
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 22px;
+          color: rgba(0, 0, 0, 0.85);
+          i {
+            height: 15px;
+            margin-right: 5px;
+          }
+          &.h_user_rising_star {
+            i {
+              svg {
+                g {
+                  path {
+                    fill: @success-color;
+                  }
+                }
+              }
+            }
+          }
+          &.h_user_top_rated {
+            i {
+              svg {
+                g {
+                  path {
+                    fill: @primary-color5;
+                  }
+                }
+              }
+            }
+          }
+        }
+        .h_saved {
+          display: flex;
+          cursor: pointer;
+          margin: auto 24px;
+          i {
+            height: 20px;
+          }
+        }
+        .h_action_btn {
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 22px;
+        }
+      }
+    }
+    .h_user_work {
+      color: @primary-color;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 22px;
+      margin-bottom: 10px;
+    }
+    .h_user_bio {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 22px;
+      color: @font-color1;
+      margin-bottom: 8px;
+    }
+    .h_user_skills_main {
+      display: flex;
+      align-items: center;
+      list-style: none;
+      margin-top: 8px;
+      padding: unset;
+      .h_skill {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 2px 8px;
+        background: #f5f5f5;
+        border: 1px solid #f0f0f0;
+        border-radius: 3px;
+        margin-right: 8px;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 20px;
+      }
+    }
+    .h_user_review_main {
+      display: flex;
+      align-items: center;
+      .h_total_review_count {
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 12px;
+        color: @gray-color;
+      }
+    }
+  }
+}

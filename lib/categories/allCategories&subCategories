@@ -1,0 +1,410 @@
+{
+  "name": "default",
+  "groups": [
+    {
+      "uid": "531770282584862721",
+      "name": "Accounting \u0026 Consulting",
+      "categories": [
+        {
+          "uid": "531770282601639943",
+          "name": "Accounting \u0026 Bookkeeping",
+          "slug": null
+        },
+        {
+          "uid": "531770282601639945",
+          "name": "Financial Planning",
+          "slug": null
+        },
+        {
+          "uid": "531770282601639944",
+          "name": "Management Consulting \u0026 Analysis",
+          "slug": null
+        },
+        {
+          "uid": "531770282601639947",
+          "name": "Other - Accounting \u0026 Consulting",
+          "slug": null
+        },
+        {
+          "uid": "1534904461833879552",
+          "name": "Personal \u0026 Professional Coaching",
+          "slug": null
+        },
+        {
+          "uid": "531770282601639946",
+          "name": "Recruiting \u0026 Human Resources",
+          "slug": null
+        }
+      ],
+      "slug": null
+    },
+    {
+      "uid": "531770282580668416",
+      "name": "Admin Support",
+      "categories": [
+        {
+          "uid": "531770282584862724",
+          "name": "Data Entry \u0026 Transcription Services",
+          "slug": null
+        },
+        {
+          "uid": "531770282584862726",
+          "name": "Market Research \u0026 Product Reviews",
+          "slug": null
+        },
+        {
+          "uid": "531770282584862728",
+          "name": "Project Management",
+          "slug": null
+        },
+        {
+          "uid": "531770282584862725",
+          "name": "Virtual Assistance",
+          "slug": null
+        }
+      ],
+      "slug": null
+    },
+    {
+      "uid": "531770282580668417",
+      "name": "Customer Service",
+      "categories": [
+        {
+          "uid": "1484275072572772352",
+          "name": "Community Management \u0026 Tagging",
+          "slug": null
+        },
+        {
+          "uid": "531770282584862730",
+          "name": "Customer Experience \u0026 Tech Support",
+          "slug": null
+        }
+      ],
+      "slug": null
+    },
+    {
+      "uid": "531770282580668420",
+      "name": "Data Science \u0026 Analytics",
+      "categories": [
+        {
+          "uid": "531770282593251329",
+          "name": "AI \u0026 Machine Learning",
+          "slug": null
+        },
+        {
+          "uid": "531770282593251330",
+          "name": "Data Analysis \u0026 Testing",
+          "slug": null
+        },
+        {
+          "uid": "531770282589057039",
+          "name": "Data Design \u0026 Visualization",
+          "slug": null
+        },
+        {
+          "uid": "531770282593251331",
+          "name": "Data Extraction\/ETL",
+          "slug": null
+        },
+        {
+          "uid": "531770282589057038",
+          "name": "Data Mining \u0026 Management",
+          "slug": null
+        }
+      ],
+      "slug": null
+    },
+    {
+      "uid": "531770282580668421",
+      "name": "Design \u0026 Creative",
+      "categories": [
+        {
+          "uid": "531770282593251335",
+          "name": "Art \u0026 Illustration",
+          "slug": null
+        },
+        {
+          "uid": "531770282593251341",
+          "name": "Audio \u0026 Music Production",
+          "slug": null
+        },
+        {
+          "uid": "1044578476142100480",
+          "name": "Branding \u0026 Logo Design",
+          "slug": null
+        },
+        {
+          "uid": "531770282593251334",
+          "name": "Graphic, Editorial \u0026 Presentation Design",
+          "slug": null
+        },
+        {
+          "uid": "1356688560628174848",
+          "name": "NFT, AR\/VR \u0026 Game Art",
+          "slug": null
+        },
+        {
+          "uid": "1356688565288046592",
+          "name": "Performing Arts",
+          "slug": null
+        },
+        {
+          "uid": "531770282593251340",
+          "name": "Photography",
+          "slug": null
+        },
+        {
+          "uid": "531770282601639953",
+          "name": "Product Design",
+          "slug": null
+        },
+        {
+          "uid": "1356688570056970240",
+          "name": "Video \u0026 Animation",
+          "slug": null
+        }
+      ],
+      "slug": null
+    },
+    {
+      "uid": "531770282584862722",
+      "name": "Engineering \u0026 Architecture",
+      "categories": [
+        {
+          "uid": "531770282601639948",
+          "name": "3D Modeling \u0026 CAD",
+          "slug": null
+        },
+        {
+          "uid": "531770282601639949",
+          "name": "Building \u0026 Landscape Architecture",
+          "slug": null
+        },
+        {
+          "uid": "531770282605834240",
+          "name": "Chemical Engineering",
+          "slug": null
+        },
+        {
+          "uid": "531770282601639950",
+          "name": "Civil \u0026 Structural Engineering",
+          "slug": null
+        },
+        {
+          "uid": "531770282605834241",
+          "name": "Contract Manufacturing",
+          "slug": null
+        },
+        {
+          "uid": "531770282601639951",
+          "name": "Electrical \u0026 Electronic Engineering",
+          "slug": null
+        },
+        {
+          "uid": "531770282601639952",
+          "name": "Energy \u0026 Mechanical Engineering",
+          "slug": null
+        },
+        {
+          "uid": "531770282605834242",
+          "name": "Interior \u0026 Trade Show Design",
+          "slug": null
+        },
+        {
+          "uid": "1301900647896092672",
+          "name": "Physical Sciences",
+          "slug": null
+        }
+      ],
+      "slug": null
+    },
+    {
+      "uid": "531770282580668419",
+      "name": "IT \u0026 Networking",
+      "categories": [
+        {
+          "uid": "531770282589057033",
+          "name": "Database Management \u0026 Administration",
+          "slug": null
+        },
+        {
+          "uid": "531770282589057037",
+          "name": "DevOps \u0026 Solutions Architecture",
+          "slug": null
+        },
+        {
+          "uid": "531770282589057034",
+          "name": "ERP\/CRM Software",
+          "slug": null
+        },
+        {
+          "uid": "531770282589057036",
+          "name": "Information Security \u0026 Compliance",
+          "slug": null
+        },
+        {
+          "uid": "531770282589057035",
+          "name": "Network \u0026 System Administration",
+          "slug": null
+        }
+      ],
+      "slug": null
+    },
+    {
+      "uid": "531770282584862723",
+      "name": "Legal",
+      "categories": [
+        {
+          "uid": "531770282605834246",
+          "name": "Corporate \u0026 Contract Law",
+          "slug": null
+        },
+        {
+          "uid": "531770283696353280",
+          "name": "Finance \u0026 Tax Law",
+          "slug": null
+        },
+        {
+          "uid": "1484275156546932736",
+          "name": "International \u0026 Immigration Law",
+          "slug": null
+        },
+        {
+          "uid": "1484275408410693632",
+          "name": "Public Law",
+          "slug": null
+        }
+      ],
+      "slug": null
+    },
+    {
+      "uid": "531770282580668422",
+      "name": "Sales \u0026 Marketing",
+      "categories": [
+        {
+          "uid": "531770282597445636",
+          "name": "Digital Marketing",
+          "slug": null
+        },
+        {
+          "uid": "531770282597445634",
+          "name": "Lead Generation \u0026 Telemarketing",
+          "slug": null
+        },
+        {
+          "uid": "531770282593251343",
+          "name": "Marketing, PR \u0026 Brand Strategy",
+          "slug": null
+        }
+      ],
+      "slug": null
+    },
+    {
+      "uid": "531770282584862720",
+      "name": "Translation",
+      "categories": [
+        {
+          "uid": "1534904461842268160",
+          "name": "Language Tutoring \u0026 Interpretation",
+          "slug": null
+        },
+        {
+          "uid": "531770282601639939",
+          "name": "Translation \u0026 Localization Services",
+          "slug": null
+        }
+      ],
+      "slug": null
+    },
+    {
+      "uid": "531770282580668418",
+      "name": "Web, Mobile \u0026 Software Dev",
+      "categories": [
+        {
+          "uid": "1517518458442309632",
+          "name": "Blockchain, NFT \u0026 Cryptocurrency",
+          "slug": null
+        },
+        {
+          "uid": "531770282589057025",
+          "name": "Desktop Application Development",
+          "slug": null
+        },
+        {
+          "uid": "531770282589057026",
+          "name": "Ecommerce Development",
+          "slug": null
+        },
+        {
+          "uid": "531770282589057027",
+          "name": "Game Design \u0026 Development",
+          "slug": null
+        },
+        {
+          "uid": "531770282589057024",
+          "name": "Mobile Development",
+          "slug": null
+        },
+        {
+          "uid": "531770282589057032",
+          "name": "Other - Software Development",
+          "slug": null
+        },
+        {
+          "uid": "531770282589057030",
+          "name": "Product Management",
+          "slug": null
+        },
+        {
+          "uid": "531770282589057031",
+          "name": "QA \u0026 Testing",
+          "slug": null
+        },
+        {
+          "uid": "531770282589057028",
+          "name": "Scripts \u0026 Utilities",
+          "slug": null
+        },
+        {
+          "uid": "531770282589057029",
+          "name": "Web \u0026 Mobile Design",
+          "slug": null
+        },
+        {
+          "uid": "531770282584862733",
+          "name": "Web Development",
+          "slug": null
+        }
+      ],
+      "slug": null
+    },
+    {
+      "uid": "531770282580668423",
+      "name": "Writing",
+      "categories": [
+        {
+          "uid": "1301900640421842944",
+          "name": "Content Writing",
+          "slug": null
+        },
+        {
+          "uid": "531770282597445644",
+          "name": "Editing \u0026 Proofreading Services",
+          "slug": null
+        },
+        {
+          "uid": "531770282597445646",
+          "name": "Professional \u0026 Business Writing",
+          "slug": null
+        },
+        {
+          "uid": "1534904462131675136",
+          "name": "Sales \u0026 Marketing Copywriting",
+          "slug": null
+        }
+      ],
+      "slug": null
+    }
+  ],
+  "slug": null
+}

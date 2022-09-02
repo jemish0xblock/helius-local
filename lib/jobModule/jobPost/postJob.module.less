@@ -1,0 +1,464 @@
+.h_jobPost_wrapper {
+  margin: 78px auto;
+  width: 100%;
+
+  justify-content: center;
+  .h_content_alignment {
+    width: 98%;
+    text-align: right;
+    display: block;
+    margin-bottom: 15px;
+    color: #2b85cf;
+    span {
+      margin-right: 16px;
+    }
+    button {
+      border: none;
+      color: #2b85cf;
+      box-shadow: none;
+      font-size: 16px;
+      font-weight: 400;
+    }
+    button:hover {
+      color: #6bc6ff;
+    }
+  }
+  .d_flex {
+    align-items: center;
+    display: flex;
+    color: #808080;
+  }
+  .h_jobPost_addLanguage {
+    align-items: center;
+    display: flex;
+    margin-left: 12px;
+    margin-bottom: 12px;
+    color: #808080;
+    button {
+      // font-family: "Poppins";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 16px;
+      border: none;
+      padding: 4px 5px;
+      box-shadow: none;
+      color: #2b85cf;
+      line-height: 22px;
+    }
+    svg {
+      margin-top: 7px;
+      font-size: 12px;
+      width: 24px;
+      height: 16px;
+      path {
+        fill: @primary-color;
+      }
+    }
+    a {
+      font-weight: 500;
+      margin-left: 6px;
+    }
+  }
+  .h_jobPost_submit_button_Styled {
+    display: flex;
+    justify-content: flex-end;
+    @media (min-width: 100px) and (max-width: 768px) {
+      justify-content: center !important;
+    }
+    button {
+      margin: 12px 8px;
+    }
+    .h_cancel_button {
+      background: #ffffff;
+      color: #2b85cf;
+
+      border: 1px solid #2b85cf;
+      border-radius: 3px;
+    }
+  }
+
+  .h_jobPost_submit_button {
+    display: flex;
+    justify-content: flex-end;
+
+    .h_cancel_button {
+      background: #ffffff;
+      color: #2b85cf;
+      margin-right: 12px;
+      border: 1px solid #2b85cf;
+      box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.016);
+      border-radius: 3px;
+    }
+  }
+  .h_radio_button_styled {
+    display: inline-grid;
+    label {
+      margin: 10px 0px;
+    }
+  }
+  .h_form_radio_wrapper {
+    width: 100%;
+    height: 78px;
+    background: #ffffff;
+    border: 0.5px solid #ededed;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
+    border-radius: 3px;
+    padding: 15px 20px;
+    display: flex;
+    margin: 20px 25px;
+    flex-direction: row;
+
+    align-items: center;
+    color: @font-color;
+
+    .h_radio_button_text {
+      // font-family: @poppins-fonts !important;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 10px;
+      line-height: 24px;
+      display: block;
+      color: #2b85cf;
+    }
+    @media (min-width: 100px) and (max-width: 768px) {
+      margin: 12px 0px !important;
+    }
+    &.active {
+      background: #f3fafc !important;
+      border: 0.5px solid #3fa9f5 !important;
+      svg {
+        rect {
+          fill: @primary-color;
+          &:last-child {
+            opacity: 0;
+            fill: unset !important;
+          }
+        }
+        path {
+          fill: @white;
+        }
+      }
+    }
+
+    &:last-child {
+      margin-bottom: 8px;
+    }
+    .ant-radio {
+      opacity: 0;
+    }
+  }
+  .h_form_item {
+    display: block !important;
+    .ant-form-item-required {
+      &.ant-form-item-no-colon {
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 22px;
+      }
+    }
+    &.h_form_row {
+      width: 194px;
+      margin-right: 6px;
+      &:last-child {
+        margin-left: 6px;
+        margin-right: unset;
+      }
+    }
+  }
+  .h_login_form_row {
+    display: flex;
+    justify-content: center;
+  }
+  .site_card_border_less_wrapper {
+    background: #ececec;
+    display: block;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+    margin-top: 30px;
+    position: relative;
+  }
+  .h_button_style_link {
+    // font-family: "Poppins";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 0px;
+    line-height: 22px;
+    border: none;
+    margin-top: 20px;
+    box-shadow: none;
+    text-align: center;
+    color: #2b85cf;
+  }
+  .h_jobPostForm_file_styled {
+    padding: 15px;
+    .h_displya_files {
+      background-color: @gray-color4;
+      padding: 8px 20px;
+      margin-bottom: 5px;
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+  .h_jobPost_content_span {
+    // font-family: "Poppins";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    width: 200px;
+    text-align: center;
+
+    color: #8c8c8c;
+  }
+  .h_jobPost_edit_skill {
+    padding: 15px;
+    text-align: left;
+    width: 100%;
+    height: 50vh;
+    border-right: 0.8px dashed #8c8c8c;
+  }
+  .h_jobPost_edit_text {
+    padding: 15px;
+    text-align: left;
+    width: 100%;
+  }
+  .h_jobPostForm_Scope_styled {
+    background-color: @gray-color4;
+    padding: 10px 30px;
+    display: flex;
+    margin-bottom: 5px;
+    align-items: center;
+    p {
+      margin-bottom: 0px;
+    }
+    svg {
+      cursor: pointer;
+    }
+    span {
+      color: @gray-color;
+      // font-family: @poppins-fonts;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      width: 100%;
+      line-height: 22px;
+      margin-left: 20px;
+    }
+    div {
+      display: inline-flex;
+      width: 80%;
+    }
+    i {
+      width: 100%;
+      text-align: right;
+    }
+  }
+  .h_jobPostForm_Scope_language_styled {
+    background-color: @gray-color4;
+    padding: 15px;
+
+    margin-bottom: 5px;
+    align-items: center;
+  }
+  .h_postJob_input_field {
+    border-radius: 1.5rem;
+    padding: 0px 12px;
+    color: red !important;
+    margin-bottom: 20px;
+    .d_flex {
+      align-items: center;
+      display: flex;
+      color: #808080;
+      align-items: flex-end;
+    }
+    .ant-form-item {
+      display: contents;
+      margin-bottom: 0px;
+
+      flex-direction: column !important;
+    }
+
+    .h_postJob_ant_form_item {
+      display: contents;
+      input {
+        padding: 8px !important;
+      }
+      .h_jobSkill_Search {
+        display: flex;
+        button {
+          height: 44px;
+        }
+        input {
+          padding: 0px !important;
+        }
+      }
+    }
+    .ant-form-item-label {
+      text-align: start !important;
+    }
+    .budgetInput span {
+      color: #808080;
+    }
+    .ant-form-item-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+
+      text-align: left;
+    }
+    .ant-row {
+      display: contents;
+      flex-direction: column !important;
+    }
+  }
+  .h_postJob_form {
+    max-width: 100%;
+  }
+  .h_postJob_text_layout {
+    display: flex;
+    padding: 20px 36px;
+    align-items: center;
+    h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      margin: 0px;
+      line-height: 26px;
+      margin-left: 10px;
+    }
+  }
+  .h_postJob_button_styled {
+    button {
+      font-size: 16px;
+      font-weight: 600;
+      color: white;
+      margin: 16px 10px 16px 0px;
+      border-radius: 4px;
+      padding: 24px;
+      align-items: center;
+      display: flex;
+
+      border: none;
+
+      background-color: #2a41e8;
+    }
+    button:hover {
+      box-shadow: 0 4px 12px rgb(42 65 232 / 15%);
+    }
+  }
+  .h_postJob_button_layout_gray {
+    button {
+      font-size: 16px;
+      font-weight: 400;
+      color: #000000d9;
+      margin: 10px 0px 10px 10px;
+      border-radius: 4px;
+      height: 36px;
+      align-items: center;
+      display: flex;
+      flex-direction: row-reverse;
+      line-height: 26px;
+      border: none;
+      background: @gray-color4;
+    }
+
+    button:hover {
+      box-shadow: 0 4px 12px rgb(42 65 232 / 15%);
+    }
+  }
+  .h_postJob_button_layout {
+    button {
+      font-size: 16px;
+      font-weight: 400;
+      color: @white;
+      margin: 10px 0px 10px 10px;
+      border-radius: 4px;
+      height: 36px;
+      align-items: center;
+      display: flex;
+      flex-direction: row-reverse;
+      line-height: 26px;
+      border: none;
+      background: @primary-color;
+    }
+
+    button:hover {
+      box-shadow: 0 4px 12px rgb(42 65 232 / 15%);
+    }
+  }
+  .h_flex_wrap {
+    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+  }
+  .h_upload_file_text {
+    // font-family: "Poppins";
+    font-style: normal;
+    color: @primary-color;
+    font-weight: 500;
+    font-size: 16px;
+    border: none;
+    box-shadow: none;
+    line-height: 22px;
+  }
+  .h_postJob_upload_styled {
+    button {
+      font-size: 16px;
+      font-weight: 600;
+      color: #385ce8;
+
+      border: none;
+      // margin: 30px 20px 30px 12px;
+      border-radius: 4px;
+
+      align-items: center;
+      display: flex;
+      padding: 10px 24px;
+      line-height: 26px;
+    }
+    .h_upload_file_instraction {
+      // font-family: "Poppins";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 22px;
+
+      text-align: center;
+      position: absolute;
+      display: flex;
+      bottom: auto;
+      bottom: -27px;
+
+      right: 0px;
+      flex-wrap: wrap-reverse;
+
+      color: #2b85cf;
+    }
+    .h_fileUpload_svg {
+      svg {
+        margin-top: 7px;
+        font-size: 12px;
+        width: 24px;
+        height: 16px;
+      }
+    }
+
+    .h_upload_file_text {
+      // font-family: "Poppins";
+      font-style: normal;
+      color: @primary-color;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 22px;
+    }
+    button:hover {
+      color: white;
+      background: transparent;
+      box-shadow: none;
+      border: none;
+    }
+  }
+}

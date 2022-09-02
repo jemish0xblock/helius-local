@@ -1,0 +1,54 @@
+.h_header_main {
+  width: 100%;
+  align-items: center;
+  padding: unset !important;
+  color: rgba(0, 0, 0, 0.85);
+  line-height: 82px;
+  position: relative;
+  z-index: 999;
+  box-shadow: 0 0 18px 0 rgb(0 0 0 / 12%);
+  font-size: 16px;
+  height: 80px !important;
+  align-items: center;
+  display: flex;
+  .h_header_rightBar {
+    align-items: center;
+    @media (min-width: 100px) and (max-width: 768px) {
+      padding: 0px 12px;
+    }
+    .header_lang_main {
+      margin-left: 10px;
+    }
+    .h_user_Info {
+      display: flex;
+      align-items: center;
+      .h_user_detail {
+        display: flex;
+        flex-direction: column;
+        margin-left: 10px;
+        color: #fff;
+        .h_user_name {
+          font-weight: 400;
+          font-size: 16px;
+          line-height: 24px;
+        }
+        .h_user_action_popover {
+          display: flex;
+          align-items: center;
+          line-height: 24px;
+          margin-bottom: unset;
+        }
+      }
+    }
+  }
+}
+.h_user_popover_content {
+  .h_user_action_btn {
+    box-shadow: unset;
+    border: none;
+    box-sizing: unset;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+  }
+}
