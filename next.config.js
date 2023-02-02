@@ -78,8 +78,6 @@ const nextConfig = withAntdLess(
     future: {
       webpack5: true,
     },
-    swcMinify: true,
- yarn
   })
 );
 
