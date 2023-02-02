@@ -1,10 +1,9 @@
 import { Form, Input, Select } from "antd";
-import { FC, useContext } from "react";
+import { has } from "lodash";
+import { FC, useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { v4 as uuid } from "uuid";
 
 import ModalComponent from "@/components/ModalWithFormComponent";
-import { IFetchOptions } from "@/lib/common/types/storeTypes";
 
 import FreelancersContext from "../../context/freelancers.context";
 
@@ -13,15 +12,26 @@ import s from "./addNote.module.less";
 interface IFreelancerAddNoteProps {
   freelancerName: string;
   freelancerId: string;
+  noteFormData: any;
 }
 const { Option } = Select;
 
-const FreelancerAddNote: FC<IFreelancerAddNoteProps> = ({ freelancerName, freelancerId }) => {
+const FreelancerAddNote: FC<IFreelancerAddNoteProps> = ({ freelancerName, freelancerId, noteFormData }) => {
   const [form] = Form.useForm();
   const { t } = useTranslation();
   const freelancersContext = useContext(FreelancersContext);
   const { isShowAddNoteModal, freelancersIsLoading, setIsShowAddNoteModal, addNoteToFreelancer, commonStoreDataList } =
     freelancersContext;
+
+  useEffect(() => {
+    if (noteFormData && has(noteFormData, "id")) {
+      form.setFieldsValue({
+        note: noteFormData?.note || "",
+        softSkills: noteFormData?.softSkills || [],
+        extraPhrase: noteFormData?.extraPhrase || [],
+      });
+    }
+  }, [noteFormData]);
 
   const children: React.ReactNode[] = [];
 
@@ -36,7 +46,7 @@ const FreelancerAddNote: FC<IFreelancerAddNoteProps> = ({ freelancerName, freela
           Note about <span>&nbsp;{freelancerName || ""}.</span>
         </div>
       }
-      okText={t("formItem.saveNote")}
+      okText={noteFormData && has(noteFormData, "id") ? t("formItem.updateNote") : t("formItem.saveNote")}
       cancelText={t("formItem.cancel")}
       isShow={isShowAddNoteModal}
       confirmLoading={freelancersIsLoading}
@@ -44,7 +54,7 @@ const FreelancerAddNote: FC<IFreelancerAddNoteProps> = ({ freelancerName, freela
       form={form}
       onCreate={onCreate}
     >
-      <Form form={form} layout="vertical" name="add_note_form" initialValues={{ extraPhrase: ["item 01", "item 02"] }}>
+      <Form form={form} layout="vertical" name="add_note_form">
         <Form.Item name="note" label={t("formItem.note")}>
           <Input.TextArea maxLength={100} placeholder={t("formItem.notePlace")} />
         </Form.Item>
@@ -52,8 +62,8 @@ const FreelancerAddNote: FC<IFreelancerAddNoteProps> = ({ freelancerName, freela
         <Form.Item name="softSkills" colon={false} label={t("formItem.softSkills")}>
           <Select allowClear mode="multiple" showArrow showSearch={false} maxTagCount="responsive">
             {commonStoreDataList?.softSkillsList?.length > 0 &&
-              commonStoreDataList?.softSkillsList?.map((skill: IFetchOptions) => (
-                <Option key={uuid()} value={skill?.label}>
+              commonStoreDataList?.softSkillsList?.map((skill: any) => (
+                <Option key={skill?.id} value={skill?.id}>
                   {skill?.name}
                 </Option>
               ))}

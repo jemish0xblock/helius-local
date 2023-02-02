@@ -1,0 +1,201 @@
+.h_chat_wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  position: relative;
+  border: 0.5px solid @gray-color;
+  border-right: unset;
+  .h_sidemenu_wrapper {
+    border-right: 0.5px solid @gray-color;
+    min-height: 100%;
+    overflow: auto;
+    border-bottom: none;
+    // width: 22%;
+    .h_search_input {
+      height: 65px;
+      border-right: none;
+      border-left: none;
+    }
+    .h_chat_active {
+      background-color: #e2e5e8;
+    }
+    .h_chat_list {
+      position: relative;
+      max-height: 665px;
+      overflow: auto;
+      overflow-x: hidden;
+    }
+    .h_chat_list_content {
+      cursor: pointer;
+      padding: 5px;
+      display: flex;
+      border-bottom: 0.5px solid @gray-color;
+      .user_icon {
+        align-items: center;
+        justify-content: center;
+        display: flex;
+      }
+      .h_user_content {
+        width: 84%;
+        padding: 0px 5px 0px 5px;
+        color: #c6c6c6;
+        .h_chat_user_warpper {
+          display: flex;
+          justify-content: space-between;
+
+          .h_user_name {
+            color: #434343;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          .h_chat_date {
+            right: 0px;
+            color: #c6c6c6;
+          }
+        }
+        .h_last_message {
+          font-size: 14px;
+          line-height: 18px;
+          margin-bottom: 2px;
+          white-space: nowrap;
+          overflow: hidden;
+
+          text-overflow: ellipsis;
+        }
+      }
+    }
+  }
+  //chat list start
+  .h_chat_screen_wrapper {
+    width: 100%;
+    // height: 100%;
+    border-right: 0.5px solid @gray-color;
+    .h_room_header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      top: 0;
+      background-color: #fff;
+      padding: 5px 20px;
+      height: 65px;
+      border-top: 0.5px solid @gray-color;
+      border-bottom: 0.5px solid @gray-color;
+      .h_room_title {
+        margin: 0 5px 0px 0;
+        font-weight: 500;
+        font-size: 18px;
+      }
+      .h_room_subtitle {
+        color: #c6c6c6;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+      .h_room_header_action {
+        display: flex;
+        .h_room_header_info_icon {
+          margin-left: 10px;
+        }
+      }
+    }
+    .h_message_content {
+      max-height: 550px;
+      min-height: 550px;
+      padding: 15px;
+      position: relative;
+      overflow: auto;
+
+      .h_chat_list_content {
+        display: flex;
+      }
+      .h_user_content {
+        padding-left: 10px;
+        .h_chat_user_warpper {
+          display: flex;
+          .h_chat_date {
+            margin-left: 10px;
+            color: #c6c6c6;
+          }
+          .h_user_name {
+            font-weight: 600;
+          }
+        }
+      }
+    }
+    .h_message_input {
+      bottom: 0px;
+      word-break: break-all;
+    }
+  }
+  .send_button {
+    position: absolute;
+    button {
+      z-index: 9999;
+      right: 10px;
+      height: 40px;
+      top: 60px;
+      width: 42px;
+      background: #2b85cf;
+      svg {
+        fill: #fff;
+      }
+    }
+  }
+  //user info section
+  .h_user_info_wrapper {
+    border-right: 0.5px solid @gray-color;
+    height: 730px;
+    overflow: auto;
+    overflow-x: hidden;
+    .h_user_name_section {
+      display: flex;
+      padding: 10px;
+
+      .h_user_content {
+        padding: 0px 5px 0px 5px;
+        color: #c6c6c6;
+        width: 100%;
+        word-break: break-all;
+        .h_chat_user_warpper {
+          display: flex;
+          justify-content: space-between;
+          color: #434343;
+          .h_user_name {
+            font-size: 18px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+        .h_last_message {
+          font-size: 14px;
+          line-height: 18px;
+          margin-bottom: 2px;
+        }
+      }
+    }
+    .h_search_input {
+      border: unset;
+      height: 50px;
+      border-bottom: 0.5px solid @gray-color;
+      &:hover {
+        box-shadow: none;
+      }
+    }
+    .personal_notepad {
+      padding: 10px;
+      .personalNoteBtn {
+        margin-top: 10px;
+      }
+    }
+  }
+}
+.h_action_content_main {
+  margin-top: -20px;
+  ul {
+    list-style: none;
+    padding: 10px;
+    margin: 10px;
+  }
+}

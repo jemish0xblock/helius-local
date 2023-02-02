@@ -14,7 +14,8 @@ const VerifyAccount: FC = () => {
   const localEmail = localStorage.getItem(localStorageKeys.userEmail);
   // const authStore = useAppSelector(authSelector);
 
-  const [isLocalEmail, setIsLocalEmail] = useState<string | null>(localEmail);
+  const [isLocalEmail, setIsLocalEmail] = useState<string | null>(localEmail || "");
+  const [recentMailLoader, setRecentMailLoader] = useState<boolean>(false);
   const router = useRouter();
   const { isAuth, currentUser } = useAppSelector(authSelector);
 
@@ -37,6 +38,16 @@ const VerifyAccount: FC = () => {
     }
   });
 
+  const handleResendEmail = async (emailType: string) => {
+    await setRecentMailLoader(true);
+    // const localEmail = localStorage.getItem(localStorageKeys.userEmail);
+    dispatch(asyncResendEmailForVerification({ type: emailType, email: localEmail || isLocalEmail }))
+      .unwrap()
+      .then(() => {
+        setRecentMailLoader(false);
+      });
+  };
+
   return !isAuth && isLocalEmail ? (
     <div className="h_page_wrapper" style={{ margin: "100px auto" }}>
       <AcknowledgementComponent
@@ -46,9 +57,8 @@ const VerifyAccount: FC = () => {
         isBtnAvail
         btnName={t("formItem.reSendEmailBtn")}
         isShowContactUsLink
-        handleOnClick={() =>
-          dispatch(asyncResendEmailForVerification({ type: "verifyAccount", email: localEmail || isLocalEmail }))
-        }
+        handleOnClick={() => handleResendEmail("verifyAccount")}
+        recentMailLoader={recentMailLoader}
       />
     </div>
   ) : (

@@ -89,9 +89,22 @@ export type CustomProps = {
   handleCancelForSearchModel: any;
   visibleModel: boolean;
   setVisibleModel: (value: React.SetStateAction<boolean>) => void;
+  commonStoreDataList: any;
+  authType: string;
+  currentUserDetails: any;
 };
 export interface FilterProps {
   page: string;
   flag: string;
   speciality: string;
+}
+export interface IFetchOptionsReasonList {
+  name: string;
+  id: string;
+}
+
+export interface LoadMoreJobsProps {
+  recentClient: number;
+  inprogress: number;
+  otherOpenJobs: number;
 }

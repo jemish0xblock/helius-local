@@ -1,5 +1,6 @@
 {
   "app_title": "Helius",
+  "app_description": "Globally Compliant IT Consultancy & Services",
   "nav": {
     "app_title": "Helius"
   },
@@ -17,7 +18,7 @@
     "register": "Register"
   },
   "registerScreen": {
-    "pageTitle": "Join Helius as a",
+    "pageTitle": "Join as a client or freelancer",
     "signUp": "Sign up",
     "sendMeEmails": "Send me emails with tips on how to find talent that fits my needs.",
     "terms1": "I accept the",
@@ -38,14 +39,23 @@
   },
   "forgotPasswordScreen": {
     "pageTitle": "Update your password",
-    "note": "Enter your registered Email ID and Submit"
+    "note": "Enter your registered Email ID and Submit",
+    "backToLogin": "Return to"
   },
   "updatePasswordScreen": {
     "pageTitle": "Update password"
   },
   "errorScreen": {
     "backToHome": "Back Home",
-    "errorMsg": "Sorry, you are not authorized to access this page."
+    "errorMsg": "Sorry, you are not authorized to access this page.",
+    "pageNotFound": "Sorry, We couldn't find this page."
+  },
+  "notificationScreen": {
+    "infoNoteOnNotifications": "Note: When user visits this page, by default we will read all notifications.",
+    "loadMore": "Load more",
+    "seeAllNotifications": "See all notifications",
+    "today": "Today",
+    "earlier": "Earlier"
   },
   "acknowledgementScreens": {
     "verifyAcTitle": "Verify Your Account",
@@ -57,6 +67,9 @@
     "contactUsNote": "After resending the email, still, you are not receiving any email, please",
     "passwordUpdatedTitle": "Password Updated Successfully!!!",
     "passwordUpdatedDesc": "Login to your account with an updated password."
+  },
+  "freelancerModule": {
+    "messageToInviteToAJob": "Message to invite to a job"
   },
   "jobPostScreen": {
     "pageTitle": "Post a Job",
@@ -72,6 +85,7 @@
     "withoutprojectBudget": "Continue Without Project Budget.",
     "reviewJobPost": "Review Job Post",
     "back": "Back",
+    "backToPrevious": "Back To Previous",
     "savePost": "Save as Draft",
     "postJob": " Post your Job",
     "projectBudgettitle": "Project Budget",
@@ -113,7 +127,11 @@
     "notePlace": "The Freelancer won 't see anything you note here",
     "note": "Note",
     "saveNote": "Save Note",
+    "addNote": "Add Note",
+    "updateNote": "Update Note",
     "add": "Add",
+    "profileTitle": "Profile Title",
+    "profileTitlePlace": "Example: Full Stack Developer | Web & Mobile",
     "remove": "Remove",
     "previous": "Previous",
     "register": "Register",
@@ -269,7 +287,12 @@
     "extraPhrase": "The Exact Phrase",
     "flaggingReason": "Select the reason for flagging this",
     "describe": "Describe",
-    "describePlace": "Describe the reason you have selected..."
+    "describePlace": "Describe the reason you have selected...",
+    "message": "Message",
+    "inviteToExistingJob": "Invite to an existing job",
+    "sendInvitationMessage": "Send invitation message",
+    "continueToJobDetails": "Continue to job details",
+    "withdrawProposalReason": "Reason"
   },
   "validationErrorMsgs": {
     "requireField": "This is required field.",
@@ -282,13 +305,24 @@
     "requireEmailAddress": "Please input your email address!",
     "requireCountry": "Please select your country!",
     "requireTerms": "Please accept the Helius Terms of Service before continuing!",
+    "requireUserAgreement": "You need to agree to the Helius User Agreement.",
     "requireJobTitle": "Please input your Job Title!",
     "requireJobType": "Please input your Job Type!",
     "requireJobCategory": "Please input your Job Category!",
     "requireSpeciality": "Please input your Job Speciality!",
     "requireJobLocation": "Please input your Location!",
-    "requireJobBudget": "Please input Minimun Budget!",
-    "requireJobBudgetValid": "Please input valid Budget!",
+    "requireJobBudget": "Please input Minimun Amount!",
+    "requireJobBudgetValid": "Please input valid Amount!",
+    "requireRateValid": "Please input valid Amount!",
+    "totalFixedAmount": "Total price of this project must be greater than $5.00 ",
+    "requireMinimumRateValid": "Minimum of $5.00",
+    "requireDescriptionFixedValid": "A description is needed",
+    "mileStoneLimitExceeded": "The milestone name cannot exceed 500 characters",
+    "requireHourlyRateValid": "please enter a value between $3.00 to $999.00",
+    "requirefixedProjectRateValid": "please enter value between $5 to $1,000,000.00",
+    "requireSelectFreelancerType": "Please select freelancer type",
+    "requireCoverLetter": "Please enter cover letter",
+    "requireMilestoneModeValid": "Please select Milestone Mode",
     "requireHourPerWeek": "Please enter your working hours per week!",
     "requireJobSkill": "Please input your Job Skill!",
     "requireJobSkillAtleast": "Please submit atleast 1 Job Skill!",
@@ -350,11 +384,13 @@
     "descriptionIsNotValidFormat": "field must contain at maximum 250 characters.",
     "titleIsNotValidFormat": "field must contain at maximum 100 characters.",
     "requireValidNumberReg": "Number of Freelancers You Required only 99",
+    "requireValidNumber": "Please enter a valid number",
     "servicesMaxLength": "You can select maximum 8 services.",
     "skillsMaxLength": "You can select maximum 10 services.",
     "describeLength": "$t(formItem.describe) must contain maximum 4000 characters.",
     "requirejobPostReuse": "Please select a job",
-    "requireEditJob": "Please select a job"
+    "requireEditJob": "Please select a job",
+    "profileTitleMinChar": "A descriptive profile title must have at least 4 letters."
   },
   "errorMessages": {
     "404": "Request not found.",
@@ -362,6 +398,7 @@
     "DATA_NOT_FOUND": "Record not found.",
     "USER_IS_NOT_LOGGED_IN": "Please login.",
     "USER_NOT_FOUND": "User not found.",
+    "INVALID_OTP": "OTP is not valid.",
     "UNAUTHORIZED_ACCESS": "Please login with registered email address.",
     "INVALID_REQUEST_ROUTE": "Not valid url for this request.",
     "SOMETHING_WENT_WRONG": "Something went wrong.",
@@ -390,7 +427,23 @@
     "JOB_ALREADY_DISLIKED": "Job is already dislike.",
     "FILE_NOT_EXISTS": "File not found.",
     "INVALID_FILE_TYPE": "Invalid file type.",
-    "JOB_DETAIL_NOT_FOUND": "Job detail not found."
+    "JOB_DETAIL_NOT_FOUND": "Job detail not found.",
+    "INVITATION_ALREADY_SENT": "You already sent invitation for this job.",
+    "ACTION_ALREADY_TAKEN": "Proposal submitted already.",
+    "SUBMIT_PROPOSAL_CONNECTS_NOT_FOUND": "You don't have sufficient connects",
+    "PROPOSAL_ALREADY_DECLINED": "Proposal declined already.",
+    "JOB_ALREADY_DECLINED": "Job declined already.",
+    "OFFER_ALREADY_SENT": "Offer submitted already.",
+    "INVITATION_ALREADY_DECLINED": "Invitation declined already.",
+    "BID_ALREADY_SENT": "Bid already submitted.",
+    "SKILL_NOT_EXIST": "skill not found",
+    "JOB_ALREADY_SAVED_AS_INAPPROPRIATE": "job already saved as Inappropriate.",
+    "FEEDBACK_ALREADY_SUBMITTED": "Feedback already submitted.",
+    "PASSWORD_LENGTH_ERROR": "Password must contain 8 characters",
+    "PASSWORD_ERROR": "Please enter valid password",
+    "\"email\" must be a valid email": "your entered email must be a valid email format",
+    "CONTRACT_DETAIL_NOT_FOUND": "Contract detail not found.",
+    "FEEDBACK_SEND_SUCCESSFULLY": "feedback send successfully."
   },
   "successMessage": {
     "RECORD_CREATE_SUCCESSFULLY": "Record created successfully.",
@@ -413,7 +466,23 @@
     "JOB_INAPPROPRIATED": "Flag as Inappropriate successfully.",
     "JOB_DISLIKED": "Job dislike successfully.",
     "JOB_UPDATED": "Job update successfully",
-    "JOB_CREATED": "Job created successfully."
+    "JOB_CREATED": "Job created successfully.",
+    "INVITATION_SENT_SUCCESSFULLY": "Invitation sent successfully.",
+    "PROPOSAL_CREATED": "Proposal submitted successfully.",
+    "SEARCH_UPDATED": "search query update successfully",
+    "SEARCH_SAVED": "search query saved successfully",
+    "SEARCH_ALREADY_SAVED": "search query already saved",
+    "SEARCH_ALREADY_UPDATED": "search query already updated",
+    "PROPOSAL_SHORTLIST_SUCCESSFULLY": "proposal added in shortlist.",
+    "PROPOSAL_ADDED_ON_LIST": "proposal added in list.",
+    "PROPOSAL_ARCHIVED_SUCCESSFULLY": "proposal added in archived.",
+    "CLIENT_PROFILE_CREATED": "Profile create as client successfully",
+    "FREELANCER_PROFILE_CREATED": "Profile create as freelancer successfully",
+    "DELETE_CHAT_SUCCESSFULLY": "Chat delete successfully",
+    "WRONG_TOKEN": "your token is wrong.",
+    "MANUAL_ADDED_SUCCESSFULLY": "manual hours added successfully.",
+    "PAYMENT_REQUEST_ADDED_SUCCESSFULLY": "Payment requested successfully.",
+    "REWORK_ADDED_SUCCESSFULLY": "Rework assigned to freelancer."
   },
   "commonMessages": {},
   "welcome_title": "Welcome to Helius app"

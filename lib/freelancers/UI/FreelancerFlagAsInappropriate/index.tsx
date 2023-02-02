@@ -1,10 +1,9 @@
 import { Form, Input, Radio } from "antd";
-import { FC, useContext } from "react";
+import { has } from "lodash";
+import { FC, useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { v4 as uuid } from "uuid";
 
 import ModalComponent from "@/components/ModalWithFormComponent";
-import { IFetchOptions } from "@/lib/common/types/storeTypes";
 
 import { validateDescribeLength } from "../../constants/validationRegx";
 import FreelancersContext from "../../context/freelancers.context";
@@ -13,9 +12,10 @@ import s from "./style.module.less";
 
 interface IFreelancerFlagAsInappropriate {
   freelancerId: string;
+  inappropriateFormData: any;
 }
 
-const FreelancerFlagAsInappropriate: FC<IFreelancerFlagAsInappropriate> = ({ freelancerId }) => {
+const FreelancerFlagAsInappropriate: FC<IFreelancerFlagAsInappropriate> = ({ freelancerId, inappropriateFormData }) => {
   const [form] = Form.useForm();
   const { t } = useTranslation();
   const freelancersContext = useContext(FreelancersContext);
@@ -27,9 +27,18 @@ const FreelancerFlagAsInappropriate: FC<IFreelancerFlagAsInappropriate> = ({ fre
     commonStoreDataList,
   } = freelancersContext;
 
+  useEffect(() => {
+    if (inappropriateFormData && has(inappropriateFormData, "id")) {
+      form.setFieldsValue({
+        flaggingReason: inappropriateFormData?.flaggingReason || "",
+        describe: inappropriateFormData?.describe || "",
+      });
+    }
+  }, []);
   const onCreate = (values: any) => {
     flaggingToFreelancer(values, freelancerId);
   };
+
   return (
     <ModalComponent
       title={<div className={s.h_modal_title}>Why are you Flagging this?</div>}
@@ -51,8 +60,8 @@ const FreelancerFlagAsInappropriate: FC<IFreelancerFlagAsInappropriate> = ({ fre
         >
           <Radio.Group className={s.h_form_radio_field}>
             {commonStoreDataList?.flagAsInappropriateList?.length > 0 &&
-              commonStoreDataList?.flagAsInappropriateList.map((flag: IFetchOptions) => (
-                <Radio key={uuid()} value={flag?.label} className={s.h_form_radio_item}>
+              commonStoreDataList?.flagAsInappropriateList.map((flag: any) => (
+                <Radio key={flag?.id} value={flag?.id} className={s.h_form_radio_item}>
                   {flag?.name}
                 </Radio>
               ))}
@@ -64,8 +73,8 @@ const FreelancerFlagAsInappropriate: FC<IFreelancerFlagAsInappropriate> = ({ fre
           name="describe"
           label={t("formItem.describe")}
           rules={[
-            { required: true, message: t("validationErrorMsgs.requireField") },
             {
+              required: true,
               pattern: new RegExp(validateDescribeLength),
               message: t("validationErrorMsgs.describeLength"),
             },

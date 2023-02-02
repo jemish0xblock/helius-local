@@ -7,6 +7,8 @@ import React, { useContext, memo } from "react";
 import InlineSVG from "svg-inline-react";
 import { v4 as uuid } from "uuid";
 
+import { useAppSelector } from "@/hooks/redux";
+import { authSelector } from "@/lib/auth/authSlice";
 import { dot, filledHeartSvg, heartSvg, userRatedSvg, verifiedUser } from "@/utils/allSvgs";
 import { getCapitalizeStartWord, getStringFirstLetter } from "@/utils/pascalCase";
 import RenderIf from "@/utils/RenderIf/renderIf";
@@ -19,25 +21,27 @@ const { Paragraph } = Typography;
 
 interface FreelancerCardComponentProps {
   freelancer: any;
+  isSuggestedFreelancer?: boolean;
 }
 
 const FreelancerCardComponent: React.FC<FreelancerCardComponentProps> = (props) => {
-  const { freelancer } = props;
+  const { freelancer, isSuggestedFreelancer } = props;
   const freelancersContext: IFreelancerContext | any = useContext(FreelancersContext);
+  const authStore = useAppSelector(authSelector);
 
-  const { handleSaveFreelancer, freelancerActionLoading } = freelancersContext;
+  const { handleSaveFreelancer, freelancerActionLoading, inviteFreelancerForJobByClient } = freelancersContext;
   return (
     <div className={s.h_card_wrapper}>
       <div className={s.user_icon}>
-        <RenderIf isTrue={freelancer?.profileUrl}>
+        <RenderIf isTrue={freelancer?.profileImage}>
           <Avatar
             size={60}
-            src={freelancer?.profileUrl}
+            src={freelancer?.profileImage}
             style={{ verticalAlign: "middle", display: "flex", alignItems: "center" }}
           />
         </RenderIf>
 
-        <RenderIf isTrue={!freelancer?.profileUrl}>
+        <RenderIf isTrue={!freelancer?.profileImage}>
           <Avatar
             size={60}
             style={{
@@ -70,20 +74,28 @@ const FreelancerCardComponent: React.FC<FreelancerCardComponentProps> = (props) 
         </div>
         <div className={s.h_user_description}>
           <div className={s.h_user_roles}>
-            {/* {freelancer?.profession || ""} */}
-            Lead Architecture Developer | PHP | Wordpress
-            <br /> <span>{freelancer?.country?.value || ""}</span>
+            <RenderIf isTrue={freelancer?.profileTitle}>
+              <>
+                {freelancer?.profileTitle || ""}
+                <br />
+              </>
+            </RenderIf>
+
+            <span>{freelancer?.country?.value || ""}</span>
           </div>
           <div className={s.h_user_actions}>
-            <span className={`${s.h_user_rated}`}>
-              <InlineSVG src={userRatedSvg} />
-              Top Rated Plus
-            </span>
+            <RenderIf isTrue={!isSuggestedFreelancer}>
+              <span className={`${s.h_user_rated}`}>
+                <InlineSVG src={userRatedSvg} />
+                Top Rated Plus
+              </span>
+            </RenderIf>
             {/* TODO:: use below classes for change icon color */}
             {/* <span className={`${s.h_user_rated} ${s.h_user_rising_star} ${s.h_user_top_rated}`}>
             <InlineSVG src={userRatedSvg} />
             Top Rated Plus
           </span> */}
+
             <span
               onClick={() => handleSaveFreelancer(freelancer?.isSaved === 1 ? 0 : 1, freelancer?.id)}
               className={s.h_saved}
@@ -94,14 +106,42 @@ const FreelancerCardComponent: React.FC<FreelancerCardComponentProps> = (props) 
                 <InlineSVG src={freelancer?.isSaved === 1 ? filledHeartSvg : heartSvg} />
               )}
             </span>
-            <Button type="primary" className={s.h_action_btn}>
-              Invite to Job
-            </Button>
+            <RenderIf
+              isTrue={authStore?.isAuth && authStore?.currentUser?.authType === "client" && isSuggestedFreelancer}
+            >
+              <Link href={`/offer/new/${freelancer?.id}`} passHref>
+                <a href="replace">
+                  <Button className={s.h_action_btn} style={{ marginRight: "10px" }}>
+                    Hire
+                  </Button>
+                </a>
+              </Link>
+            </RenderIf>
+            <RenderIf isTrue={authStore?.isAuth && authStore?.currentUser?.authType === "client"}>
+              <Button
+                type="primary"
+                className={s.h_action_btn}
+                onClick={() => inviteFreelancerForJobByClient(freelancer)}
+              >
+                Invite to Job
+              </Button>
+            </RenderIf>
           </div>
         </div>
-        <div className={s.h_user_work}>
-          ${freelancer?.hoursPerWeek?.toFixed(2) || 10}/hr | $52k+ Earned | 70% Job Success
-        </div>
+        <RenderIf isTrue={authStore?.isAuth && authStore?.currentUser?.authType === "client" && !isSuggestedFreelancer}>
+          <div className={s.h_user_work}>
+            {`$${freelancer?.hourlyRate?.toFixed(2) || 10}/hr | $${freelancer?.moneyEarned} Earned | ${
+              freelancer?.jobSuccessScore ? freelancer?.jobSuccessScore : 0
+            }% Job Success`}
+          </div>
+        </RenderIf>
+
+        <RenderIf isTrue={authStore?.isAuth && authStore?.currentUser?.authType === "client" && isSuggestedFreelancer}>
+          <div className={`${s.h_user_work} ${s.h_text_black}`}>{`$${
+            freelancer?.hourlyRate?.toFixed(2) || 10
+          }/hr`}</div>
+        </RenderIf>
+
         <Paragraph ellipsis={{ rows: 2 }}>
           <span className={s.h_user_bio}>{freelancer?.aboutYourSelf || ""}</span>
         </Paragraph>
@@ -122,4 +162,5 @@ const FreelancerCardComponent: React.FC<FreelancerCardComponentProps> = (props) 
   );
 };
 
+FreelancerCardComponent.defaultProps = { isSuggestedFreelancer: false };
 export default memo(FreelancerCardComponent);

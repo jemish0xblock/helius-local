@@ -9,7 +9,7 @@ import { JobPostProps } from "./types/storeTypes";
 const JobPostTypeSelection = dynamic(() => import("./UI/JobPostTypeSelection"));
 const JobPostForm = dynamic(() => import("./UI/jobPostForm"));
 
-const JobPostView: React.FC<JobPostProps> = (props) => {
+const JobPostView: React.FC<JobPostProps | any> = (props) => {
   const {
     form,
     handleOnFinish,
@@ -54,6 +54,7 @@ const JobPostView: React.FC<JobPostProps> = (props) => {
     isLoading,
     deleteFileUpload,
     jobPostTypeSubmitHandler,
+    onChangeHandlerBackButton,
   } = props;
 
   return (
@@ -64,7 +65,7 @@ const JobPostView: React.FC<JobPostProps> = (props) => {
             jobPostType={jobPostType}
             form={form}
             handleOnFinish={handleOnFinish}
-            onHandleChangeForSelectFieldValueAndFormData={onHandleChangeForSelectFieldValueAndFormData}
+            // onHandleChangeForSelectFieldValueAndFormData={onHandleChangeForSelectFieldValueAndFormData}
             jobPostIsActive={jobPostIsActive}
             jobPostTypeHandle={jobPostTypeHandle}
             onHandleSelectJob={onHandleSelectJob}
@@ -116,6 +117,7 @@ const JobPostView: React.FC<JobPostProps> = (props) => {
             isLoading={isLoading}
             deleteFileUpload={deleteFileUpload}
             jobPostTypeSubmitHandler={jobPostTypeSubmitHandler}
+            onChangeHandlerBackButton={onChangeHandlerBackButton}
           />
         </DefaultContentBox>
       </RenderIf>

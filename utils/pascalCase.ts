@@ -31,6 +31,7 @@ export const getStringFirstLetter = (str: string, isSpaceAllowed: boolean): stri
   }
   return "";
 };
+
 export const getConvertValues = (value: string) => {
   const str = value.replaceAll("k", "000");
   const newStr = str.replace(/[^0-9 -]/g, "");
@@ -38,5 +39,44 @@ export const getConvertValues = (value: string) => {
   const result = removeDollarSignStr.split(" ").join("");
   if (result === "100") return "0-100";
   if (result === "5000") return "5000-";
+  if (value === "No hires") return "-0";
+  if (result === "19") return "1-9";
+  if (result === "10") return "10-";
+  if (result === "2") return "0-2";
+  if (result === "4") return "2-4";
+  if (result === "6") return "5-6";
+
+  return result;
+};
+
+export const getUserShortName = (firstName: string, lastName: string) => {
+  if (firstName !== "" && lastName !== "") {
+    return `${getCapitalizeStartWord(firstName)} ${getCapitalizeStartWord(lastName?.charAt(0))}.`;
+  }
+  return "";
+};
+
+export const convertAdvanceSearchValues = (keyName: string, value: string) => {
+  let result;
+  if (keyName === "orTerms") {
+    const str = value.replaceAll(" ", " OR ");
+    return str;
+  }
+  if (keyName === "andTerms") {
+    const str = value.replaceAll(" ", " AND ");
+    return str;
+  }
+  if (keyName === "exactTerms") {
+    return ` "${value}"`;
+  }
+  if (keyName === "excludeTerms") {
+    const str = value.replaceAll(" ", " OR ");
+    return ` NOT ${str}`;
+  }
+  if (keyName === "titleTerm") {
+    const str = value.replaceAll(" ", " AND ");
+    return str;
+  }
+
   return result;
 };

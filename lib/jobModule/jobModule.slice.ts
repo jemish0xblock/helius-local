@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   asyncFilterAllJobListing,
   getAllSavedJobListApi,
-  getJobPostList,
   jobPostSavedJobApi,
 } from "@/lib/jobModule/services/jobListing.service";
 import { jobPostApiPost, jobPostApiUpdate, jobPostUpdateWithFileData } from "@/lib/jobModule/services/jobPost.service";
@@ -36,6 +35,10 @@ const initialState: jobModuleType = {
       attachments: [],
       talentType: "",
       scope: "",
+      connects: "",
+      proposals: "",
+      jobStatus: [],
+      jobStatusWithCount: [],
       jobType: "",
       budget: 0,
       minBudget: 0,
@@ -61,6 +64,9 @@ const initialState: jobModuleType = {
       visibility: "",
       workingHours: 0,
       worldWideValid: false,
+      workedHours: 0,
+      totalPaidAmount: 0,
+      avgPaid: 0,
     },
   },
   jobListing: {
@@ -93,10 +99,14 @@ const initialState: jobModuleType = {
       jobId: "",
       attachments: [],
       talentType: "",
+      connects: "",
+      jobStatusWithCount: [],
+      proposals: "",
       scope: "",
       jobType: "",
       budget: 0,
       minBudget: 0,
+      jobStatus: [],
       maxBudget: 0,
       experience: "",
       id: "",
@@ -119,6 +129,9 @@ const initialState: jobModuleType = {
       visibility: "",
       workingHours: 0,
       worldWideValid: false,
+      workedHours: 0,
+      totalPaidAmount: 0,
+      avgPaid: 0,
     },
     similarJobs: [],
   },
@@ -216,30 +229,6 @@ const JobModule = createSlice({
         state.newRequestId = undefined;
       }
     },
-    [getJobPostList.pending.type]: (state: any, _action: any) => {
-      const { requestId } = _action.meta;
-      state.isLoading = true;
-      state.currentRequestId = requestId;
-    },
-
-    [getJobPostList.fulfilled.type]: (state: any, _action: any) => {
-      const { requestId } = _action.meta;
-      if (state.isLoading && state.currentRequestId === requestId) {
-        state.isLoading = false;
-        state.currentRequestId = undefined;
-        state.jobListing.allJobPostList = _action.payload?.data?.result;
-      }
-    },
-
-    [getJobPostList.rejected.type]: (state: any, _action: any) => {
-      const { requestId } = _action.meta;
-      if (state.isLoading && state.currentRequestId === requestId) {
-        state.isLoading = false;
-        state.error = _action.error;
-        state.currentRequestId = undefined;
-        state.jobListing.allJobPostList = undefined;
-      }
-    },
     [asyncFilterAllJobListing.pending.type]: (state: any, _action: any) => {
       const { requestId } = _action.meta;
       state.isLoading = true;
@@ -252,7 +241,7 @@ const JobModule = createSlice({
       if (state.isLoading && state.currentRequestId === requestId) {
         state.isLoading = false;
         state.currentRequestId = undefined;
-        state.jobListing.allJobPostList = _action.payload?.result;
+        state.jobListing.allJobPostList = _action.payload?.data;
       }
     },
 
@@ -277,7 +266,7 @@ const JobModule = createSlice({
       if (state.isLoading && state.jobListing.newRequestId === requestId) {
         state.isLoading = false;
         state.jobListing.newRequestId = undefined;
-        state.jobListing.savedJobList = _action.payload.result;
+        state.jobListing.savedJobList = _action.payload?.data;
       }
     },
 
@@ -302,7 +291,7 @@ const JobModule = createSlice({
       if (state.jobListing.isLoading && state.jobListing.newRequestId === requestId) {
         state.jobListing.isLoading = false;
         state.jobListing.newRequestId = undefined;
-        state.jobListing.savedJobList = _action.payload.result;
+        state.jobListing.savedJobList = _action.payload.data;
       }
     },
 
@@ -350,7 +339,7 @@ const JobModule = createSlice({
       if (state.secondIsLoading && state.newRequestId === requestId) {
         state.secondIsLoading = false;
         state.newRequestId = undefined;
-        state.jobDetails.similarJobs = _action.payload?.result?.jobs;
+        state.jobDetails.similarJobs = _action.payload?.data?.results;
       }
     },
 
@@ -378,11 +367,11 @@ export const getJobPostFormData = (state: { jobModule: jobModuleType }) =>
 export const getJobPostFormDataResponse = (state: { jobModule: jobModuleType }) =>
   state.jobModule.jobPost.jobPostResponse;
 export const getAllJobPostData = (state: { jobModule: jobModuleType }) =>
-  state.jobModule.jobListing.allJobPostList?.jobs;
+  state.jobModule.jobListing.allJobPostList?.results;
 export const getJobPostAllDetails = (state: { jobModule: jobModuleType }) => state.jobModule;
 
 export const getJobPostSingleDetail = (state: { jobModule: jobModuleType }) => state.jobModule.jobDetails.jobPostDetail;
 export const getSimilarJobPost = (state: { jobModule: jobModuleType }) => state.jobModule.jobDetails.similarJobs;
 export const getSavedJobDataList = (state: { jobModule: jobModuleType }) =>
-  state.jobModule.jobListing.savedJobList?.jobs;
+  state.jobModule.jobListing.savedJobList?.results;
 export const getAllJobListingStoreData = (state: { jobModule: jobModuleType }) => state.jobModule.jobListing;

@@ -1,13 +1,14 @@
 import { Form, Input, Button, Checkbox, Row, InputNumber, Col } from "antd";
 import { startsWith } from "lodash";
 import Link from "next/link";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import PhoneInput from "react-phone-input-2";
 
 import CaptchaComponent from "@/components/RecaptchaComponent";
 import { useAppSelector } from "@/hooks/redux";
 import { generalEmailValidation } from "@/utils/globalFunction";
+import RenderIf from "@/utils/RenderIf/renderIf";
 import s from "@lib/auth/login.module.less";
 
 import { selectGetVerificationLoading } from "../authSlice";
@@ -18,13 +19,21 @@ interface RegisterProps {
   handleOnFinish: any;
   authStoreLoading: boolean;
   handleGetVerificationCode: () => void;
+  captchaValiadate: boolean;
 }
 
-const RegisterForm: FC<RegisterProps> = ({ form, handleOnFinish, handleGetVerificationCode, authStoreLoading }) => {
+const RegisterForm: FC<RegisterProps> = ({
+  form,
+  handleOnFinish,
+  handleGetVerificationCode,
+  authStoreLoading,
+  captchaValiadate,
+}) => {
   const { t } = useTranslation();
 
   const authVerificationCodeLoading: boolean = useAppSelector(selectGetVerificationLoading);
 
+  const [getCodeBtn, setgetCodeBtn] = useState<boolean>(true);
   return (
     <Form
       form={form}
@@ -141,16 +150,31 @@ const RegisterForm: FC<RegisterProps> = ({ form, handleOnFinish, handleGetVerifi
             <PhoneInput
               country="us"
               inputClass="h_phone_input"
-              isValid={(inputNumber, country, countries) =>
+              isValid={(inputNumber, country, countries) => {
                 countries.some(
                   (item: any) => startsWith(inputNumber, item.dialCode) || startsWith(item.dialCode, inputNumber)
-                )
-              }
+                );
+                if (inputNumber.match(/12345/)) {
+                  setgetCodeBtn(true);
+                  return false;
+                }
+                if (inputNumber.match(/1234/)) {
+                  setgetCodeBtn(true);
+                  return false;
+                }
+                if (inputNumber?.length < 7) {
+                  setgetCodeBtn(true);
+                  return false;
+                }
+                setgetCodeBtn(false);
+                return true;
+              }}
               inputProps={{
                 name: "mobileNo",
                 required: true,
                 autoFocus: true,
               }}
+              enableSearch
             />
           </Col>
           <Col span={8}>
@@ -158,6 +182,7 @@ const RegisterForm: FC<RegisterProps> = ({ form, handleOnFinish, handleGetVerifi
               className="h_phone_input_btn"
               loading={authVerificationCodeLoading}
               onClick={handleGetVerificationCode}
+              disabled={getCodeBtn}
             >
               {t("formItem.getCode")}
             </Button>
@@ -181,7 +206,11 @@ const RegisterForm: FC<RegisterProps> = ({ form, handleOnFinish, handleGetVerifi
       </Form.Item>
 
       <CaptchaComponent formName="userRegistrationForm" />
-
+      <RenderIf isTrue={captchaValiadate}>
+        <div className="ant-form-item-explain ant-form-item-explain-connected" role="alert">
+          <div className="ant-form-item-explain-error">This is required field.</div>
+        </div>
+      </RenderIf>
       <Form.Item
         className={s.h_form_item}
         name="terms"

@@ -35,6 +35,10 @@ const initialState: any = {
       ...commonResultObj,
       flag: "saved",
     },
+    invitedFreelancers: {
+      ...commonResultObj,
+      flag: "invitedFreelancers",
+    },
   },
   freelancerLoaderOj: {
     id: "",

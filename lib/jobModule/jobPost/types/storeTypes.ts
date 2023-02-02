@@ -30,7 +30,7 @@ export interface JobPostProps {
   jobPostType: string;
   onHandleSelectJob?: (item: string) => void;
   // handleChange?: ((value: any, option: DefaultOptionType | DefaultOptionType[]) => void) | undefined;
-  onHandleChangeForSelectFieldValueAndFormData: any;
+  formOnChangeMethod: any;
   jobPostCategoryOption?: React.ReactNode[];
   // onChangeCollapse: (key: string | string[]) => void;
   onClickHandler: (e: RadioChangeEvent) => void;
@@ -66,6 +66,7 @@ export interface JobPostProps {
   isLoading: boolean;
   deleteFileUpload: any;
   jobPostTypeSubmitHandler: (value: boolean) => void;
+  onChangeHandlerBackButton: (value: string | string[]) => void;
 }
 
 export interface DataProps {
@@ -95,7 +96,7 @@ export interface JobPostState {
 export interface JobPostFormProps {
   form: any;
   handleOnFinish: any;
-  onHandleChangeForSelectFieldValueAndFormData: any;
+  formOnChangeMethod: any;
   accountType: AccountType | string | string[];
   jobPostType?: string;
   size: SizeType;
@@ -133,9 +134,9 @@ type LanguageProps = {
 export interface BudgetFormProps {
   onClickHandler: (e: RadioChangeEvent) => void;
   budgetRateType: string;
-  onHandleChangeForSelectFieldValueAndFormData: any;
+  formOnChangeMethod: any;
   form: any;
-
+  onChangeHandlerBackButton: (value: string | string[]) => void;
   onCollapseHandle: (key: string) => void;
   collapseKey: string | string[];
   handleOnFinish: any;
@@ -144,7 +145,7 @@ export interface BudgetFormProps {
 }
 export interface ScopeFormProps {
   form: any;
-  onHandleChangeForSelectFieldValueAndFormData: any;
+  formOnChangeMethod: any;
   jobPostTypeOption?: React.ReactNode[];
   onLanguageChangeHandler: (value: string) => void;
   proficiency: string;
@@ -185,7 +186,7 @@ export interface SkillFormProps {
   onJobCategoryChange?: (value: string) => void;
   jobCategory?: jobCategoryProps;
   onJobSubCategoryChange?: (value: string) => void;
-  onHandleChangeForSelectFieldValueAndFormData?: any;
+  formOnChangeMethod?: any;
   jobSpeciality: jobSubCategoryProps;
   jobSubCategory: jobSubCategoryProps;
   onJobSpecialityChange: (value: string) => void;
@@ -198,7 +199,7 @@ export interface SkillFormProps {
 export interface SelectJobTypeProps {
   form: any;
   handleOnFinish: any;
-  onHandleChangeForSelectFieldValueAndFormData: any;
+  // formOnChangeMethod: any;
   jobPostType?: string;
   jobPostTypeHandle?: (e: RadioChangeEvent) => void;
   jobPostIsActive?: string;
@@ -211,7 +212,7 @@ export interface ReviewJobPostFormProps {
   addSkills: (skillValue: string) => void;
   skillValues: string[];
   setSkillValues: React.Dispatch<React.SetStateAction<string[]>>;
-  onHandleChangeForSelectFieldValueAndFormData: any;
+  formOnChangeMethod: any;
   jobPostTypeOption: React.ReactNode[];
   onJobCategoryChange?: (value: string) => void;
   jobcategory?: string;

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import CaptchaComponent from "@/components/RecaptchaComponent";
 import { IClientCompanyDetailsDropdownObj } from "@/lib/common/types/storeTypes";
 import { ICountryObj } from "@/lib/countriesAndLanguages/types/storeTypes";
+import RenderIf from "@/utils/RenderIf/renderIf";
 import s from "@lib/auth/login.module.less";
 
 import {
@@ -21,6 +22,8 @@ interface CompanyDetailsProps {
   authStoreLoading: boolean;
   commonStoreDataList: any;
   countriesData: ICountryObj[] | [];
+  handleConfirmButtonForCancel: () => void;
+  captchaValiadate: boolean;
 }
 const { Option } = Select;
 const CompanyDetailsForm: FC<CompanyDetailsProps> = ({
@@ -28,7 +31,9 @@ const CompanyDetailsForm: FC<CompanyDetailsProps> = ({
   handleOnFinish,
   authStoreLoading,
   commonStoreDataList,
+  handleConfirmButtonForCancel,
   countriesData,
+  captchaValiadate,
 }) => {
   const { t } = useTranslation();
   return (
@@ -244,12 +249,16 @@ const CompanyDetailsForm: FC<CompanyDetailsProps> = ({
       </Row>
 
       <CaptchaComponent formName="clientCompanyDetailForm" />
-
+      <RenderIf isTrue={captchaValiadate}>
+        <div className="ant-form-item-explain ant-form-item-explain-connected" role="alert">
+          <div className="ant-form-item-explain-error">This is required field.</div>
+        </div>
+      </RenderIf>
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item shouldUpdate className="h_form_action_btn">
             {() => (
-              <Button style={{ width: "100%" }} size="large">
+              <Button style={{ width: "100%" }} size="large" onClick={() => handleConfirmButtonForCancel()}>
                 {t("formItem.cancel")}
               </Button>
             )}

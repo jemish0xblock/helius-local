@@ -75,3 +75,4 @@ export const flagAsInappropriateOpt = [
     value: "",
   },
 ];
+export const checkTermsNameExits = ["andTerms", "orTerms", "exactTerms", "excludeTerms", "titleTerm"];

@@ -36,6 +36,7 @@ interface AuthViewProps {
   resetForgotPasswordStoreData: () => void;
   handleGetVerificationCode: () => void;
   maxTagSelectionValidation: (_: any, value: [string]) => void;
+  handleConfirmButtonForCancel: () => void;
   onChangeStep1FormValues: any;
   customLanguagesState: ICustomLanguagesData;
 
@@ -45,6 +46,8 @@ interface AuthViewProps {
   commonStoreDataList: ICommonStoreData[] | null;
   countriesData: ICountryObj[] | [];
   languagesData: ILanguageObj[] | [];
+  recentMailLoader: boolean;
+  captchaValiadate: boolean;
 }
 
 const AuthView: React.FC<AuthViewProps> = (props) => {
@@ -71,24 +74,37 @@ const AuthView: React.FC<AuthViewProps> = (props) => {
     commonStoreDataList,
     countriesData,
     languagesData,
+    handleConfirmButtonForCancel,
     maxTagSelectionValidation,
+    recentMailLoader,
+    captchaValiadate,
   } = props;
   const { t } = useTranslation();
   const router: NextRouter | undefined = useRouter();
   const authStore = useAppSelector(authSelector);
 
   return (
-    <>
+    <div className="auth_form">
       <RenderIf isTrue={authType === "login"}>
         <DefaultContentBox title={t("loginScreen.pageTitle")}>
-          <LoginForm form={form} handleOnFinish={handleOnFinish} authStoreLoading={authStoreLoading} />
+          <LoginForm
+            form={form}
+            handleOnFinish={handleOnFinish}
+            authStoreLoading={authStoreLoading}
+            captchaValiadate={captchaValiadate}
+          />
         </DefaultContentBox>
       </RenderIf>
 
       {/* account-security reset password module start */}
       <RenderIf isTrue={authType === "forgotPassword" && authStore?.account_security?.forgotPasswordStep === 0}>
         <DefaultContentBox className="h_forgot_pwd_box" title={t("forgotPasswordScreen.pageTitle")}>
-          <ForgotPassword form={form} handleOnFinish={handleOnFinish} authStoreLoading={authStoreLoading} />
+          <ForgotPassword
+            form={form}
+            handleOnFinish={handleOnFinish}
+            authStoreLoading={authStoreLoading}
+            captchaValiadate={captchaValiadate}
+          />
         </DefaultContentBox>
       </RenderIf>
       <RenderIf isTrue={authType === "forgotPassword" && authStore?.account_security?.forgotPasswordStep === 1}>
@@ -100,12 +116,13 @@ const AuthView: React.FC<AuthViewProps> = (props) => {
           isShowContactUsLink
           btnName={t("formItem.reSendEmailBtn")}
           handleOnClick={() => handleResendEmail("re-send-forgotPassword")}
+          recentMailLoader={recentMailLoader}
         />
       </RenderIf>
 
       <RenderIf isTrue={authType === "updatePassword" && authStore?.account_security?.forgotPasswordStep === 2}>
         <DefaultContentBox className="h_update_pwd_box" title={t("updatePasswordScreen.pageTitle")}>
-          <UpdatePassword form={form} handleOnFinish={handleOnFinish} />
+          <UpdatePassword form={form} handleOnFinish={handleOnFinish} captchaValiadate={captchaValiadate} />
         </DefaultContentBox>
       </RenderIf>
 
@@ -117,6 +134,7 @@ const AuthView: React.FC<AuthViewProps> = (props) => {
           isBtnAvail
           btnName={t("formItem.login")}
           handleOnClick={resetForgotPasswordStoreData}
+          recentMailLoader={recentMailLoader}
           // isLinkAvail
           // navigationRoute="/account-security/login"
           // linkName={t("formItem.login")}
@@ -144,6 +162,7 @@ const AuthView: React.FC<AuthViewProps> = (props) => {
               handleOnFinish={handleOnFinish}
               authStoreLoading={authStoreLoading}
               handleGetVerificationCode={handleGetVerificationCode}
+              captchaValiadate={captchaValiadate}
             />
           </DefaultContentBox>
         </RenderIf>
@@ -155,6 +174,7 @@ const AuthView: React.FC<AuthViewProps> = (props) => {
               handleOnFinish={handleOnFinish}
               authStoreLoading={authStoreLoading}
               handleGetVerificationCode={handleGetVerificationCode}
+              captchaValiadate={captchaValiadate}
             />
           </DefaultContentBox>
         </RenderIf>
@@ -179,6 +199,8 @@ const AuthView: React.FC<AuthViewProps> = (props) => {
             authStoreLoading={authStoreLoading}
             commonStoreDataList={commonStoreDataList}
             countriesData={countriesData}
+            handleConfirmButtonForCancel={handleConfirmButtonForCancel}
+            captchaValiadate={captchaValiadate}
           />
         </DefaultContentBox>
       </RenderIf>
@@ -207,10 +229,11 @@ const AuthView: React.FC<AuthViewProps> = (props) => {
             commonStoreDataList={commonStoreDataList}
             countriesData={countriesData}
             languagesData={languagesData}
+            captchaValiadate={captchaValiadate}
           />
         </DefaultContentBox>
       </RenderIf>
-    </>
+    </div>
   );
 };
 

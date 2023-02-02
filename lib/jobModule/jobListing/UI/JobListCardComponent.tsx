@@ -12,8 +12,8 @@ import { disLikesSvg, likesSvg, filledHeartSvg, heartSvg, locationSvg, verifiedU
 import { getDateAndTimeFormatter } from "@/utils/helper";
 import RenderIf from "@/utils/RenderIf/renderIf";
 
+import { IFetchOptionsReasonList } from "../../jobDetails/types/storeTypes";
 import { JobPostResponse } from "../../types/commonTypes";
-import { menuItemsList } from "../constants/common";
 
 import s from "./jobListCard.module.less";
 
@@ -39,6 +39,8 @@ interface JobListingCardComponentProps {
   checkCollapseJobDislikeExit: (id: string) => boolean;
   onCollapseHandle: (key: string | string[]) => void;
   jobId: any;
+  tabValue: string;
+  commonStoreDataList: any;
 }
 
 const LikeAndDislikeSavedComponent = (props: any) => {
@@ -49,8 +51,10 @@ const LikeAndDislikeSavedComponent = (props: any) => {
     checkCollapseJobDislikeExit,
     isDislikeLoading,
     jobId,
+    tabValue,
     onChangeHandlerSaved,
     isSavedLoading,
+    commonStoreDataList,
   } = props;
   return (
     <div className={s.h_job_list_title_and_like}>
@@ -69,7 +73,16 @@ const LikeAndDislikeSavedComponent = (props: any) => {
           ) : (
             <Dropdown
               overlay={
-                <Menu onClick={(e) => onHandleLikeAndDisLikeButton(e, data?.id, "dislike")} items={menuItemsList} />
+                <Menu
+                  onClick={(e) => onHandleLikeAndDisLikeButton(e, data?.id, "dislike")}
+                  selectable
+                  disabled={tabValue === "saved"}
+                >
+                  {commonStoreDataList?.dislikeReasonsList?.length > 0 &&
+                    commonStoreDataList?.dislikeReasonsList?.map((reasons: IFetchOptionsReasonList) => (
+                      <Menu.Item key={reasons?.id}>{reasons?.name}</Menu.Item>
+                    ))}
+                </Menu>
               }
               className={s.h_job_list_dislike}
               trigger={["click"]}
@@ -129,7 +142,7 @@ const JobListingCommonComponent = (props: any) => {
           {data?.skills === null
             ? null
             : data?.skills?.map((skill: any) => (
-                <li className={s.h_skill} key={skill?.id}>
+                <li className={s.h_skill} key={`${skill?.id}${Math.random()}`}>
                   {skill?.title}
                 </li>
               ))}
@@ -149,18 +162,17 @@ const JobListingCommonComponent = (props: any) => {
             {data?.location?.value}
           </span>
         ) : null}
-        {/* TODO we will make dynamic */}
         <span className={s.h_jobPost_detail}>
-          <span>$25k+</span>
+          <span>{`$${data?.clientId?.moneySpent} `}</span>
           {t("jobListingScreen.spendText")}
         </span>
         <span className={s.h_jobPost_detail}>
-          {t("jobListingScreen.connectToApply")}:<span>6 Connects</span>
+          {t("jobListingScreen.connectToApply")}:<span>{data?.connects ? data?.connects : 0} Connects</span>
         </span>
       </div>
       <div className={s.h_user_review_main}>
         <span className={s.h_jobPost_detail}>
-          {t("jobListingScreen.proposals")}:<span>Less than 10</span>
+          {t("jobListingScreen.proposals")}:<span>{data?.proposals ? data?.proposals : 0}</span>
         </span>
       </div>
     </div>
@@ -176,9 +188,11 @@ const JobListingCardComponent: React.FC<JobListingCardComponentProps> = ({
   getDislikeReasonMessage,
   isSavedLoading,
   isDislikeLoading,
+  tabValue,
   checkCollapseCurrentValue,
   checkCollapseJobDislikeExit,
   onCollapseHandle,
+  commonStoreDataList,
   jobId,
 }) => (
   <div className={s.h_card_wrapper}>
@@ -220,9 +234,11 @@ const JobListingCardComponent: React.FC<JobListingCardComponentProps> = ({
                         checkCollapseJobDislikeExit={checkCollapseJobDislikeExit}
                         isDislikeLoading={isDislikeLoading}
                         jobId={jobId}
+                        tabValue={tabValue}
                         onChangeHandlerSaved={onChangeHandlerSaved}
                         isSavedLoading={isSavedLoading}
                         isLoading={isLoading}
+                        commonStoreDataList={commonStoreDataList}
                       />
                     </Skeleton>
                   </div>
@@ -267,9 +283,11 @@ const JobListingCardComponent: React.FC<JobListingCardComponentProps> = ({
                     checkCollapseJobDislikeExit={checkCollapseJobDislikeExit}
                     isDislikeLoading={isDislikeLoading}
                     jobId={jobId}
+                    tabValue={tabValue}
                     onChangeHandlerSaved={onChangeHandlerSaved}
                     isSavedLoading={isSavedLoading}
                     isLoading={isLoading}
+                    commonStoreDataList={commonStoreDataList}
                   />
                   <JobListingCommonComponent data={item} />
                 </Skeleton>

@@ -8,6 +8,7 @@ import { captchaActions } from "@/components/RecaptchaComponent/captchaSlice";
 import { RootState } from "@/store";
 import { AUTH_COOKIE_EXPIRATION_TIME_IN_DAYS, localStorageKeys } from "@/utils/constants";
 import { createCookie, eraseCookie } from "@/utils/cookieCreator";
+import { getUserShortName } from "@/utils/pascalCase";
 import { IClientCompanyDetails, ILoginPayload, IRegisterFormItem, IUpdatePassword } from "@models/user";
 import Api from "@services/Api";
 
@@ -45,7 +46,10 @@ export const asyncUserLogin = createAsyncThunk(`auth/login`, async (payload: ILo
           Router.push(`/register/please-verify`);
           // thunkAPI.dispatch(push(`/register/please-verify`));
         }
-        return res.data;
+        const cloneUserData = _.cloneDeep(res.data);
+        cloneUserData.user.shortName = getUserShortName(cloneUserData.user.firstName, cloneUserData.user.lastName);
+
+        return cloneUserData;
       }
       return thunkAPI.rejectWithValue(res);
     });
@@ -61,12 +65,14 @@ export const asyncUserLogin = createAsyncThunk(`auth/login`, async (payload: ILo
   }
 });
 
-// User Login
+// User Login details
 export const asyncGetUserDetails = createAsyncThunk(`auth/get/user/details`, async (payload, thunkAPI) => {
   try {
     const response = await api.get(`/users/get-user-details`, {}, false, false).then(async (res: any) => {
       if (res && res?.isSuccess) {
-        return res.data;
+        const cloneUserData = _.cloneDeep(res.data);
+        cloneUserData.user.shortName = getUserShortName(cloneUserData.user.firstName, cloneUserData.user.lastName);
+        return cloneUserData;
       }
       return thunkAPI.rejectWithValue(res);
     });
@@ -302,3 +308,22 @@ export const asyncFreelancerCompleteProfile = createAsyncThunk(
     }
   }
 );
+
+// check token is expired or not.
+export const asyncCheckToken = (params: any) =>
+  new Promise<any>((resolve, reject) => {
+    try {
+      api
+        .post(`/common/check-token`, params, {}, false, false)
+        .then(async (res: any) => {
+          if (res && res?.data && res?.isSuccess) {
+            resolve(res);
+          }
+        })
+        .catch((err: any) => {
+          reject(err);
+        });
+    } catch (e: any) {
+      reject(e.message);
+    }
+  });

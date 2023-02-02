@@ -8,6 +8,7 @@ export interface CurrentUser {
   lastName: string;
   mobileNo: string;
   authType: string;
+  profileTitle: string;
   verificationCode: number;
   authStatus: AuthStatusEnum | number;
   createdAt: string;
@@ -15,6 +16,7 @@ export interface CurrentUser {
   isActive: boolean;
   isEmailVerified: boolean;
   tokens: any;
+  notification: any;
 }
 export interface AuthSecurityType {
   forgotPasswordStep: number;

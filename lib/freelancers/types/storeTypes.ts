@@ -10,3 +10,15 @@ export interface AuthState {
   isLoading: boolean;
   error: any;
 }
+export interface SubmitModelValues {
+  searchText: string;
+  anySearchText: string;
+  exactPhrase: string;
+  excludeWord: string;
+  titleSearch: string;
+}
+
+export type freelancerSavedProps = {
+  value: string;
+  id: string;
+};

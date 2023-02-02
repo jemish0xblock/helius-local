@@ -14,6 +14,7 @@ import s from "@lib/auth/login.module.less";
 
 import {
   addressFormatRegex,
+  atLeastFourChar,
   cityAlphabetRegex,
   organizationAlphanumericRegex,
   passingYearRegex,
@@ -41,6 +42,7 @@ interface ResidentialDetailsProps {
   submitFreelancerCompleteProfile: (name: string, info: any) => void;
   onChangeStep1FormValues: (item: any) => void;
   handleFreelancerPastExperience: (type: string, index?: string) => void;
+  captchaValiadate: boolean;
 }
 
 const currentYear = new Date().getFullYear();
@@ -63,6 +65,7 @@ const FreelancerCompleteProfileForms: FC<ResidentialDetailsProps> = (props) => {
     commonStoreDataList,
     maxTagSelectionValidation,
     languagesData,
+    captchaValiadate,
   } = props;
   const { t } = useTranslation();
   // Render steps
@@ -132,7 +135,7 @@ const FreelancerCompleteProfileForms: FC<ResidentialDetailsProps> = (props) => {
               { required: true, message: t("validationErrorMsgs.requireField") },
               {
                 pattern: new RegExp(addressFormatRegex),
-                message: t("validationErrorMsgs.companyNameLength"),
+                message: t("validationErrorMsgs.addressLine1Format"),
               },
             ]}
           >
@@ -253,6 +256,22 @@ const FreelancerCompleteProfileForms: FC<ResidentialDetailsProps> = (props) => {
         }}
       >
         <Form.Item
+          name="profileTitle"
+          className={`${s.h_form_item}`}
+          colon={false}
+          label={t("formItem.profileTitle")}
+          rules={[
+            { required: true, message: t("validationErrorMsgs.requireField") },
+            {
+              pattern: new RegExp(atLeastFourChar),
+              message: t("validationErrorMsgs.profileTitleMinChar"),
+            },
+          ]}
+        >
+          <Input placeholder={t("formItem.profileTitlePlace")} />
+        </Form.Item>
+
+        <Form.Item
           name="services"
           className={`${s.h_form_item}`}
           colon={false}
@@ -269,8 +288,17 @@ const FreelancerCompleteProfileForms: FC<ResidentialDetailsProps> = (props) => {
             allowClear
             mode="multiple"
             showArrow
-            showSearch={false}
+            showSearch
             maxTagCount="responsive"
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
+            }
+            filterSort={(optionA, optionB) =>
+              (optionA!.children as unknown as string)
+                .toLowerCase()
+                .localeCompare((optionB!.children as unknown as string).toLowerCase())
+            }
           >
             {commonStoreDataList?.categoriesList?.length > 0 &&
               commonStoreDataList?.categoriesList.map((category: any) =>
@@ -321,7 +349,7 @@ const FreelancerCompleteProfileForms: FC<ResidentialDetailsProps> = (props) => {
             {commonStoreDataList &&
               commonStoreDataList?.skillList?.length > 0 &&
               commonStoreDataList?.skillList.map((option: any) => (
-                <Option key={option?.uid} value={option?.uid}>
+                <Option key={option?.id} value={option?.id}>
                   {option?.title}
                 </Option>
               ))}
@@ -892,6 +920,11 @@ const FreelancerCompleteProfileForms: FC<ResidentialDetailsProps> = (props) => {
       </div>
 
       <CaptchaComponent formName="freelancerAboutSelfForm" />
+      <RenderIf isTrue={captchaValiadate}>
+        <div className="ant-form-item-explain ant-form-item-explain-connected" role="alert">
+          <div className="ant-form-item-explain-error">This is required field.</div>
+        </div>
+      </RenderIf>
       {renderFormActionBtnGroup()}
     </Form>
   );

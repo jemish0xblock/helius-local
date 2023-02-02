@@ -31,7 +31,7 @@ export const makeStore = (context: any) => {
         getDefaultMiddleware({
           serializableCheck: false,
         }).concat(routerMiddleware),
-      devTools: process.env.NODE_ENV !== "production",
+      devTools: process.env.NEXT_PUBLIC_ENV_MODE !== "production",
       preloadedState,
     });
   }
@@ -39,17 +39,19 @@ export const makeStore = (context: any) => {
   const persistConfig = {
     key: "root",
     storage,
-    blacklist: ["auth", "captcha", "freelancerModule", "jobModule"],
+    blacklist: ["auth", "captcha", "freelancerModule", "jobModule", "notificationModule"],
   };
 
   const persistedReducer = persistReducer(persistConfig, rootReducers);
+  const isLoggerAvail: any = process.env.NEXT_PUBLIC_ENV_MODE !== "production" ? logger : [];
+
   const store = configureStore({
     reducer: persistedReducer,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: false,
-      }).concat(routerMiddleware, logger),
-    devTools: process.env.NODE_ENV !== "production",
+      }).concat(routerMiddleware, isLoggerAvail),
+    devTools: process.env.NEXT_PUBLIC_ENV_MODE !== "production",
     preloadedState,
   });
 

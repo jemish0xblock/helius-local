@@ -27,7 +27,7 @@ const AppErrorBoundaryLayout = ({ errorInfo }: React.PropsWithChildren<any>) => 
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <HeaderComponent />
-      <Layout>
+      <Layout style={{ marginTop: "100px" }}>
         <Content className="site-layout-background container">
           <Result
             status="error"

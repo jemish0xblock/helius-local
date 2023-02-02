@@ -13,3 +13,15 @@ export type AllCategoryProps = {
   name: string;
   nativeName: string;
 };
+export type jobCategoryProps = {
+  value: string;
+  id: string;
+};
+export type jobSubCategoryProps = {
+  value: string;
+  id: string;
+};
+export type jobSkillsProps = {
+  value: string;
+  id: string;
+};

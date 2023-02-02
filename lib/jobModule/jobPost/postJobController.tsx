@@ -1,5 +1,5 @@
-import { Form, RadioChangeEvent, UploadFile } from "antd";
-import _ from "lodash";
+import { Form, RadioChangeEvent } from "antd";
+import _, { isEmpty } from "lodash";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import React, { FC, useEffect, useState } from "react";
@@ -10,6 +10,7 @@ import { categoriesListFromStore } from "@/lib/categories/categoriesSlice";
 import { asyncFetchFreelancerOptions } from "@/lib/common/common.service";
 import { languagesListFromStore } from "@/lib/countriesAndLanguages/countriesSlice";
 import { commonAlert, errorAlert } from "@/utils/alert";
+import { errorString } from "@/utils/constants";
 import { getAttachmentFileName } from "@/utils/helper";
 import { getLocalStorageItem, setLocalStorageItem } from "@/utils/localStorage";
 import { getJobPostFormDataResponse, getJobPostStoreData } from "@lib/jobModule/jobModule.slice";
@@ -97,9 +98,11 @@ const PostJobController: FC<JobPostControllerProps> = (props) => {
         router.push("/freelancer/dashboard");
       }
     };
-
+    // if (authStore.currentUser?.authType === "") {
+    //   router.push("/account-security/login");
+    // }
     const getJobPostReuseApiData = async () => {
-      const reuseJobPostList = await asyncGetClientJobPostReuse();
+      const reuseJobPostList = await asyncGetClientJobPostReuse({ flag: "allJobs" });
       setReuseListApiData(reuseJobPostList);
     };
 
@@ -133,12 +136,16 @@ const PostJobController: FC<JobPostControllerProps> = (props) => {
     const reuseJobPostDetail = await asyncGetJobPostDetails(data);
 
     if (reuseJobPostDetail?.status === 400) {
-      commonAlert("error", "JOB_DETAIL_NOT_FOUND");
+      commonAlert("error", errorString.jobDetailNotFound);
+      router.push("/job-post/getting-started");
+    } else if (reuseJobPostDetail === undefined) {
+      commonAlert("error", errorString.jobDetailNotFound);
       router.push("/job-post/getting-started");
     } else {
       setJobPostReuseDetails(reuseJobPostDetail);
     }
   };
+
   useEffect(() => {
     const data = {
       jobId: jobIdFromUrl,
@@ -169,7 +176,7 @@ const PostJobController: FC<JobPostControllerProps> = (props) => {
   }, [jobIdFromUrl, postId, dispatch, jobId]);
 
   useEffect(() => {
-    const { __INTERNAL__ } = form;
+    const { __INTERNAL__ }: any = form;
     const formName = __INTERNAL__?.name;
 
     if (jobIdFromUrl) {
@@ -185,7 +192,23 @@ const PostJobController: FC<JobPostControllerProps> = (props) => {
           ])
         );
       }
-
+      if (jobPostReuseDetails?.skills?.length > 0 && skillValues.length === 1) {
+        const uniqueArray: jobSkillsProps[] = [];
+        let results: jobSkillsProps[] = [];
+        jobPostReuseDetails?.skills?.forEach((data: any) => {
+          const singleObject = { value: data?.title, id: data?.id };
+          if (!uniqueArray.includes(singleObject)) {
+            uniqueArray.push(singleObject);
+            results = uniqueArray.filter((item: any) => {
+              if (item.value !== "") {
+                return true;
+              }
+              return false;
+            });
+          }
+        });
+        setSkillValues(results);
+      }
       if (formName === "JobPostFormDescription") {
         form.setFieldsValue({
           jobPostTitle: jobPostReuseDetails?.title,
@@ -196,18 +219,26 @@ const PostJobController: FC<JobPostControllerProps> = (props) => {
           speciality: jobPostReuseDetails?.speciality?.title,
         });
       }
-      if (jobPostReuseDetails?.skills?.length > 0 && skillValues.length === 1) {
-        jobPostReuseDetails?.skills.map((item: any) =>
-          setSkillValues((preValue) => [...preValue, { value: item?.title, id: item?.id }])
-        );
-      }
 
       if (formName === "JobPostFormSkill") {
         if (jobPostReuseDetails?.skills?.length > 0 && skillValues.length === 1) {
-          jobPostReuseDetails?.skills.map((item: any) =>
-            setSkillValues((preValue) => [...preValue, { value: item?.title, id: item?.id }])
-          );
+          const uniqueArray: jobSkillsProps[] = [];
+          let results: jobSkillsProps[] = [];
+          jobPostReuseDetails?.skills?.forEach((data: any) => {
+            const singleObject = { value: data?.title, id: data?.id };
+            if (!uniqueArray.includes(singleObject)) {
+              uniqueArray.push(singleObject);
+              results = uniqueArray.filter((item: any) => {
+                if (item.value !== "") {
+                  return true;
+                }
+                return false;
+              });
+            }
+          });
+          setSkillValues(results);
         }
+
         form.setFieldsValue({
           category: jobPostReuseDetails?.category?.title,
           subCategory: jobPostReuseDetails?.subCategory?.title,
@@ -260,13 +291,14 @@ const PostJobController: FC<JobPostControllerProps> = (props) => {
         freelancer: jobPostReuseDetails?.providerCount > 1 ? "More than One" : "One Freelancer",
         enterNumberFreelancer: jobPostReuseDetails?.providerCount,
         selectLocation: jobPostReuseDetails?.location,
+        hourPerWeek: jobPostReuseDetails?.workingHours,
         budgetRate: jobPostReuseDetails?.paymentType,
         budgetMin: jobPostReuseDetails?.minBudget,
         budgetMax: jobPostReuseDetails?.maxBudget,
         budget: jobPostReuseDetails?.budget,
       });
     }
-  }, [jobIdFromUrl, reuseListApiData, form]);
+  }, [jobIdFromUrl, reuseListApiData, jobPostReuseDetails, form]);
 
   // event handler methods
 
@@ -321,6 +353,19 @@ const PostJobController: FC<JobPostControllerProps> = (props) => {
   const onHandleChangeForSelectFieldValueAndFormData = () => {
     // this is onchange for form data we will use future
   };
+  const onChangeHandlerBackButton = (value: string | string[]) => {
+    const key = value[0];
+    if (Number(key) === 1) {
+      router.push({
+        pathname: `/job-post/getting-started`,
+      });
+    } else {
+      const newKey = Number(key) - 1;
+
+      setLocalStorageItem("collapseValue", newKey.toString());
+      setCollapseKey([newKey.toString()]);
+    }
+  };
 
   const onClickHandler = (e: RadioChangeEvent) => {
     setBudgetRateType(e.target.value);
@@ -338,7 +383,7 @@ const PostJobController: FC<JobPostControllerProps> = (props) => {
     await asyncGetJobPostDeleteFiles(data);
   };
 
-  const deleteFileUpload = (file: UploadFile) => {
+  const deleteFileUpload = (file: any) => {
     const data = {
       jobId: jobIdFromUrl,
       filekey: file?.name,
@@ -350,25 +395,27 @@ const PostJobController: FC<JobPostControllerProps> = (props) => {
   };
   // on submit form
   const onFinish = async (values: JobPostForm | any) => {
-    const { __INTERNAL__ } = form;
+    const { __INTERNAL__ }: any = form;
     const formName = __INTERNAL__?.name;
-
     if (formName === "jobPostTypeSelection") {
       if (_.has(values, "jobPostReuse")) {
         router.push({
           pathname: `/job-post/reuse/${values?.jobPostReuse}`,
+          query: !isEmpty(router.query) && router.query?.send_offer ? router.query : "",
         });
         return;
       }
       if (_.has(values, "editJob")) {
         router.push({
           pathname: `/job-post/draft/${values?.editJob}`,
+          query: !isEmpty(router.query) && router.query?.send_offer ? router.query : "",
         });
         return;
       }
       setLocalStorageItem("collapseValue", "1");
       router.push({
         pathname: `/job-post/create`,
+        query: !isEmpty(router.query) && router.query?.send_offer ? router.query : "",
       });
     } else if (formName === "JobPostFormDescription") {
       const getPathName = router.pathname.split("/")[2];
@@ -431,9 +478,12 @@ const PostJobController: FC<JobPostControllerProps> = (props) => {
       });
 
       asyncJobPostUpdateForm("4", { ...values, newLanguageIds, jobId });
-    } else if (formName === "JobPostFormBudget") {
+    } else if (formName === "JobPostFormBudget" && collapseKey[0] === "4") {
       new Promise((resolve, reject) => {
         const ObjectValues = { ...values, submitButtonType, jobId };
+        if (!submitButtonType) {
+          ObjectValues.status = "pending";
+        }
         dispatch(jobPostApiUpdate({ ObjectValues, resolve, reject }));
       }).then((res: any) => {
         setLocalStorageItem("collapseValue", "1");
@@ -442,48 +492,26 @@ const PostJobController: FC<JobPostControllerProps> = (props) => {
         commonAlert("success", res?.successCode);
         router.push({
           pathname: `/job-post/submited`,
+          query: !isEmpty(router.query) && router.query?.send_offer ? router.query : "",
         });
       });
     }
   };
-
   const AddMoreSkills = (skillValue: string, id: string) => {
     if (skillValues.length < 15) {
-      const items = skillValue.split(",");
-      if (items.length > 1 && skillValue !== "" && id !== "") {
-        items.forEach((element) => {
-          const uniqueArray: Array<jobSkillsProps> = skillValues.filter((item) => item.value !== element);
-
-          const singleObject = { value: element, id };
-          if (!uniqueArray.includes(singleObject)) {
-            uniqueArray.push(singleObject);
-
-            const results = uniqueArray.filter((item) => {
-              if (item.value !== "") {
-                return true;
-              }
-
-              return false;
-            });
-
-            setSkillValues(results);
-          }
-        });
-      } else if (skillValue !== "" && id !== "") {
-        const uniqueArray: Array<jobSkillsProps> = skillValues.filter((item) => item.value !== skillValue);
-
+      if (skillValue !== "" && id !== "") {
+        const uniqueArray: jobSkillsProps[] = skillValues.filter((item: any) => item.value !== skillValue);
         const singleObject = { value: skillValue, id };
         if (!uniqueArray.includes(singleObject)) {
           uniqueArray.push(singleObject);
 
-          const results = uniqueArray.filter((item) => {
+          const results = uniqueArray.filter((item: any) => {
             if (item.value !== "") {
               return true;
             }
 
             return false;
           });
-
           setSkillValues(results);
         }
       }
@@ -491,7 +519,6 @@ const PostJobController: FC<JobPostControllerProps> = (props) => {
       errorAlert("error", "Only 15 skills are allowed", true);
     }
   };
-
   const onLanguageChangeModelSubmit = () => {
     if (onChangeValue !== "") {
       const uniqueArray: Array<LanguageProps> = language.filter((item) => item.language !== onChangeValue);
@@ -606,6 +633,7 @@ const PostJobController: FC<JobPostControllerProps> = (props) => {
       isLoading={isLoading}
       deleteFileUpload={deleteFileUpload}
       jobPostTypeSubmitHandler={jobPostTypeSubmitHandler}
+      onChangeHandlerBackButton={onChangeHandlerBackButton}
     />
   );
 };

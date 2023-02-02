@@ -3,9 +3,7 @@ import _ from "lodash";
 import Link from "next/link";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-
 import RenderIf from "@utils/RenderIf/renderIf";
-
 import s from "./style.module.less";
 
 const { Title } = Typography;
@@ -24,6 +22,7 @@ interface AcknowledgementComponentProps {
   isLinkAvail?: boolean;
   handleOnClick?: () => void;
   linkName?: LinKNameProps[];
+  recentMailLoader: boolean;
   // navigationRoute?: any;
 }
 
@@ -37,6 +36,7 @@ const AcknowledgementComponent: FC<AcknowledgementComponentProps> = ({
   isLinkAvail,
   linkName,
   isShowContactUsLink,
+  recentMailLoader,
 }) => {
   const { t } = useTranslation();
 
@@ -53,7 +53,7 @@ const AcknowledgementComponent: FC<AcknowledgementComponentProps> = ({
       </RenderIf>
 
       <RenderIf isTrue={isBtnAvail === true}>
-        <Button type="primary" className={s.h_ack_btn_primary} onClick={handleOnClick}>
+        <Button type="primary" loading={recentMailLoader} className={s.h_ack_btn_primary} onClick={handleOnClick}>
           {btnName}
         </Button>
       </RenderIf>

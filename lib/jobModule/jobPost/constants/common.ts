@@ -15,7 +15,10 @@ export const jobType = [
 export const jobScopeList = ["Large", "Medium", "Small"];
 export const jobScopeListLarge = ["More than 6 months", "3 to 6 months", "1 to 3 months"];
 export const jobScopeLisSmall = ["3 to 6 months", "1 to 3 months", "Less than 1 month"];
-export const experienceList = ["Entry Level", "Intermediate", "Expert"];
+
+export const jobScopeFullList = ["More than 6 months", "3 to 6 months", "1 to 3 months", "Less than 1 month"];
+
+export const experienceList = ["Entry", "Intermediate", "Expert"];
 export const successScoreList = [
   { id: 0, title: "60% Job success & up", value: 60 },
   { id: 1, title: "80% Job success & up", value: 80 },
@@ -28,10 +31,10 @@ export const whocanseejob = [
 ];
 export const projectTypeList = ["One time Project", "Ongoing Project", "Complex Project"];
 export const proficiencyList = [
-  "Any Level",
-  "Conversational or better",
-  "Fluent or better",
-  "Native or bilingual only",
+  { title: "Any Level", value: "Any" },
+  { title: "Conversational or better", value: "Conversational" },
+  { title: "Fluent or better", value: "Fluent" },
+  { title: "Native or bilingual only", value: "Native" },
 ];
 export const freelancerTypeList = ["No Preference", "Independent", "Agency"];
 export const hoursBilledList = [

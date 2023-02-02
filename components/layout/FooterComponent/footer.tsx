@@ -17,13 +17,13 @@ const FooterComponent: React.FC = () => {
         <div className="main-screen-content">
           <span className={styles.footer_content}>
             {t(`footer.copyright`)}@ {t(`app_title`)} {new Date().getFullYear()} |
-            <Link href="/terms" passHref>
+            <Link href="/legal/terms?slug=user-agreement" passHref>
               <a href="replace" className={styles.h_footer_links}>
                 {t(`footer.termsOfService`)}
               </a>
             </Link>
             |
-            <Link href="/privacy" passHref>
+            <Link href="/legal/privacy?slug=user-agreement" passHref>
               <a href="replace" className={styles.h_footer_links}>
                 {t(`footer.privacyPolicy`)}
               </a>

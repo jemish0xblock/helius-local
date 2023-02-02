@@ -7,21 +7,24 @@ interface ICollapseComponentProps {
   children: ReactNode;
   collapseTitle: string;
   itemKey: string;
+  visiblePanel: boolean;
 }
 const { Panel } = Collapse;
 
 const CollapseComponent: FC<ICollapseComponentProps> = (props) => {
-  const { defaultActiveKeyList, customClass, children, itemKey, collapseTitle } = props;
+  const { defaultActiveKeyList, visiblePanel, customClass, children, itemKey, collapseTitle } = props;
   return (
     <Collapse
       accordion
       defaultActiveKey={defaultActiveKeyList}
       ghost
-      className={`h_filter_collapse_sec ${customClass || ""}`}
+      className={`${visiblePanel ? "h_filter_collapse_sec" : ""} ${customClass || ""}`}
     >
-      <Panel header={collapseTitle} key={itemKey}>
-        {children}
-      </Panel>
+      {visiblePanel ? (
+        <Panel header={collapseTitle} key={itemKey}>
+          {children}
+        </Panel>
+      ) : null}
     </Collapse>
   );
 };

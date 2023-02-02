@@ -13,7 +13,9 @@ export const sliceName = "categoriesStore";
 
 const initialState: categoriesDataProps = {
   currentRequestId: "",
+  newRequestId: "",
   isLoading: false,
+  newISLoading: false,
   categoriesList: null,
   subCategoriesSkills: [],
   specialityAllSkills: [],
@@ -50,15 +52,16 @@ export const categoriesSlice = createSlice({
     },
     [getJobPostSkills.pending.type]: (state: any, _action: any) => {
       const { requestId } = _action.meta;
-      state.isLoading = true;
-      state.currentRequestId = requestId;
+      state.newISLoading = true;
+      state.newRequestId = requestId;
     },
 
     [getJobPostSkills.fulfilled.type]: (state: any, _action: any) => {
       const { requestId } = _action.meta;
-      if (state.isLoading && state.currentRequestId === requestId) {
-        state.isLoading = false;
-        state.currentRequestId = undefined;
+
+      if (state.newISLoading && state.newRequestId === requestId) {
+        state.newISLoading = false;
+        state.newRequestId = undefined;
         state.isAuth = true;
 
         state.subCategoriesSkills = _action.payload;
@@ -67,10 +70,10 @@ export const categoriesSlice = createSlice({
 
     [getJobPostSkills.rejected.type]: (state: any, _action: any) => {
       const { requestId } = _action.meta;
-      if (state.isLoading && state.currentRequestId === requestId) {
-        state.isLoading = false;
+      if (state.newISLoading && state.newRequestId === requestId) {
+        state.newISLoading = false;
         state.error = _action.error;
-        state.currentRequestId = undefined;
+        state.newRequestId = undefined;
       }
     },
     [getJobPostSkillsWithRelatables.pending.type]: (state: any, _action: any) => {

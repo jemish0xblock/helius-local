@@ -31,6 +31,8 @@ export interface ICommonStoreData {
   flagAsInappropriateList: IFetchOptions[] | IFetchOptionsReasonList[] | null;
   currentRequestId: string;
   dislikeReasonsList: IFetchOptionsReasonList[] | null;
+  withdrawReasonsList: IFetchOptionsReasonList[] | null;
+  interviewReasonsList: IFetchOptionsReasonList[] | null;
   isLoading: boolean;
   error: any;
 }

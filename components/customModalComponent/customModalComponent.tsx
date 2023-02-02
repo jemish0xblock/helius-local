@@ -11,7 +11,9 @@ interface ModalProps {
   children: ReactNode;
   title: string;
   widthSize: number;
-  onChangeModelSubmit: () => void;
+  submitText?: string;
+  cancelText?: string;
+  onChangeModelSubmit: any;
 }
 const CustomModalComponent: React.FC<ModalProps> = ({
   widthSize,
@@ -21,6 +23,8 @@ const CustomModalComponent: React.FC<ModalProps> = ({
   visible,
   handleCancel,
   setVisible,
+  cancelText,
+  submitText,
 }) => {
   const [loading, setLoading] = useState(false);
 
@@ -39,26 +43,30 @@ const CustomModalComponent: React.FC<ModalProps> = ({
       title={title}
       footer={null}
       onOk={handleOk}
-      onCancel={handleCancel}
+      onCancel={() => handleCancel(false)}
     >
       {children}
       <div className={s.h_model_button_style}>
-        <Button key="back" onClick={handleCancel}>
-          Cancel
+        <Button key="back" onClick={() => handleCancel(false)}>
+          {cancelText}
         </Button>
-
-        <Button
-          key="submit"
-          type="primary"
-          className={s.h_model_submit}
-          loading={loading}
-          onClick={onChangeModelSubmit || handleOk}
-        >
-          Submit
-        </Button>
+        {onChangeModelSubmit !== null ? (
+          <Button
+            key="submit"
+            type="primary"
+            className={s.h_model_submit}
+            loading={loading}
+            onClick={onChangeModelSubmit || handleOk}
+          >
+            {submitText}
+          </Button>
+        ) : null}
       </div>
     </Modal>
   );
 };
-
+CustomModalComponent.defaultProps = {
+  submitText: "Submit",
+  cancelText: "Cancel",
+};
 export default CustomModalComponent;

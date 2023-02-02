@@ -1,42 +1,57 @@
 /* eslint-disable consistent-return */
+import { has } from "lodash";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useAppSelector } from "@/hooks/redux";
 import { authSelector } from "@/lib/auth/authSlice";
-import { errorAlert } from "@/utils/alert";
 import { localStorageKeys } from "@/utils/constants";
 import AcknowledgementComponent from "@components/AcknowledgementComponent";
 import Api from "@services/Api";
 
 const api = new Api();
 interface IVerifiedAccountProps {
-  isVerified: boolean;
-  data: null | { successCode: string; data: null };
+  token: string;
 }
-const VerifiedAccount: FC<IVerifiedAccountProps> = ({ isVerified, data }) => {
-  const { isAuth, currentUser } = useAppSelector(authSelector);
 
+const VerifiedAccount: FC<IVerifiedAccountProps> = ({ token }) => {
+  const { isAuth, currentUser } = useAppSelector(authSelector);
   const { t } = useTranslation();
   const router = useRouter();
+  const [isVerified, setIsVerified] = useState<boolean>(false);
+
+  // Api methods
+  const verifyUserEmailAddress = async () => {
+    try {
+      await api
+        .post("/auth/verify-email", {
+          token,
+        })
+        .then((res: any) => {
+          if (res && res?.isSuccess) {
+            setIsVerified(true);
+            if (has(localStorage, localStorageKeys.userEmail)) {
+              localStorage.removeItem(localStorageKeys.userEmail);
+            }
+            router.push("/account-security/login");
+          }
+        });
+    } catch (e: any) {
+      router.push("/account-security/login");
+      setIsVerified(false);
+    }
+  };
   useEffect(() => {
     if (isAuth) {
       router.push(`/${currentUser.authType}/dashboard`);
       return;
     }
-    if (!isVerified) {
-      errorAlert("error", "Something went went", true);
-      router.push("/account-security/login");
-    } else {
-      if (data && data.successCode !== "EMAIL_VERIFY_SUCCESSFULLY") {
-        errorAlert("success", data.successCode);
-      }
-      localStorage.removeItem(localStorageKeys.userEmail);
-    }
-
-    return (): void => localStorage.removeItem(localStorageKeys.userEmail);
+    verifyUserEmailAddress();
+    return (): void => {
+      if (has(localStorage, localStorageKeys.userEmail)) localStorage.removeItem(localStorageKeys.userEmail);
+    };
   }, []);
 
   return !isAuth && isVerified ? (
@@ -53,6 +68,7 @@ const VerifiedAccount: FC<IVerifiedAccountProps> = ({ isVerified, data }) => {
             link: "/account-security/login",
           },
         ]}
+        recentMailLoader={false}
       />
     </div>
   ) : (
@@ -60,28 +76,7 @@ const VerifiedAccount: FC<IVerifiedAccountProps> = ({ isVerified, data }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const params: any = {
-    isVerified: false,
-  };
-  try {
-    await api
-      .post("/auth/verify-email", {
-        token: query.token,
-      })
-      .then((res: any) => {
-        if (res && res?.isSuccess) {
-          params.isVerified = true;
-          params.data = res.data;
-        }
-      });
-  } catch (e: any) {
-    params.isVerified = false;
-  }
-
-  return {
-    props: params,
-  };
-};
-
+export const getServerSideProps: GetServerSideProps = async ({ query }) => ({
+  props: { token: query?.token || "" },
+});
 export default VerifiedAccount;

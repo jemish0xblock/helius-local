@@ -7,6 +7,7 @@ import categoriesReducer from "@/lib/categories/categoriesSlice";
 import commonStoreData from "@/lib/common/commonSlice";
 import freelancersReducer from "@/lib/freelancers/freelancerSlice";
 import jobModuleSlice from "@/lib/jobModule/jobModule.slice";
+import notificationReducer from "@/lib/notification/notificationSlice";
 import authReducer from "@lib/auth/authSlice";
 
 import captchaReducer from "../components/RecaptchaComponent/captchaSlice";
@@ -23,6 +24,7 @@ export const allReducers = combineReducers({
   countriesAndLanguages: countriesReducer,
   categoriesStoreData: categoriesReducer,
   filterOption: jobListFilterReducer,
+  notificationModule: notificationReducer,
 });
 
 export const rootReducers = (state: any, action: AnyAction) => {
@@ -37,8 +39,8 @@ export const rootReducers = (state: any, action: AnyAction) => {
     }
     return nextState;
   }
-  // if (action.type === "auth/logout") {
-  //   state = undefined;
-  // }
+  if (action.type === "auth/logout/fulfilled") {
+    state = undefined;
+  }
   return allReducers(state, action);
 };

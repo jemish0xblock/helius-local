@@ -35,7 +35,8 @@
   },
   "forgotPasswordScreen": {
     "pageTitle": "Mettez à jour votre mot de passe",
-    "note": "Entrez votre identifiant de messagerie enregistré et soumettez"
+    "note": "Entrez votre identifiant de messagerie enregistré et soumettez",
+    "backToLogin": "Retourner à"
   },
   "updatePasswordScreen": {
     "pageTitle": "Mettre à jour le mot de passe"
@@ -84,17 +85,17 @@
     "whatWould": "What would you like to do?",
     "cancel": "Annuler",
     "next": "Prochain",
-    "categoryPlaceholderText":"Choisir une catégorie",
-       "subCategoryPlaceholderText":"Sélectionnez la sous-catégorie"
+    "categoryPlaceholderText": "Choisir une catégorie",
+    "subCategoryPlaceholderText": "Sélectionnez la sous-catégorie"
   },
-      "jobListingScreen": {
+  "jobListingScreen": {
     "paymentVerified": "Paiement vérifié",
     "spendText": "Dépenser",
     "connectToApply": "Se connecte pour postuler",
     "proposals": "Les propositions",
-    "scopeText":"Porté",
-    "postedText":"Posté"
-    },
+    "scopeText": "Porté",
+    "postedText": "Posté"
+  },
   "formItem": {
     "login": "Connexion",
     "register": "S'inscrire",
@@ -182,7 +183,6 @@
     "fluentBetter": "Fluent or better",
     "native": "Native or bilingual only"
   },
-
   "validationErrorMsgs": {
     "requireEmailId": "Veuillez saisir votre e-mail !",
     "requirePassword": "Veuillez saisir votre mot de passe !",
@@ -196,10 +196,10 @@
     "requireJobTitle": "Veuillez saisir votre intitulé de poste !",
     "requireJobType": "Veuillez saisir votre type d'emploi !",
     "requireJobCategory": "Veuillez saisir votre catégorie d'emploi !",
-     "requireSpeciality": "Please input your Job Speciality!",
+    "requireSpeciality": "Please input your Job Speciality!",
     "requireJobLocation": "Veuillez saisir votre emplacement !",
-    "requireJobBudget": "Veuillez saisir le budget minimum !",
-    "requireJobBudgetValid": "Veuillez saisir un budget valide !",
+    "requireJobBudget": "Veuillez saisir le amount minimum !",
+    "requireJobBudgetValid": "Veuillez saisir un amount valide !",
     "requiePaymentType": "Veuillez saisir votre type de paiement !",
     "requireJobSkill": "Veuillez saisir votre compétence professionnelle !",
     "requireJobSkillAtleast": "Please submit atleast 1 Job Skill!",
@@ -227,7 +227,9 @@
   "errorMessages": {
     "SOMETHING_WENT_WRONG": "quelque chose s'est mal passé !",
     "ERR_NETWORK": "Erreur réseau",
-    "JOB_DETAIL_NOT_FOUND": "Job detail not found."
+    "JOB_DETAIL_NOT_FOUND": "Job detail not found.",
+    "PASSWORD_LENGTH_ERROR": "Password must contain 8 characters",
+    "PASSWORD_ERROR": "Please enter valid password"
   },
   "successMessages": {
     "job_submit_successully": "Mise à jour de l'offre d'emploi réussie",

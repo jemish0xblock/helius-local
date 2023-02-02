@@ -4,6 +4,7 @@ import React, { FC, ReactNode } from "react";
 interface ModalComponentProps {
   children: ReactNode;
   title: string | any;
+  className?: string | any;
   okText: string;
   cancelText: string;
   isShow: boolean;
@@ -18,6 +19,7 @@ const ModalComponent: FC<ModalComponentProps> = ({
   okText,
   cancelText,
   title,
+  className,
   isShow,
   confirmLoading,
   setIsShow,
@@ -37,6 +39,7 @@ const ModalComponent: FC<ModalComponentProps> = ({
 
   return (
     <Modal
+      className={className}
       centered
       okText={okText}
       cancelText={cancelText}
@@ -50,5 +53,7 @@ const ModalComponent: FC<ModalComponentProps> = ({
     </Modal>
   );
 };
-
+ModalComponent.defaultProps = {
+  className: "",
+};
 export default ModalComponent;

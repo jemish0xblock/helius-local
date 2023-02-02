@@ -4,7 +4,7 @@ import chalk from "chalk";
 import { LogSystem } from ".";
 
 export const consoleLog: LogSystem = (data) => {
-  console.log(chalk.bgMagenta("-----------------"));
+  console.log(chalk.bgBlue("--------------------------------------------------------------------"));
   switch (data.type) {
     case "error":
       console.log(chalk.bold.red(data.slug));
@@ -18,9 +18,8 @@ export const consoleLog: LogSystem = (data) => {
     default:
       console.log(chalk.bold.white(data.slug));
   }
-
-  // console.log(chalk.white("Route: ", data.route));
   console.log(chalk.white("Date: ", new Date()));
+  console.log(chalk.white("Url: ", JSON.stringify(data.route)));
   console.log(chalk.white("Body: ", JSON.stringify(data.body)));
-  console.log(chalk.bgMagenta("-----------------"));
+  console.log(chalk.bgBlue("--------------------------------------------------------------------"));
 };

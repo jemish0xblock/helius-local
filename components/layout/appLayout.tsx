@@ -85,7 +85,7 @@ const AppLayout = ({ isHideBreadCrumb, children, router }: React.PropsWithChildr
       )} */}
 
       <Layout style={{ marginTop: "80px" }}>
-        <Content className="site-layout-background container">
+        <Content className={`site-layout-background ${pathname !== "/messages" ? "container" : ""}`}>
           {!isHideBreadCrumb && (
             <Row className="site-layout-breadCrumb-row">
               {!isHideBreadCrumb && <Breadcrumb style={{ margin: "16px 0" }} itemRender={itemRender} routes={routes} />}

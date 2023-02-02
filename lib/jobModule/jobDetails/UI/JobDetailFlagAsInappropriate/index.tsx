@@ -4,6 +4,8 @@ import CustomModalComponent from "@/components/customModalComponent/customModalC
 import { descriptionValidationRegex } from "@/lib/jobModule/jobPost/constants/validationRegx";
 import sm from "@components/customModalComponent/style.module.less";
 
+import { IFetchOptionsReasonList } from "../../types/storeTypes";
+
 const { TextArea } = Input;
 interface IJobDetailFlagAsInappropriate {
   form: any;
@@ -12,6 +14,7 @@ interface IJobDetailFlagAsInappropriate {
   handleCancelForSearchModel: any;
   visibleModel: boolean;
   setVisibleModel: (value: React.SetStateAction<boolean>) => void;
+  commonStoreDataList: any;
 }
 
 const JobDetailFlagAsInappropriate: React.FC<IJobDetailFlagAsInappropriate> = ({
@@ -19,6 +22,7 @@ const JobDetailFlagAsInappropriate: React.FC<IJobDetailFlagAsInappropriate> = ({
   onFlagAsInappropriateSubmitModel,
   handleCancelForSearchModel,
   visibleModel,
+  commonStoreDataList,
   setVisibleModel,
 }) => (
   <CustomModalComponent
@@ -51,22 +55,12 @@ const JobDetailFlagAsInappropriate: React.FC<IJobDetailFlagAsInappropriate> = ({
           rules={[{ required: true, message: "Please select the reason" }]}
         >
           <Radio.Group style={{ width: "100%" }} name="JobType">
-            <Radio value="Client is offering payment outside of Helius">
-              Client is offering payment outside of Helius
-            </Radio>
-            <Radio value="Client is asking for free work">Client is asking for free work</Radio>
-            <Radio value="Client is misrepresenting their identity">Client is misrepresenting their identity</Radio>
-            <Radio value="Person is attempting to buy or use my Helius account">
-              Person is attempting to buy or use my Helius account
-            </Radio>
-            <Radio value="Job post looks like a scam or contains a suspicious link">
-              Job post looks like a scam or contains a suspicious link
-            </Radio>
-            <Radio value="Job post contains contact information">Job post contains contact information</Radio>
-            <Radio value="Job post is illegal or unethical">Job post is illegal or unethical</Radio>
-            <Radio value="Job is unclear or incomplete">Job is unclear or incomplete</Radio>
-            <Radio value="This is a freelancer ad, not a job post">This is a freelancer ad, not a job post</Radio>
-            <Radio value="It’s something else">It’s something else</Radio>
+            {commonStoreDataList?.flagAsInappropriateList?.length > 0 &&
+              commonStoreDataList?.flagAsInappropriateList.map((flag: IFetchOptionsReasonList) => (
+                <Radio key={flag?.id} value={flag?.name}>
+                  {flag?.name}
+                </Radio>
+              ))}
           </Radio.Group>
         </Form.Item>
       </div>

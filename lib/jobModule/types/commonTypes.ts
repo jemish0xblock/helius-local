@@ -12,18 +12,27 @@ export interface JobPostState {
   jobPostFormDetailsReview: string[];
   skills: string[];
   total: string;
-  jobPostResponse: JobPostResponse;
+  jobPostResponse: JobPostResponse | any;
 }
 export interface JobListState {
   allJobPostList: any;
   totalJob: number;
 }
 export interface JobDetailState {
-  jobPostDetail: JobPostResponse;
+  jobPostDetail: JobPostResponse | any;
   similarJobs: JobPostResponse[];
 }
 
 export type JobPostResponse = {
+  proposalCount: any;
+  interviewCount: any;
+  inviteCount: any;
+  lowestBid: any;
+  avgBid: any;
+  highestBid: any;
+  workedHours: any;
+  avgPaid: any;
+  clientJobs: any;
   status: string;
   description: string;
   title: string;
@@ -32,6 +41,8 @@ export type JobPostResponse = {
   heliusHours: number;
   jobFee?: number;
   hireDate: string;
+  jobStatus: string[];
+  jobStatusWithCount: any;
   includeRisingTalent: boolean;
   jobSuccessScore: number;
   paymentType: string;
@@ -44,6 +55,8 @@ export type JobPostResponse = {
   attachments?: string[];
   talentType: string;
   scope: string;
+  connects: string;
+  proposals: string;
   languages: LanguageProps[];
   jobType: string;
   jobId: string;
@@ -63,6 +76,7 @@ export type JobPostResponse = {
   updatedAt: string;
   location: { id: string; label: string; value: string; sortValue: string };
   worldWideValid: boolean;
+  totalPaidAmount: number;
 };
 type LanguageProps = {
   language: string;

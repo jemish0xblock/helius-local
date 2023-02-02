@@ -1,0 +1,36 @@
+.h_applicants_wrapper {
+  width: 100%;
+  margin: 30px auto;
+  .h_JobPostLists_wrapper_view {
+    border: 0.5px solid @gray-color;
+    height: 80px;
+    overflow: hidden;
+    border-radius: 10px;
+    .h_top_tab_view {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      a {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: @gray-color5;
+      }
+      a {
+        &:hover {
+          text-decoration: underline;
+          color: @primary-color;
+        }
+      }
+      &.h_top_tab_view_active {
+        background: @primary-color;
+        a {
+          color: @white;
+        }
+      }
+    }
+  }
+}

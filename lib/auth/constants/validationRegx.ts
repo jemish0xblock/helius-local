@@ -6,7 +6,9 @@ export const emailStandardRegex =
 
 // Password data field Criteria - Minimum 8- Maximum 12 characters, one number, one uppercase letter, one lowercase letter, and one special character.
 // export const passwordRegex = /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])[a-zA-Z][a-zA-Z0-9]{7,}$/;
-export const passwordRegex = /^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+*!=]).\S*$/;
+
+export const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[a-zA-Z0-9!@#$%^&*?]{8,12}$/;
+// /^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+*!=]).\S*$/;
 
 // Only alphabet
 export const onlyAlphabetRegex = /^[a-zA-Z]+$/;
@@ -34,9 +36,10 @@ export const stateAlphabetRegex = /^([a-zA-Z]){3,20}$/;
 export const zipPostalCodeRegex = /^([a-zA-Z0-9]){3,20}$/;
 
 // Verify that the "verification code" field contain only 6 digit allow. Display error message IF write min or max 6 characters.
-export const verificationCodeRegex = /^[0-9]{0,6}$/;
+export const verificationCodeRegex = /^[0-9]{6}$/;
 
 export const organizationAlphanumericRegex = /^([a-zA-Z0-9? ,_-]){3,80}$/;
 export const onlyAllowNumbersRegex = /^[0-9]+$/;
 export const passingYearRegex = /(?:(?:18|19|20|21)[0-9]{2})/;
 export const textAreaMaxLengthRegex = /^[\s\S]{0,5000}$/;
+export const atLeastFourChar = /^[a-zA-Z0-9!~@#$%‡^&*()_+= ]{4,255}$/;

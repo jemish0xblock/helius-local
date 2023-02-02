@@ -3,6 +3,7 @@
 @import "@lib/auth/UI/authCommon.less";
 @import "@lib/jobModule/jobPost/UI/jobPostCommon.less";
 @import "@lib/freelancers/styles/freelances.less";
+@import "@lib/proposalModule/styles/proposals.less";
 
 /* Disable select site content using mouse */
 // *,
@@ -151,11 +152,15 @@ a {
   }
 }
 // Form styles
+.ant-picker,
+.ant-input,
+.ant-upload.ant-upload-drag,
+.ant-input-number-affix-wrapper,
 input[type="text"],
 input[type="password"],
 input[type="number"],
 textarea {
-  font-size: 14px;
+  font-size: 16px;
   border-color: @light-gray-color;
 }
 
@@ -332,17 +337,14 @@ textarea {
 .ant-result {
   margin: 0 auto;
 }
-.h_filter .h_filter_collapse_sec .h_filter_multiple_checkbox .ant-checkbox-wrapper{
-    width: 100%;
-
+.h_filter .h_filter_collapse_sec .h_filter_multiple_checkbox .ant-checkbox-wrapper {
+  width: 100%;
 }
 .ant-input,
 .ant-input-number-input:placeholder-shown,
 .ant-form label,
 .ant-checkbox-wrapper .ant-checkbox-wrapper-in-form-item {
   font-size: 14px;
-
-
 }
 .freelancer_card {
   .ant-card-body {
@@ -396,6 +398,20 @@ textarea {
     gap: 8px;
     width: 46px !important;
     height: 40px !important;
+  }
+}
+.custom-collapse-detail-styled-chat {
+  &.ant-collapse {
+    border: unset !important;
+  }
+  .ant-collapse-header-text {
+    color: #434343;
+  }
+  .ant-collapse-item {
+    border-bottom: 0.5px solid @gray-color;
+  }
+  .ant-collapse-content-box {
+    padding: 0px;
   }
 }
 .custom-collapse-detail-styled {
@@ -457,6 +473,7 @@ textarea {
 
       .ant-checkbox-wrapper {
         margin-bottom: 6px;
+        width: 100%;
       }
 
       .h_filter_multiple_checkbox {
@@ -553,8 +570,9 @@ textarea {
     .h_filter_radio {
       .ant-radio-wrapper {
         font-weight: 400;
+        width: 100%;
         font-size: 14px;
-            margin: 5px 0px;
+        margin: 5px 0px;
         line-height: 22px;
         color: rgba(0, 0, 0, 0.85);
       }
@@ -666,22 +684,324 @@ textarea {
     }
   }
 }
-.model-input-field-style {
+.remove_before_input_styling {
+  .ant-form-item-explain-error {
+    margin: 10px 28px 10px;
+  }
+  .ant-input-group-addon {
+    border: none;
+    background: none;
+  }
+}
+.auth_form {
   .ant-form-item-row {
     display: block;
   }
 }
-.ant-form {
-.select-multiple-tag-styling {
-  padding: 0px;
-  margin: 0px;
-  .ant-select-selection-search{
-    height: 43px;
-  input {
-     height: 43px;
-    padding: 0px !important;
+.model-input-field-style {
+  .ant-input-affix-wrapper {
+    .ant-input-prefix {
+      margin: 0px 10px;
+    }
   }
+  .ant-form-item-row {
+    display: block;
+  }
+  .radio-button-group-styling {
+    label {
+      width: 100%;
+      margin: 9px 0px;
+    }
+  }
+  &.edit-form-fields {
+    // .ant-form-horizontal .ant-form-item-label > label {
+    //   margin-bottom: 0px;
+    //   font-weight: 500;
+    //   color: black;
+    // }
+  }
+}
+
+.ant-form {
+  .select-multiple-tag-styling {
+    padding: 0px;
+    margin: 0px;
+    .ant-select-selection-search {
+      height: 43px;
+      input {
+        height: 43px;
+        padding: 0px !important;
+      }
+    }
+  }
+}
+
+.h_user_notification_drawer {
+  width: 350px;
+  margin-top: unset;
+  padding: unset;
+  &:last-child {
+    border-top: 0.5px solid;
+  }
+  .ant-dropdown-menu-item {
+    padding: 15px 20px;
+  }
+  .nav-notification-icon-container {
+    display: flex;
+    justify-content: center;
+    i {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+      svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+  .nav-menu-item {
+    .nav-notification-text {
+      display: inline-block;
+      color: @font-color1;
+      font-size: 15px;
+      &:hover {
+        color: @primary-color;
+      }
+    }
+    .nav-notification-timestamp {
+      white-space: nowrap;
+    }
+  }
+  .menu-item-trigger {
+    width: 100%;
+    text-align: left;
+    display: block;
+    &.nav-dismissable {
+      flex: 1;
+      padding: 0;
+      white-space: normal !important;
+      line-height: 1.53;
+    }
+  }
+  .nav-menu-main-div {
+    display: flex;
+    align-items: center;
+  }
+  .notification_loader {
+    display: flex;
+    justify-content: center;
+  }
+}
+.h_user_invite_modal {
+  width: 750px !important;
+  .h_invite_form {
+    .ant-form-item-control-input-content {
+      flex-direction: column;
+    }
+    .h_form_message {
+      margin-bottom: 5px;
+    }
+    .h_form_message_note {
+      cursor: pointer;
+      margin-top: 5px;
+      color: @primary-color;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    .h_invite_form_item {
+      &.h_add_margin {
+        margin: 20px 0;
+      }
+      .ant-radio {
+        padding-right: 6px;
+      }
+      .ant-radio-wrapper {
+        margin: 5px 0;
+      }
+      span.ant-radio + * {
+        width: 100%;
+      }
+    }
+  }
+}
+.attachments-file-drag {
+  .ant-form-item-control-input-content {
+    display: block;
+  }
+}
+.ant-modal-title {
+  font-size: 24px;
+}
+.add-Required-submit-proposal-page label::after {
+  content: " * ";
+  display: flex;
+  margin-left: 4px;
+  color: #ff4d4f;
+  font-size: 16px;
+  font-family: SimSun, sans-serif;
+  /* line-height: 1; */
+  align-items: center;
+  text-align: center;
+  top: 0;
+  bottom: 0;
+}
+.add-Required-submit-proposal-input-field {
+  display: flex;
+}
+.add-Required-submit-proposal-input-field::after {
+  content: " * ";
+  display: flex;
+  margin-left: 4px;
+  color: #ff4d4f;
+  font-size: 16px;
+  font-family: SimSun, sans-serif;
+  /* line-height: 1; */
+  align-items: center;
+  text-align: center;
+  top: 0;
+  bottom: 0;
+}
+.search-skill-and-saved-suggestion {
+  .ant-select-selector {
+    height: 44px !important;
+    align-items: center;
+  }
+}
+.price-input {
+  margin-bottom: unset;
+  .ant-form-item {
+    margin-bottom: 0 !important;
+  }
+  .ant-form-item-control-input-content {
+    width: 100%;
+    .h_date_picker_input_main,
+    .ant-input-number-affix-wrapper {
+      width: 100%;
+    }
+    .ant-input-number-affix-wrapper > div.ant-input-number {
+      padding: 0 10px;
+    }
+    .ant-input-number-input,
+    .ant-input-number-affix-wrapper input.ant-input-number-input {
+      text-align: right;
+    }
+  }
+}
+.warning-text {
+  color: @warning-color;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+.h_offer_milestone {
+  .ant-form-item {
+    margin-bottom: unset;
+  }
+}
+.w-100 {
+  width: 100%;
+}
+.proposalWithdrawMsg .ant-form-item-control-input-content {
+  flex-direction: column;
+}
+
+.h_form_radio_widthdraw_proposal {
+  display: flex;
+  flex-direction: column;
+}
+
+// Client job listing
+.h_client_job_search_main {
+  .ant-input-wrapper {
+    &.ant-input-group,
+    input {
+      height: 100%;
+    }
+    .ant-input-group-addon {
+      background-color: @primary-color;
+      button {
+        width: 46px;
+        background-color: @primary-color;
+        color: @white;
+        border: 1px solid @primary-color;
+
+        svg {
+          fill: white;
+        }
+      }
+    }
+  }
+}
+
+.h_radio_selector_box {
+  .h_radio_button {
+    padding: 15px 20px;
+    width: 100%;
+    margin: unset;
+    display: flex;
+    .ant-radio {
+      display: none !important;
+      opacity: 0 !important;
+    }
   }
 
+  label span:nth-child(2) {
+    padding: unset;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    .h_radio_lable_text {
+      margin-left: 20px;
+    }
+  }
 }
+.ant-select-selection-item {
+  display: flex;
+  align-items: center;
+}
+
+.chat_input {
+  .ql-toolbar {
+    border: 0.5px solid @gray-color !important;
+    border-left: unset !important;
+    border-right: unset !important;
+  }
+  .ql-editor {
+    width: 90%;
+    overflow: auto;
+  }
+  .ql-container.ql-snow {
+    border: unset !important;
+    height: 70px;
+  }
+}
+
+.h_chat_last_message {
+  p {
+    margin-bottom: 0px;
+  }
+}
+
+//border classes
+.bordor_bottom {
+  border-bottom: 0.5px solid @gray-color;
+}
+.bordor_top {
+  border-top: 0.5px solid @gray-color;
+}
+.bordor_left {
+  border-left: 0.5px solid @gray-color;
+}
+.bordor_right {
+  border-right: 0.5px solid @gray-color;
+}
+
+.h_feedback_radio_section {
+  .ant-radio-wrapper {
+    flex-direction: column;
+    align-items: center;
+    line-height: 35px;
+  }
 }

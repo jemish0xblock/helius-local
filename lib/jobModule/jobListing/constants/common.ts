@@ -42,3 +42,4 @@ export const menuItemsList = [
 ];
 export const sortingList = ["Relevance", "Newest", "Oldest"];
 // TODO we do letter,"Random"
+export const checkTermsNameExits = ["andTerms", "orTerms", "exactTerms", "excludeTerms", "titleTerm"];

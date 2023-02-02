@@ -4,8 +4,11 @@ import React, { FC, useEffect, useState } from "react";
 
 import FullScreenLoaderComponent from "@/components/FullScreenLoaderComponent";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { authSelector } from "@/lib/auth/authSlice";
-import { commonAlert } from "@/utils/alert";
+import { authSelector, fetchCurrentUserDetails } from "@/lib/auth/authSlice";
+import { asyncFetchAllFreelancerDetailScreenDropdownList } from "@/lib/common/common.service";
+import { commonStoreSelector } from "@/lib/common/commonSlice";
+import { commonAlert, showUnauthorizedAccessConfirmAlert } from "@/utils/alert";
+import { errorString } from "@/utils/constants";
 import RenderIf from "@/utils/RenderIf/renderIf";
 import { getDateAndTimeFormatter } from "@utils/helper";
 
@@ -23,11 +26,13 @@ const JobDetailsController: FC<JobDetailsControllerProps> = ({ authType }) => {
   // Store & States
   const authStore = useAppSelector(authSelector);
   const router = useRouter();
+  const currentUserDetails = useAppSelector(fetchCurrentUserDetails);
   const [form] = Form.useForm();
   const { postId } = router.query;
   const dispatch = useAppDispatch();
   const similarJob = useAppSelector(getSimilarJobPost);
   const savedJobList = useAppSelector(getSavedJobDataList);
+  const commonStoreDataList = useAppSelector(commonStoreSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [apiResponseIsLoading, setApiResponseIsLoading] = useState(false);
   const [jobId, setJobId] = useState<any>();
@@ -36,19 +41,22 @@ const JobDetailsController: FC<JobDetailsControllerProps> = ({ authType }) => {
   const [savedJobs, setSavedJobs] = useState<any>([]);
   // api calling
   const jobPostSavedApiMethod = () => {
-    // const queryParams = `?status=save&page=1`;
     dispatch(getAllSavedJobListApi());
   };
   // get current page url
 
   // life cycle hooks
   useEffect(() => {
-    const getUser = () => {
-      if (authStore?.currentUser.authType === "client") {
-        router.push("/client/dashboard");
-      }
-    };
-    getUser();
+    // const getUser = () => {
+    //   if (!authStore?.isAuth) {
+    //     router.push("/account-security/login");
+    //   }
+    // };
+
+    if (commonStoreDataList?.flagAsInappropriateList === null) {
+      dispatch(asyncFetchAllFreelancerDetailScreenDropdownList(null));
+    }
+    // getUser();
     jobPostSavedApiMethod();
   }, []);
 
@@ -64,12 +72,11 @@ const JobDetailsController: FC<JobDetailsControllerProps> = ({ authType }) => {
   const getJobPostDetails = async (data: any) => {
     setApiResponseIsLoading(true);
     const jobPostDetailResponse = await asyncGetJobPostDetails(data);
-
     if (jobPostDetailResponse?.status === 400) {
-      commonAlert("error", "JOB_DETAIL_NOT_FOUND");
+      commonAlert("error", errorString.jobDetailNotFound);
       router.push("/jobs/listing");
     } else if (jobPostDetailResponse === undefined) {
-      commonAlert("error", "JOB_DETAIL_NOT_FOUND");
+      commonAlert("error", errorString.jobDetailNotFound);
       router.push("/jobs/listing");
     } else {
       setJobPostDetail(jobPostDetailResponse);
@@ -81,8 +88,7 @@ const JobDetailsController: FC<JobDetailsControllerProps> = ({ authType }) => {
     const data = {
       jobId: postId,
     };
-
-    if (postId !== undefined || jobPostDetail === undefined) {
+    if (postId !== undefined && jobPostDetail === undefined) {
       getJobPostDetails(data);
     }
   }, [postId]);
@@ -109,6 +115,13 @@ const JobDetailsController: FC<JobDetailsControllerProps> = ({ authType }) => {
     };
     setVisibleModel(false);
     if (jobPostDetail?.jobId !== undefined) {
+      const reqData = {
+        jobId: postId,
+      };
+
+      if (postId !== undefined || jobPostDetail === undefined) {
+        getJobPostDetails(reqData);
+      }
       await jobPostLikeAndSavedApi(data);
       jobPostSavedApiMethod();
     }
@@ -116,6 +129,9 @@ const JobDetailsController: FC<JobDetailsControllerProps> = ({ authType }) => {
 
   // event handlers
   const onChangeHandlerSaved = async (id: string, value: string) => {
+    if (!authStore.isAuth) {
+      showUnauthorizedAccessConfirmAlert();
+    }
     setJobId(id);
     const data = {
       jobId: id,
@@ -154,7 +170,7 @@ const JobDetailsController: FC<JobDetailsControllerProps> = ({ authType }) => {
     setVisibleModel(false);
   };
   return (
-    <RenderIf isTrue={authStore?.currentUser.authType === authType}>
+    <>
       <RenderIf isTrue={apiResponseIsLoading}>
         <FullScreenLoaderComponent />
       </RenderIf>
@@ -173,10 +189,13 @@ const JobDetailsController: FC<JobDetailsControllerProps> = ({ authType }) => {
           onFlagAsInappropriateSubmitModel={onFlagAsInappropriateSubmitModel}
           handleCancelForSearchModel={handleCancelForSearchModel}
           visibleModel={visibleModel}
+          commonStoreDataList={commonStoreDataList}
           setVisibleModel={setVisibleModel}
+          currentUserDetails={currentUserDetails}
+          authType={authType}
         />
       </RenderIf>
-    </RenderIf>
+    </>
   );
 };
 

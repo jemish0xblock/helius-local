@@ -1,4 +1,6 @@
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { Form } from "antd";
+import confirm from "antd/lib/modal/confirm";
 import _, { toString } from "lodash";
 import { useRouter, NextRouter } from "next/router";
 import React, { FC, useEffect, useState } from "react";
@@ -8,6 +10,7 @@ import { captchaActions, googleCaptchaSelector } from "@/components/RecaptchaCom
 import { commonStoreSelector } from "@/lib/common/commonSlice";
 import { errorAlert } from "@/utils/alert";
 import { errorString, localStorageKeys } from "@/utils/constants";
+import { readCookie } from "@/utils/cookieCreator";
 import AuthView from "@lib/auth/authView";
 import { useAppDispatch, useAppSelector } from "hooks/redux";
 
@@ -24,14 +27,15 @@ import {
   asyncUserRegistration,
   asyncUserUpdatePassword,
 } from "./auth.service";
-import { authActions, selectAuthLoading } from "./authSlice";
+import { authActions, authSelector, selectAuthLoading } from "./authSlice";
 import { AccountType, ICustomLanguages, IFreelancerPastExperience } from "./types/commonTypes";
 
 interface AuthControllerProps {
   authType: string;
+  isVisibleAfterLogin?: boolean;
 }
 const AuthController: FC<AuthControllerProps> = (props) => {
-  const { authType } = props;
+  const { authType, isVisibleAfterLogin } = props;
   // Store & States
   const { t } = useTranslation();
   const [form] = Form.useForm();
@@ -43,7 +47,7 @@ const AuthController: FC<AuthControllerProps> = (props) => {
   const languagesData = useAppSelector(languagesListFromStore);
 
   const authStoreLoading: boolean = useAppSelector(selectAuthLoading);
-
+  const { isAuth, currentUser } = useAppSelector(authSelector);
   const acTypeList = ["client", "freelancer"];
 
   const [type, setAccountType] = useState<AccountType | string | string[]>("client");
@@ -59,9 +63,16 @@ const AuthController: FC<AuthControllerProps> = (props) => {
   const [customLanguagesList, setCustomLanguages] = useState<ICustomLanguages[]>([]);
   const [isDisableOptOfCurrentlyWorking, setIsDisableOptOfCurrentlyWorking] = useState<boolean>(false);
   const [isDisablePassingYear, setIsDisablePassingYear] = useState<boolean>(true);
+  const [recentMailLoader, setRecentMailLoader] = useState<boolean>(false);
+  const [captchaValiadate, setCaptchaValiadate] = useState<boolean>(false);
 
   //   Life cycle hooks
   useEffect(() => {
+    if ((isAuth || readCookie(localStorageKeys.authKey)) && !isVisibleAfterLogin) {
+      router.push(`/${currentUser?.authType}/dashboard`);
+      return;
+    }
+
     if (router?.query?.token !== null && authType === "updatePassword") {
       const params = {
         account_security: {
@@ -103,7 +114,7 @@ const AuthController: FC<AuthControllerProps> = (props) => {
     // Resting captcha store states
     dispatch(captchaActions.resetCaptchaState());
 
-    const { __INTERNAL__ } = form;
+    const { __INTERNAL__ }: any = form;
     const formName = __INTERNAL__?.name;
 
     if (formName !== "") {
@@ -121,7 +132,7 @@ const AuthController: FC<AuthControllerProps> = (props) => {
     router.replace(`/register/${acType}`);
   };
 
-  const showCaptchaUncheckedErrorAlert = () => errorAlert("error", "Please validate captcha before submitting.", true);
+  // const showCaptchaUncheckedErrorAlert = () => errorAlert("error", "Please validate captcha before submitting.", true);
 
   const maxTagSelectionValidation = (field: any, value: [string]) => {
     if (field.fullField === "services") {
@@ -139,9 +150,9 @@ const AuthController: FC<AuthControllerProps> = (props) => {
   };
 
   const onFinish = (values: any) => {
-    const { __INTERNAL__ } = form;
+    const { __INTERNAL__ }: any = form;
     const formName: string = __INTERNAL__?.name || "";
-
+    setCaptchaValiadate(false);
     // NOTE:: User registration AccountType selection
     if (formName === "accountTypeSelection") {
       // if (reCaptchaStoreData?.formName === formName && reCaptchaStoreData?.isValidated) {
@@ -158,17 +169,22 @@ const AuthController: FC<AuthControllerProps> = (props) => {
 
     // NOTE:: User registration form for Client or Freelancer
     if (formName === "userRegistrationForm") {
+      let { mobileNo } = values;
+      mobileNo = mobileNo.replace(/[a-z,A-Z]/g, "");
+      mobileNo = mobileNo.replace(/ /g, "");
       if (reCaptchaStoreData?.formName === formName && reCaptchaStoreData?.isValidated) {
         dispatch(
           asyncUserRegistration({
             ...values,
             captchaToken: reCaptchaStoreData?.token,
             type: router?.query?.accountType,
+            mobileNo,
           })
         );
         return;
       }
-      showCaptchaUncheckedErrorAlert();
+      // showCaptchaUncheckedErrorAlert();
+      setCaptchaValiadate(true);
     }
 
     // NOTE:: User Login form for Client or Freelancer
@@ -177,7 +193,8 @@ const AuthController: FC<AuthControllerProps> = (props) => {
         dispatch(asyncUserLogin({ ...values, captchaToken: reCaptchaStoreData?.token, isLoginWithGoogle: false }));
         return;
       }
-      showCaptchaUncheckedErrorAlert();
+      // showCaptchaUncheckedErrorAlert();
+      setCaptchaValiadate(true);
     }
 
     if (formName === "clientCompanyDetailForm") {
@@ -185,7 +202,8 @@ const AuthController: FC<AuthControllerProps> = (props) => {
         dispatch(asyncClientCompanyDetails({ ...values, captchaToken: reCaptchaStoreData?.token }));
         return;
       }
-      showCaptchaUncheckedErrorAlert();
+      // showCaptchaUncheckedErrorAlert();
+      setCaptchaValiadate(true);
     }
     // NOTE:: User forgot password
     if (formName === "userUpdatePassword") {
@@ -200,7 +218,8 @@ const AuthController: FC<AuthControllerProps> = (props) => {
         );
         return;
       }
-      showCaptchaUncheckedErrorAlert();
+      // showCaptchaUncheckedErrorAlert();
+      setCaptchaValiadate(true);
     }
 
     if (formName === "userForgotPassword") {
@@ -214,7 +233,8 @@ const AuthController: FC<AuthControllerProps> = (props) => {
         );
         return;
       }
-      showCaptchaUncheckedErrorAlert();
+      // showCaptchaUncheckedErrorAlert();
+      setCaptchaValiadate(true);
     }
   };
 
@@ -223,7 +243,7 @@ const AuthController: FC<AuthControllerProps> = (props) => {
   };
 
   const onChangeFreelancerForms = (_item: any) => {
-    const { __INTERNAL__, getFieldValue, setFieldsValue } = form;
+    const { __INTERNAL__, getFieldValue, setFieldsValue }: any = form;
     const formName = __INTERNAL__?.name;
     if (formName === "professionalDetailsForm") {
       const currentlyWorking = getFieldValue("currentlyWorking");
@@ -324,18 +344,24 @@ const AuthController: FC<AuthControllerProps> = (props) => {
         dispatch(asyncFreelancerCompleteProfile(updatedParams));
         return;
       }
-      showCaptchaUncheckedErrorAlert();
+      // showCaptchaUncheckedErrorAlert();
+      setCaptchaValiadate(true);
       return;
     }
     setFreelancerCompleteProfileCurrentState(stepCount + 1);
   };
-  const handleResendEmail = (emailType: string) => {
+  const handleResendEmail = async (emailType: string) => {
+    await setRecentMailLoader(true);
     const localEmail = localStorage.getItem(localStorageKeys.userEmail);
-    dispatch(asyncResendEmailForVerification({ type: emailType, email: localEmail }));
+    dispatch(asyncResendEmailForVerification({ type: emailType, email: localEmail }))
+      .unwrap()
+      .then(() => {
+        setRecentMailLoader(false);
+      });
   };
 
   const addCustomLanguage = () => {
-    const { __INTERNAL__, getFieldValue, validateFields, resetFields } = form;
+    const { __INTERNAL__, getFieldValue, validateFields, resetFields }: any = form;
     const cloneCustomLanguesList = _.cloneDeep(customLanguagesList);
     const formName = __INTERNAL__?.name;
     if (formName === "freelancerAboutSelfForm") {
@@ -391,7 +417,7 @@ const AuthController: FC<AuthControllerProps> = (props) => {
   // Freelancer past experience
   const handleFreelancerPastExperience = (actionType: string, itemId = "") => {
     // Type === "add"  | "remove"
-    const { __INTERNAL__ } = form;
+    const { __INTERNAL__ }: any = form;
     const cloneFreelancerPastExperienceList = _.cloneDeep(freelancerPastExperienceList);
     const formName = __INTERNAL__?.name;
     if (formName === "professionalDetailsForm") {
@@ -409,16 +435,32 @@ const AuthController: FC<AuthControllerProps> = (props) => {
     }
   };
   const handleGetVerificationCode = () => {
-    const { __INTERNAL__, validateFields, getFieldValue } = form;
+    const { __INTERNAL__, validateFields, getFieldValue }: any = form;
     const formName = __INTERNAL__?.name;
     if (formName === "userRegistrationForm") {
-      const mobileNo = getFieldValue("mobileNo");
+      let mobileNo = getFieldValue("mobileNo");
       if (!mobileNo) {
         validateFields(["mobileNo"]);
         return;
       }
+      mobileNo = mobileNo.replace(/[a-z,A-Z]/g, "");
+      mobileNo = mobileNo.replace(/ /g, "");
+
       dispatch(asyncGetMobileVerificationCode({ mobileNo }));
     }
+  };
+  const handleConfirmButtonForCancel = () => {
+    confirm({
+      title: "Are you sure you want to cancel the registration process?",
+      icon: <ExclamationCircleOutlined />,
+      content: "",
+      onOk() {
+        router.push("/client/dashboard");
+      },
+      // onCancel() {
+      //   console.log("No");
+      // },
+    });
   };
   const langStates = {
     isShowCustomLangFormFields,
@@ -427,7 +469,6 @@ const AuthController: FC<AuthControllerProps> = (props) => {
     addCustomLanguage,
     removeCustomLanguage,
   };
-
   return (
     <AuthView
       form={form}
@@ -454,8 +495,14 @@ const AuthController: FC<AuthControllerProps> = (props) => {
       countriesData={countriesData}
       languagesData={languagesData}
       maxTagSelectionValidation={maxTagSelectionValidation}
+      handleConfirmButtonForCancel={handleConfirmButtonForCancel}
+      recentMailLoader={recentMailLoader}
+      captchaValiadate={captchaValiadate}
     />
   );
 };
 
+AuthController.defaultProps = {
+  isVisibleAfterLogin: false,
+};
 export default AuthController;

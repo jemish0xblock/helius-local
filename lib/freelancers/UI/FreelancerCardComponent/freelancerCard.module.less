@@ -31,6 +31,7 @@
 
   .h_user_content {
     width: 100%;
+    overflow: hidden;
     .h_user_name {
       font-weight: 500;
       font-size: 14px;
@@ -75,6 +76,12 @@
         font-size: 14px;
         line-height: 24px;
         color: @gray-color5;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 62%;
+        span {
+          color: @gray-color;
+        }
       }
       .h_user_actions {
         display: flex;
@@ -126,6 +133,8 @@
           font-weight: 500;
           font-size: 14px;
           line-height: 22px;
+          max-width: 120px;
+          min-width: 100px;
         }
       }
     }
@@ -135,6 +144,9 @@
       font-size: 14px;
       line-height: 22px;
       margin-bottom: 10px;
+      &.h_text_black {
+        color: @text-color;
+      }
     }
     .h_user_bio {
       font-weight: 400;

@@ -1,7 +1,5 @@
-import { LoadingOutlined } from "@ant-design/icons";
-import { Form, Button, Collapse, Spin } from "antd";
+import { Button, Collapse } from "antd";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
 import React, { FC, memo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -18,11 +16,10 @@ const JobPostSkillForm = dynamic(() => import("./jobPostSkillForm"));
 // TODO we will use const ReviewJobPost = dynamic(() => import("./ReviewJobPost"));
 const { Panel } = Collapse;
 
-const JobPostForm: FC<JobPostProps> = ({
+const JobPostForm: FC<JobPostProps | any> = ({
   form,
-
   handleOnFinish,
-  onHandleChangeForSelectFieldValueAndFormData,
+  formOnChangeMethod,
   fileUpload,
   setFileUpload,
   jobSubCategory,
@@ -56,11 +53,11 @@ const JobPostForm: FC<JobPostProps> = ({
   onChangeDefaultLanguageEnglish,
   isLoading,
   deleteFileUpload,
+  onChangeHandlerBackButton,
 }) => {
   const { t } = useTranslation("common");
 
   const [visible, setVisible] = useState(false);
-  const router = useRouter();
 
   const showModal = () => {
     setVisible(true);
@@ -73,139 +70,82 @@ const JobPostForm: FC<JobPostProps> = ({
     <div className="h_jobPost_form">
       <Collapse activeKey={collapseKey} onChange={() => onCollapseHandle(collapseKey[0])} expandIconPosition="end">
         <Panel header={t("jobPostScreen.description")} key="1">
-          <Form
+          <JobPostDescriptionForm
             form={form}
-            name="JobPostFormDescription"
-            onFinish={handleOnFinish}
-            onChange={onHandleChangeForSelectFieldValueAndFormData}
-            initialValues={{}}
-          >
-            <JobPostDescriptionForm
-              form={form}
-              fileUpload={fileUpload}
-              setFileUpload={setFileUpload}
-              setVisible={setVisible}
-              showModal={showModal}
-              visible={visible}
-              handleCancel={handleCancel}
-              onJobCategoryChange={onJobCategoryChange}
-              onJobSubCategoryChange={onJobSubCategoryChange}
-              onJobSpecialityChange={onJobSpecialityChange}
-              jobCategory={jobCategory}
-              jobSubCategory={jobSubCategory}
-              jobSpeciality={jobSpeciality}
-              filterSpecialityList={filterSpecialityList}
-              filterSubCategoryList={filterSubCategoryList}
-              deleteFileUpload={deleteFileUpload}
-            />
-            <div className={s.h_content_alignment}>
-              {isLoading === true ? (
-                <Spin indicator={<LoadingOutlined style={{ fontSize: 20 }} spin />} />
-              ) : (
-                <Button htmlType="submit" className={s.h_upload_file_instraction}>
-                  {t("jobPostScreen.continue")}
-                </Button>
-              )}
-            </div>
-          </Form>
+            fileUpload={fileUpload}
+            setFileUpload={setFileUpload}
+            setVisible={setVisible}
+            showModal={showModal}
+            visible={visible}
+            handleCancel={handleCancel}
+            onJobCategoryChange={onJobCategoryChange}
+            onJobSubCategoryChange={onJobSubCategoryChange}
+            onJobSpecialityChange={onJobSpecialityChange}
+            jobCategory={jobCategory}
+            jobSubCategory={jobSubCategory}
+            jobSpeciality={jobSpeciality}
+            filterSpecialityList={filterSpecialityList}
+            filterSubCategoryList={filterSubCategoryList}
+            deleteFileUpload={deleteFileUpload}
+            handleOnFinish={handleOnFinish}
+            isLoading={isLoading}
+          />
         </Panel>
 
         <Panel header="Skill" key="2">
-          <Form
+          <JobPostSkillForm
             form={form}
-            name="JobPostFormSkill"
-            onFinish={handleOnFinish}
-            onValuesChange={onHandleChangeForSelectFieldValueAndFormData}
-            initialValues={{}}
-          >
-            <JobPostSkillForm
-              form={form}
-              onHandleChangeForSelectFieldValueAndFormData={onHandleChangeForSelectFieldValueAndFormData}
-              onJobCategoryChange={onJobCategoryChange}
-              onJobSubCategoryChange={onJobSubCategoryChange}
-              onJobSpecialityChange={onJobSpecialityChange}
-              jobCategory={jobCategory}
-              jobSubCategory={jobSubCategory}
-              jobSpeciality={jobSpeciality}
-              filterSpecialityList={filterSpecialityList}
-              filterSubCategoryList={filterSubCategoryList}
-              addSkills={addSkills}
-              skillValues={skillValues}
-              setSkillValues={setSkillValues}
-            />
-            <div className={s.h_content_alignment}>
-              {isLoading === true ? (
-                <Spin indicator={<LoadingOutlined style={{ fontSize: 20 }} spin />} />
-              ) : (
-                <Button htmlType="submit" className={s.h_upload_file_instraction}>
-                  {t("jobPostScreen.continue")}
-                </Button>
-              )}
-            </div>
-          </Form>
+            formOnChangeMethod={formOnChangeMethod}
+            onJobCategoryChange={onJobCategoryChange}
+            onJobSubCategoryChange={onJobSubCategoryChange}
+            onJobSpecialityChange={onJobSpecialityChange}
+            jobCategory={jobCategory}
+            jobSubCategory={jobSubCategory}
+            jobSpeciality={jobSpeciality}
+            filterSpecialityList={filterSpecialityList}
+            filterSubCategoryList={filterSubCategoryList}
+            addSkills={addSkills}
+            skillValues={skillValues}
+            setSkillValues={setSkillValues}
+            handleOnFinish={handleOnFinish}
+            isLoading={isLoading}
+          />
         </Panel>
 
         <Panel header={t("jobPostScreen.scope")} key="3">
-          <Form
+          <JobPostScopeForm
             form={form}
-            name="JobPostFormScope"
-            onFinish={handleOnFinish}
-            onValuesChange={onHandleChangeForSelectFieldValueAndFormData}
-            initialValues={{
-              englishProficiency: proficiency,
-              englishProficiencyModel: proficiency,
-            }}
-          >
-            <JobPostScopeForm
-              form={form}
-              onHandleChangeForSelectFieldValueAndFormData={onHandleChangeForSelectFieldValueAndFormData}
-              onLanguageChangeHandler={onLanguageChangeHandler}
-              proficiency={proficiency}
-              onClickProficiency={onClickProficiency}
-              language={language}
-              removeLanguageFromBothObject={removeLanguageFromBothObject}
-              onLanguageChangeModelSubmit={onLanguageChangeModelSubmit}
-              onClickFreelancer={onClickFreelancer}
-              freelancer={freelancer}
-              onClickHandlerLocation={onClickHandlerLocation}
-              location={location}
-              visibleCategory={visibleCategory}
-              setVisibleCategory={setVisibleCategory}
-              onChangeDefaultLanguageEnglish={onChangeDefaultLanguageEnglish}
-            />
-            <div className={s.h_content_alignment}>
-              {isLoading === true ? (
-                <Spin indicator={<LoadingOutlined style={{ fontSize: 20 }} spin />} />
-              ) : (
-                <Button htmlType="submit" className={s.h_upload_file_instraction}>
-                  {t("jobPostScreen.continue")}
-                </Button>
-              )}
-            </div>
-          </Form>
+            formOnChangeMethod={formOnChangeMethod}
+            onLanguageChangeHandler={onLanguageChangeHandler}
+            proficiency={proficiency}
+            onClickProficiency={onClickProficiency}
+            language={language}
+            removeLanguageFromBothObject={removeLanguageFromBothObject}
+            onLanguageChangeModelSubmit={onLanguageChangeModelSubmit}
+            onClickFreelancer={onClickFreelancer}
+            freelancer={freelancer}
+            onClickHandlerLocation={onClickHandlerLocation}
+            location={location}
+            visibleCategory={visibleCategory}
+            setVisibleCategory={setVisibleCategory}
+            onChangeDefaultLanguageEnglish={onChangeDefaultLanguageEnglish}
+            handleOnFinish={handleOnFinish}
+            isLoading={isLoading}
+          />
         </Panel>
         <Panel header={t("jobPostScreen.budget")} key="4">
-          <Form
+          <JobPostBudgetForm
+            onClickHandler={onClickHandler}
+            budgetRateType={budgetRateType}
+            formOnChangeMethod={formOnChangeMethod}
             form={form}
-            name="JobPostFormBudget"
-            onFinish={handleOnFinish}
-            onValuesChange={onHandleChangeForSelectFieldValueAndFormData}
-            initialValues={{
-              budgetRate: budgetRateType,
-            }}
-          >
-            <JobPostBudgetForm
-              onClickHandler={onClickHandler}
-              budgetRateType={budgetRateType}
-              onHandleChangeForSelectFieldValueAndFormData={onHandleChangeForSelectFieldValueAndFormData}
-              form={form}
-              onCollapseHandle={onCollapseHandle}
-              collapseKey={collapseKey}
-              handleOnFinish={handleOnFinish}
-              setSubmitButtonType={setSubmitButtonType}
-              isLoading={isLoading}
-            />
-          </Form>
+            onCollapseHandle={onCollapseHandle}
+            collapseKey={collapseKey}
+            setSubmitButtonType={setSubmitButtonType}
+            isLoading={isLoading}
+            onChangeHandlerBackButton={onChangeHandlerBackButton}
+            handleOnFinish={handleOnFinish}
+          />
         </Panel>
       </Collapse>
       {/* <Collapse
@@ -220,7 +160,7 @@ const JobPostForm: FC<JobPostProps> = ({
               addSkills={addSkills}
               skillValues={skillValues}
               setSkillValues={setSkillValues}
-              onHandleChangeForSelectFieldValueAndFormData={onHandleChangeForSelectFieldValueAndFormData}
+              formOnChangeMethod={formOnChangeMethod}
               jobPostTypeOption={jobPostTypeOption}
               filterList={filterList}
               jobcategory={jobcategory}
@@ -234,14 +174,10 @@ const JobPostForm: FC<JobPostProps> = ({
             <Button
               className={s.h_cancel_button}
               htmlType="button"
-              onClick={() => {
-                router.push({
-                  pathname: `/job-post/getting-started`,
-                });
-              }}
+              onClick={() => onChangeHandlerBackButton(collapseKey)}
               size="large"
             >
-              {t("jobPostScreen.back")}
+              {collapseKey[0] === "1" ? t("jobPostScreen.backToPrevious") : t("jobPostScreen.back")}
             </Button>
 
             <Button type="primary" disabled={collapseKey[0] !== "4"} htmlType="submit" size="large">

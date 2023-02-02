@@ -22,6 +22,35 @@
     .h_user_Info {
       display: flex;
       align-items: center;
+      .h_user_notification {
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+        height: 24px;
+        width: 24px;
+        position: relative;
+
+        i {
+          display: flex;
+          svg {
+            path {
+              fill: @white;
+            }
+          }
+        }
+        &.h_user_unread_notifications {
+          :after {
+            content: " ";
+            border: 5px solid red;
+            border-radius: 50%;
+            width: 6px;
+            height: 6px;
+            position: absolute;
+            top: 0px;
+            right: 0px;
+          }
+        }
+      }
       .h_user_detail {
         display: flex;
         flex-direction: column;

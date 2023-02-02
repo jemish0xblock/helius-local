@@ -9,6 +9,6 @@ export type Log = {
 
 export type LogSystem = (_data: Log) => void;
 
-export const log: LogSystem = (data) => {
+export const browserLog: LogSystem = (data) => {
   consoleLog(data);
 };

@@ -1,4 +1,4 @@
-import { Form, Upload, message, UploadFile } from "antd";
+import { Form, Upload, message } from "antd";
 import type { UploadProps } from "antd/es/upload/interface";
 import { UploadChangeParam } from "antd/lib/upload";
 import React, { useState, useEffect } from "react";
@@ -22,7 +22,7 @@ const CustomFileUpload: React.FC<jobPostFile> = ({ deleteFileUpload, fileUpload,
     }
   }, [fileUpload]);
 
-  const handleChange: UploadProps["onChange"] = (info: UploadChangeParam<UploadFile>) => {
+  const handleChange: UploadProps["onChange"] = (info: UploadChangeParam<any>) => {
     if (info?.file?.status === "uploading") {
       return;
     }

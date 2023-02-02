@@ -55,9 +55,9 @@ class ErrorBoundary extends React.Component<
   React.PropsWithRef<React.PropsWithChildren<ErrorBoundaryProps>>,
   ErrorBoundaryState
 > {
-  // static getDerivedStateFromError(error: Error) {
-  //   return { error };
-  // }
+  static getDerivedStateFromError(error: Error) {
+    return { error };
+  }
 
   state = initialState;
 

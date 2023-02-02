@@ -1,17 +1,18 @@
 // /** @type {import('next').NextConfig} */
 
 const withAntdLess = require("next-plugin-antd-less");
-const isProd = process.env.NODE_ENV === "production";
+const isProd = process.env.NEXT_PUBLIC_ENV_MODE === "production";
 const withImages = require("next-images");
 const { createSecureHeaders } = require("next-secure-headers");
 
 const getRedirectUrl = (path) => {
-  switch (process.env.NODE_ENV) {
+  console.log("process.env ::", process.env.NEXT_PUBLIC_ENV_MODE);
+  switch (process.env.NEXT_PUBLIC_ENV_MODE) {
     case "production":
-      return `http:/app.helius.work${path}`;
+      return `http://65.2.158.180${path}`;
+      // return `http:/app.helius.work${path}`;
     case "development":
-      return `http://localhost:3000${path}`;
-    // return `https://app.0xblock.co${path}`;
+    return `https://app.0xblock.work${path}`;
     default:
       return `http://localhost:3000${path}`;
   }
@@ -19,15 +20,20 @@ const getRedirectUrl = (path) => {
 
 const nextConfig = withAntdLess(
   withImages({
-    // async redirects() {
-    //   return [
-    //     {
-    //       source: "/",
-    //       destination: getRedirectUrl("/account-security/login"),
-    //       permanent: true,
-    //     },
-    //   ];
-    // },
+    async redirects() {
+      return [
+        {
+          source: "/",
+          destination: getRedirectUrl("/account-security/login"),
+          permanent: true,
+        },
+        {
+          source: "/jobs",
+          destination: getRedirectUrl("/jobs/listing?page=1"),
+          permanent: true,
+        },
+      ];
+    },
 
     // async headers() {
     //   return [
@@ -71,6 +77,10 @@ const nextConfig = withAntdLess(
 
     future: {
       webpack5: true,
+    },
+    swcMinify: true,
+    experimental: {
+      outputStandalone: true,
     },
   })
 );

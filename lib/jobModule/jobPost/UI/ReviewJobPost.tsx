@@ -10,7 +10,7 @@ import { closeIcon } from "@/utils/allSvgs";
 import { ReviewJobPostFormProps } from "../types/storeTypes";
 
 const { TextArea } = Input;
-const ReviewJobPost: FC<ReviewJobPostFormProps> = ({
+const ReviewJobPost: FC<ReviewJobPostFormProps | any> = ({
   jobPostTypeOption,
   onHandleChangeForSelectFieldValueAndFormData,
 }) => {
@@ -74,7 +74,12 @@ const ReviewJobPost: FC<ReviewJobPostFormProps> = ({
                 className={s.h_postJob_ant_form_item}
                 rules={[{ required: true, message: t("validationErrorMsgs.requireJobType") }]}
               >
-                <Select placeholder="Frontend Developer" onChange={onHandleChangeForSelectFieldValueAndFormData}>
+                <Select
+                  showSearch
+                  optionFilterProp="children"
+                  placeholder="Frontend Developer"
+                  onChange={onHandleChangeForSelectFieldValueAndFormData}
+                >
                   {jobPostTypeOption}
                 </Select>
               </Form.Item>

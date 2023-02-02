@@ -33,6 +33,7 @@ const initialState: AuthState = {
     firstName: "",
     lastName: "",
     mobileNo: "",
+    profileTitle: "",
     verificationCode: 0,
     authType: "",
     authStatus: 0,
@@ -41,6 +42,7 @@ const initialState: AuthState = {
     createdAt: "",
     updatedAt: "",
     tokens: {},
+    notification: { unReadCount: 0 },
   },
   error: null,
 };
@@ -62,6 +64,16 @@ export const authSlice = createSlice({
       };
       return updatedState;
     },
+    updateNotificationCount: (state: AuthState, action) => {
+      const updatedState = {
+        ...state,
+        currentUser: {
+          ...state.currentUser,
+          ...action.payload,
+        },
+      };
+      return updatedState;
+    },
   },
   extraReducers: {
     // User login
@@ -80,6 +92,7 @@ export const authSlice = createSlice({
         state.currentUser = {
           ..._action?.payload.user,
           tokens: _action?.payload.tokens,
+          notification: _action?.payload.notification,
         };
       }
     },
@@ -91,7 +104,7 @@ export const authSlice = createSlice({
         state.currentRequestId = undefined;
       }
     },
-    // User login
+    // User login details
     [asyncGetUserDetails.pending.type]: (state: any, _action: any) => {
       const { requestId } = _action.meta;
       state.isLoading = true;
@@ -108,7 +121,7 @@ export const authSlice = createSlice({
         state.error = null;
         state.currentUser = {
           ..._action?.payload.user,
-          tokens: _action?.payload.tokens,
+          notification: _action?.payload.notification,
         };
       }
     },
@@ -290,6 +303,7 @@ export const authActions = authSlice.actions;
 
 // Selectors
 export const authSelector = (state: RootState) => state.auth;
+export const fetchCurrentUserDetails = (state: RootState) => state.auth.currentUser;
 export const selectAuthLoading = (state: RootState) => state.auth.isLoading;
 export const isFetchingUserDetails = (state: RootState) => state.auth.isFetchingUserDetails;
 export const selectGetVerificationLoading = (state: RootState) => state.auth.isGetVerificationCodeLoading;

@@ -58,11 +58,11 @@ export const similarJobPost: any = createAsyncThunk(
   }
 );
 
-export const jobPosFlagInappropriateApi: any = createAsyncThunk(
+export const jobPostFlagInappropriateApi: any = createAsyncThunk(
   `jobModule/FlagInappropriateApi`,
   async (values: any, thunkAPI) => {
     try {
-      const response = await api.post(`/job/save-action-job`, {}, {}, true, true).then(async (res: any) => {
+      const response = await api.post(`/jobFreelancer/save-action-job`, {}, {}, true, true).then(async (res: any) => {
         if (res && res?.isSuccess) {
           return res.data;
         }

@@ -1,7 +1,7 @@
 import React from "react";
 
 import { CustomProps } from "./types/storeTypes";
-import JobPostDetails from "./UI/jobDetails";
+import JobDetailComponents from "./UI/jobDetailComponents";
 
 const JobDetailsView: React.FC<CustomProps> = ({
   getDateAndTimeFormatter,
@@ -18,8 +18,11 @@ const JobDetailsView: React.FC<CustomProps> = ({
   onFlagAsInappropriateSubmitModel,
   handleCancelForSearchModel,
   apiResponseIsLoading,
+  commonStoreDataList,
+  currentUserDetails,
+  authType,
 }) => (
-  <JobPostDetails
+  <JobDetailComponents
     form={form}
     isLoading={isLoading}
     jobId={jobId}
@@ -33,7 +36,10 @@ const JobDetailsView: React.FC<CustomProps> = ({
     onFlagAsInappropriateSubmitModel={onFlagAsInappropriateSubmitModel}
     handleCancelForSearchModel={handleCancelForSearchModel}
     visibleModel={visibleModel}
+    commonStoreDataList={commonStoreDataList}
     setVisibleModel={setVisibleModel}
+    currentUserDetails={currentUserDetails}
+    authType={authType}
   />
 );
 

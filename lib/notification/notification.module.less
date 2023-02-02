@@ -1,0 +1,57 @@
+.h_notification_wrapper {
+  margin-top: 18px;
+  margin-bottom: 18px;
+  width: 100%;
+
+  .h_notification_box_main {
+    border: 0.5px solid @gray-color;
+    border-radius: 10px;
+    background: @white;
+    width: 100%;
+    .h_notification_main_header {
+      padding: 20px 30px;
+    }
+
+    .h_notification_list {
+      list-style: none;
+      padding: unset;
+      margin: 0;
+      .h_notification {
+        display: flex;
+        width: 100%;
+        align-items: top;
+        padding: 20px 30px;
+        border-bottom: 0.5px solid;
+        &:hover {
+          box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+        }
+        .h_notification_icon {
+          margin-right: 20px;
+        }
+        .h_notification_content {
+          display: flex;
+          flex-direction: column;
+          font-weight: 400;
+          font-size: 16px;
+          line-height: 24px;
+          width: 100%;
+        }
+      }
+      &.h_remove_last_child_border {
+        li:last-child {
+          border-bottom: unset !important;
+        }
+      }
+    }
+  }
+  .h_notification_title {
+    font-weight: 600 !important;
+    font-size: 25px !important;
+    line-height: 24px !important;
+    color: #434343 !important;
+  }
+  .h_add_border_bottom {
+    border-bottom: 0.5px solid @gray-color;
+    margin-bottom: unset !important;
+  }
+}

@@ -1,9 +1,10 @@
 import { Col, Layout, Row, Tabs } from "antd";
-import React, { memo } from "react";
+import React from "react";
 
 import FilterComponent from "@/components/FilterComponent/filterComponent";
 import PaginationComponent from "@/components/PaginationComponent";
-import { PAGINATION_DEFAULT_LIMIT } from "@/utils/constants";
+import { useAppSelector } from "@/hooks/redux";
+import { authSelector } from "@/lib/auth/authSlice";
 import RenderIf from "@/utils/RenderIf/renderIf";
 
 import { JobPostResponse } from "../types/commonTypes";
@@ -22,11 +23,11 @@ interface IJobPostListProps {
   onHandleLikeAndDisLikeButton: (e: any, id: string, value: string) => void;
   onChangeHandlerSaved: (id: string, value: string) => void;
   onChangeTabMenu: (key: string) => void;
-  handleChangeSortJobPost: (key: string) => void;
+  // handleChangeSortJobPost: (key: string) => void;
   handlePageClickForSavedJobs: (page: number) => void;
   onSearch: (key: string) => void;
   removeAllFilterList: () => void;
-  sortValue: string;
+  // sortValue: string;
   isLoading: boolean;
   checkJobIdWithStatus: any;
   getDislikeReasonMessage: any;
@@ -44,8 +45,14 @@ interface IJobPostListProps {
   queryParamsJobListing: string;
   setVisibleModel: React.Dispatch<React.SetStateAction<boolean>>;
   jobId: any;
+  tabValue: string;
+  commonStoreDataList: any;
+  inputValues: string;
+  setInputValues: React.Dispatch<React.SetStateAction<string>>;
+  submitHandleChangeForSearchValues: () => void;
 }
 const JobListingView: React.FC<IJobPostListProps> = (props) => {
+  const { isAuth } = useAppSelector(authSelector);
   const {
     handlePageChange,
     isDislikeLoading,
@@ -55,15 +62,16 @@ const JobListingView: React.FC<IJobPostListProps> = (props) => {
     jobId,
     allJobPostList,
     onChangeTabMenu,
-    handleChangeSortJobPost,
+    // handleChangeSortJobPost,
     removeFilterItemsFromArrayList,
     onAdvanceSearchModelSubmit,
     handleChangeForSearchSkills,
     queryParamsJobListing,
     onSearch,
     searchValue,
-    sortValue,
+    // sortValue,
     isLoading,
+    tabValue,
     checkJobIdWithStatus,
     getDislikeReasonMessage,
     jobListingStoreData,
@@ -73,23 +81,29 @@ const JobListingView: React.FC<IJobPostListProps> = (props) => {
     checkCollapseJobDislikeExit,
     onCollapseHandle,
     visibleModel,
+    commonStoreDataList,
     setVisibleModel,
+    inputValues,
+    setInputValues,
+    submitHandleChangeForSearchValues,
   } = props;
 
   return (
     <Row className={s.h_JobPostLists_wrapper_view} gutter={20}>
-      <Col span={5} className={s.h_filter_wrapper_col}>
-        <FilterComponent filterType="jobPost" />
-      </Col>
-      <Col span={19}>
+      <RenderIf isTrue={tabValue === "search"}>
+        <Col span={5} className={s.h_filter_wrapper_col}>
+          <FilterComponent filterType="freelancer" />
+        </Col>
+      </RenderIf>
+      <Col span={tabValue === "search" ? 19 : 24}>
         <Layout className={s.h_content_wrapper}>
           <div className="h_content_tab_bar">
             <Tabs defaultActiveKey="1" onChange={onChangeTabMenu}>
               <TabPane tab="Search" key="search">
                 <JobListingSearchComponent
-                  handleChangeSortJobPost={handleChangeSortJobPost}
+                  // handleChangeSortJobPost={handleChangeSortJobPost}
                   onSearch={onSearch}
-                  sortValue={sortValue}
+                  // sortValue={sortValue}
                   jobListingStoreData={jobListingStoreData?.allJobPostList}
                   removeAllFilterList={removeAllFilterList}
                   removeFilterItemsFromArrayList={removeFilterItemsFromArrayList}
@@ -98,7 +112,10 @@ const JobListingView: React.FC<IJobPostListProps> = (props) => {
                   queryParamsJobListing={queryParamsJobListing}
                   searchValue={searchValue}
                   visibleModel={visibleModel}
+                  inputValues={inputValues}
+                  setInputValues={setInputValues}
                   setVisibleModel={setVisibleModel}
+                  submitHandleChangeForSearchValues={submitHandleChangeForSearchValues}
                 />
                 <JobPostListCardComponent
                   onHandleLikeAndDisLikeButton={onHandleLikeAndDisLikeButton}
@@ -113,17 +130,19 @@ const JobListingView: React.FC<IJobPostListProps> = (props) => {
                   checkCollapseJobDislikeExit={checkCollapseJobDislikeExit}
                   onCollapseHandle={onCollapseHandle}
                   jobId={jobId}
+                  tabValue={tabValue}
+                  commonStoreDataList={commonStoreDataList}
                 />
-                <RenderIf isTrue={jobListingStoreData?.allJobPostList?.jobs?.length > 0}>
+                <RenderIf isTrue={jobListingStoreData?.allJobPostList?.results?.length > 0}>
                   <PaginationComponent
                     totalRecords={jobListingStoreData?.allJobPostList?.totalResults}
                     handlePageChange={handlePageChange}
-                    pageSize={PAGINATION_DEFAULT_LIMIT}
                   />
                 </RenderIf>
               </TabPane>
-              <TabPane tab="Saved Job" key="saved">
-                <JobListingSearchComponent
+              {isAuth ? (
+                <TabPane tab="Saved Job" key="saved">
+                  {/* <JobListingSearchComponent
                   handleChangeSortJobPost={handleChangeSortJobPost}
                   onSearch={onSearch}
                   sortValue={sortValue}
@@ -135,31 +154,37 @@ const JobListingView: React.FC<IJobPostListProps> = (props) => {
                   queryParamsJobListing={queryParamsJobListing}
                   searchValue={searchValue}
                   visibleModel={visibleModel}
+                  inputValues={inputValues}
+                  setInputValues={setInputValues}
                   setVisibleModel={setVisibleModel}
-                />
-
-                <JobPostListCardComponent
-                  onHandleLikeAndDisLikeButton={onHandleLikeAndDisLikeButton}
-                  onChangeHandlerSaved={onChangeHandlerSaved}
-                  isLoading={isLoading}
-                  allJobPostList={allJobPostList}
-                  checkJobIdWithStatus={checkJobIdWithStatus}
-                  getDislikeReasonMessage={getDislikeReasonMessage}
-                  isSavedLoading={isSavedLoading}
-                  isDislikeLoading={isDislikeLoading}
-                  checkCollapseCurrentValue={checkCollapseCurrentValue}
-                  checkCollapseJobDislikeExit={checkCollapseJobDislikeExit}
-                  onCollapseHandle={onCollapseHandle}
-                  jobId={jobId}
-                />
-                <RenderIf isTrue={jobListingStoreData?.savedJobList?.jobs?.length > 0}>
-                  <PaginationComponent
-                    totalRecords={jobListingStoreData?.savedJobList?.totalResults}
-                    handlePageChange={handlePageClickForSavedJobs}
-                    pageSize={PAGINATION_DEFAULT_LIMIT}
+                  submitHandleChangeForSearchValues={submitHandleChangeForSearchValues}
+                /> */}
+                  <JobPostListCardComponent
+                    onHandleLikeAndDisLikeButton={onHandleLikeAndDisLikeButton}
+                    onChangeHandlerSaved={onChangeHandlerSaved}
+                    isLoading={isLoading}
+                    allJobPostList={allJobPostList}
+                    checkJobIdWithStatus={checkJobIdWithStatus}
+                    getDislikeReasonMessage={getDislikeReasonMessage}
+                    isSavedLoading={isSavedLoading}
+                    isDislikeLoading={isDislikeLoading}
+                    checkCollapseCurrentValue={checkCollapseCurrentValue}
+                    checkCollapseJobDislikeExit={checkCollapseJobDislikeExit}
+                    onCollapseHandle={onCollapseHandle}
+                    commonStoreDataList={commonStoreDataList}
+                    tabValue={tabValue}
+                    jobId={jobId}
                   />
-                </RenderIf>
-              </TabPane>
+                  <RenderIf isTrue={jobListingStoreData?.savedJobList?.results?.length > 0}>
+                    <PaginationComponent
+                      totalRecords={jobListingStoreData?.savedJobList?.totalResults}
+                      handlePageChange={handlePageClickForSavedJobs}
+                    />
+                  </RenderIf>
+                </TabPane>
+              ) : (
+                <div />
+              )}
             </Tabs>
           </div>
         </Layout>
@@ -168,4 +193,5 @@ const JobListingView: React.FC<IJobPostListProps> = (props) => {
   );
 };
 
-export default memo(JobListingView);
+// export default memo(JobListingView);
+export default JobListingView;

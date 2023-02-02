@@ -7,6 +7,7 @@ import InlineSVG from "svg-inline-react";
 
 import CaptchaComponent from "@/components/RecaptchaComponent";
 import { generalEmailValidation } from "@/utils/globalFunction";
+import RenderIf from "@/utils/RenderIf/renderIf";
 import { googleIcon } from "@utils/allSvgs";
 
 import s from "../login.module.less";
@@ -15,12 +16,12 @@ interface LoginFormProps {
   form: any;
   authStoreLoading: boolean;
   handleOnFinish: any;
+  captchaValiadate: boolean;
 }
 
-const LoginForm: FC<LoginFormProps> = ({ form, handleOnFinish, authStoreLoading }) => {
+const LoginForm: FC<LoginFormProps> = ({ form, handleOnFinish, authStoreLoading, captchaValiadate }) => {
   const { t } = useTranslation();
   const router = useRouter();
-
   return (
     <div>
       <Form form={form} name="userLogin" autoComplete="off" onFinish={handleOnFinish}>
@@ -33,18 +34,10 @@ const LoginForm: FC<LoginFormProps> = ({ form, handleOnFinish, authStoreLoading 
             {
               validator: generalEmailValidation,
             },
-            // {
-            //   pattern: new RegExp(emailRegex),
-            //   message: t("validationErrorMsgs.passwordIsNotValidFormat"),
-            // },
-            // { required: true, message: t("validationErrorMsgs.requireField") },
-            // { type: "email", message: t("validationErrorMsgs.emailIsNotValidFormat") },
-            // { max: 62, message: t("validationErrorMsgs.emailMaxLength62") },
           ]}
         >
           <Input placeholder={t("formItem.emailPlaceholder")} />
         </Form.Item>
-
         <Form.Item
           className={s.h_form_item}
           name="password"
@@ -55,6 +48,12 @@ const LoginForm: FC<LoginFormProps> = ({ form, handleOnFinish, authStoreLoading 
           <Input.Password type="password" placeholder={t("formItem.password")} />
         </Form.Item>
         <CaptchaComponent formName="userLogin" />
+
+        <RenderIf isTrue={captchaValiadate}>
+          <div className="ant-form-item-explain ant-form-item-explain-connected" role="alert">
+            <div className="ant-form-item-explain-error">This is required field.</div>
+          </div>
+        </RenderIf>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <Form.Item name="remember" valuePropName="checked">
             <Checkbox>{t("formItem.rememberMe")}</Checkbox>

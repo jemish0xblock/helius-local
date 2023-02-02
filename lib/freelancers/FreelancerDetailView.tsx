@@ -1,12 +1,15 @@
 /* eslint-disable no-unsafe-optional-chaining */
 import { LoadingOutlined } from "@ant-design/icons";
 import { Avatar, Button, Col, Empty, Layout, Popover, Row, Spin, Tabs, Typography } from "antd";
+import { has } from "lodash";
+import moment from "moment-mini";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import React, { useContext } from "react";
+import { useTranslation } from "react-i18next";
 import InlineSVG from "svg-inline-react";
 import { v4 as uuid } from "uuid";
 
-import PaginationComponent from "@/components/PaginationComponent";
 import RatingComponent from "@/components/RatingComponent";
 import {
   addIconSvg,
@@ -24,8 +27,8 @@ import RenderIf from "@/utils/RenderIf/renderIf";
 import s from "@lib/freelancers/styles/freelancer-detail.module.less";
 
 import FreelancersContext from "./context/freelancers.context";
-import FreelancerAddNote from "./UI/FreelancerAddNoteForm";
 
+const FreelancerAddNote = dynamic(() => import("./UI/FreelancerAddNoteForm"));
 const FreelancerFlagAsInappropriate = dynamic(() => import("./UI/FreelancerFlagAsInappropriate"));
 const { TabPane } = Tabs;
 const { Title, Text, Paragraph } = Typography;
@@ -39,17 +42,26 @@ const FreelancerDetailView: React.FC = () => {
     isHideShowPopover,
     setIsHidePopover,
     setIsShowFlagAsInappropriateModal,
+    inviteFreelancerForJobByClient,
+    handleFilterOnJobs,
+    authStore,
   } = freelancersContext;
-  const { inProgress, completed } = freelancerData?.allJobs;
-  const totalJobsCount = completed?.length + inProgress?.length;
-
+  const { user, note, inappropriate } = freelancerData;
+  const { inProgress, completed } = user?.allJobs;
+  // const totalJobsCount = completed?.length + inProgress?.length;
+  const { t } = useTranslation();
   // Render methods
   const renderWorkHistoryItems = (jobData: any) => (
     <>
       <li className={s.h_work_list_item} key={uuid()}>
         <Title level={5} className={s.h_work_title}>
           {jobData?.title || ""}
-          <span>${jobData?.price || "0"}</span>
+
+          <span>
+            {jobData?.paymentType === "fixed"
+              ? `$${jobData?.budget}` || "0"
+              : `$${jobData?.minBudget || 0} - $${jobData?.maxBudget || 0}`}
+          </span>
         </Title>
         <Paragraph
           className={s.h_work_description}
@@ -59,8 +71,12 @@ const FreelancerDetailView: React.FC = () => {
         </Paragraph>
         <Paragraph className={s.h_work_extra_detail}>
           <RatingComponent rating={4.5} />
-          <Text className={s.h_work_text}>{jobData?.date || ""}Jan 21, 2022 - Jan 25, 2022</Text>
-          <Text className={s.h_work_text}>Fixed Price</Text>
+
+          <Text className={s.h_work_text}>
+            {moment(jobData?.startDate).format("MMM d, YYYY") || ""}
+            {jobData?.endDate ? ` - ${moment(jobData?.endDate).format("MMM d, YYYY")}` || "" : ""}
+          </Text>
+          <Text className={s.h_work_text}>{jobData?.paymentType} Price</Text>
         </Paragraph>
       </li>
       {/* <li className={s.h_work_list_item}>
@@ -166,23 +182,22 @@ const FreelancerDetailView: React.FC = () => {
       </li>
     </>
   );
+
   return (
     <Layout className={s.h_freelancer_details_wrapper}>
       <Row className={s.h_freelancer_main_row} gutter={20}>
         <Col span={24} className={s.h_user_main_section}>
           <>
             <div className={s.h_user_first_section}>
-              {/*
-                <RenderIf isTrue={freelancer?.profileUrl}>
-                  <Avatar
-                    size={100}
-                    src={freelancer?.profileUrl}
-                    style={{ verticalAlign: "middle", display: "flex", alignItems: "center",marginRight: "20px", }}
-                  />
-                </RenderIf>
-              */}
+              <RenderIf isTrue={user?.profileImage}>
+                <Avatar
+                  size={100}
+                  src={user?.profileImage}
+                  style={{ verticalAlign: "middle", display: "flex", alignItems: "center", marginRight: "20px" }}
+                />
+              </RenderIf>
 
-              <RenderIf isTrue>
+              <RenderIf isTrue={!user?.profileImage}>
                 <Avatar
                   size={100}
                   style={{
@@ -194,12 +209,12 @@ const FreelancerDetailView: React.FC = () => {
                     marginRight: "20px",
                   }}
                 >
-                  {getStringFirstLetter(`${freelancerData?.firstName} ${freelancerData?.lastName}`, false)}
+                  {getStringFirstLetter(`${user?.firstName} ${user?.lastName}`, false)}
                 </Avatar>
               </RenderIf>
               <div className={s.h_user_details}>
                 <Title level={3} className={s.h_user_name}>
-                  {getCapitalizeStartWord(`${freelancerData?.firstName} ${freelancerData?.lastName?.charAt(0) || ""}`)}
+                  {getCapitalizeStartWord(`${user?.firstName} ${user?.lastName?.charAt(0) || ""}`)}
                   .
                   <InlineSVG className={s.h_verified_svg} src={verifiedUser} height="auto" />
                   <div className={s.h_user_available_main}>
@@ -208,65 +223,74 @@ const FreelancerDetailView: React.FC = () => {
                   </div>
                 </Title>
                 <h6 className={s.h_user_location}>
-                  {getCapitalizeStartWord(freelancerData?.city) || ""}, {freelancerData?.country?.value || ""} | 05:20pm
-                  local time
+                  {`${getCapitalizeStartWord(user?.city) || ""}, ${user?.country?.value || ""} | ${moment().format(
+                    "hh:mmA"
+                  )} local time`}
                 </h6>
                 <h6 className={s.h_user_job_success}>80% Job Success</h6>
               </div>
             </div>
-            <div className={s.h_action_wrapper_right}>
-              <Popover
-                placement="bottom"
-                className="h_freelancer_actions_content"
-                visible={isHideShowPopover}
-                onVisibleChange={(newVisible: boolean) => setIsHidePopover(newVisible)}
-                content={
-                  <div className={s.h_action_content_main}>
-                    <Button
-                      className={s.h_btn}
-                      type="text"
-                      onClick={onClickAddNoteToFreelancer}
-                      // onClick={() => {
-                      //   setIsHidePopover(false);
-                      //   setIsShowAddNoteModal((current: boolean) => !current);
-                      // }}
-                    >
-                      <InlineSVG src={addIconSvg} height="auto" />
-                      Add Note
-                    </Button>
-                    <Button
-                      className={s.h_btn}
-                      type="text"
-                      onClick={() => {
-                        setIsHidePopover(false);
-                        setIsShowFlagAsInappropriateModal((current: boolean) => !current);
-                      }}
-                    >
-                      <InlineSVG src={flagIcon} height="auto" />
-                      Flag as Inappropriate
-                    </Button>
-                  </div>
-                }
-                trigger="click"
-              >
-                <InlineSVG src={moreRound} height="auto" className={s.h_more_action} />
-              </Popover>
-              <Button className={`${s.h_action_btn} ${s.h_hire_btn}`}>Hire</Button>
-              <Button type="primary" className={s.h_action_btn}>
-                Invite
-              </Button>
-              <span
-                aria-hidden
-                className={s.h_like_icon}
-                onClick={() => handleSaveFreelancer(freelancerData?.isSaved === 1 ? 0 : 1, freelancerData?.id)}
-              >
-                {freelancerData?.id === freelancerActionLoading?.id && freelancerActionLoading?.isLoading === true ? (
-                  <Spin indicator={<LoadingOutlined style={{ fontSize: 20 }} spin />} />
-                ) : (
-                  <InlineSVG src={freelancerData?.isSaved === 1 ? filledHeartSvg : heartSvg} />
-                )}
-              </span>
-            </div>
+            <RenderIf isTrue={authStore?.currentUser?.authType === "client"}>
+              <div className={s.h_action_wrapper_right}>
+                <Popover
+                  placement="bottom"
+                  className="h_freelancer_actions_content"
+                  open={isHideShowPopover}
+                  onOpenChange={(newVisible: boolean) => setIsHidePopover(newVisible)}
+                  content={
+                    <div className={s.h_action_content_main}>
+                      <Button
+                        className={s.h_btn}
+                        type="text"
+                        onClick={onClickAddNoteToFreelancer}
+                        // onClick={() => {
+                        //   setIsHidePopover(false);
+                        //   setIsShowAddNoteModal((current: boolean) => !current);
+                        // }}
+                      >
+                        <InlineSVG src={addIconSvg} height="auto" />
+                        {note && has(note, "id") ? t("formItem.updateNote") : t("formItem.addNote")}
+                      </Button>
+                      <Button
+                        className={s.h_btn}
+                        type="text"
+                        onClick={() => {
+                          setIsHidePopover(false);
+                          setIsShowFlagAsInappropriateModal((current: boolean) => !current);
+                        }}
+                      >
+                        <InlineSVG src={flagIcon} height="auto" />
+                        Flag as Inappropriate
+                      </Button>
+                    </div>
+                  }
+                  trigger="click"
+                >
+                  <InlineSVG src={moreRound} height="auto" className={s.h_more_action} />
+                </Popover>
+
+                <Link href={`/offer/new/${user?.id}`} passHref>
+                  <a href="replace">
+                    <Button className={`${s.h_action_btn} ${s.h_hire_btn}`}>Hire</Button>
+                  </a>
+                </Link>
+
+                <Button type="primary" className={s.h_action_btn} onClick={() => inviteFreelancerForJobByClient(user)}>
+                  Invite
+                </Button>
+                <span
+                  aria-hidden
+                  className={s.h_like_icon}
+                  onClick={() => handleSaveFreelancer(user?.isSaved === 1 ? 0 : 1, user?.id)}
+                >
+                  {user?.id === freelancerActionLoading?.id && freelancerActionLoading?.isLoading === true ? (
+                    <Spin indicator={<LoadingOutlined style={{ fontSize: 20 }} spin />} />
+                  ) : (
+                    <InlineSVG src={user?.isSaved === 1 ? filledHeartSvg : heartSvg} />
+                  )}
+                </span>
+              </div>
+            </RenderIf>
           </>
         </Col>
 
@@ -274,13 +298,14 @@ const FreelancerDetailView: React.FC = () => {
           <div className={s.h_left_section}>
             <div className={s.h_box}>
               <Title level={5} className={s.h_title}>
-                {freelancerData?.hoursPerWeek}hrs/week
+                {user?.hoursPerWeek}hrs/week
               </Title>
               <span>Hours per Week</span>
             </div>
             <div className={s.h_box} style={{ border: "none" }}>
               <Title level={5} className={s.h_title}>
-                {freelancerData?.totalEarned || `$0k+`}
+                {`$${user?.moneyEarned}` || `$0`}
+                {/* {user?.moneyEarned || `$0k+`} */}
               </Title>
               <span>Earned</span>
             </div>
@@ -289,7 +314,7 @@ const FreelancerDetailView: React.FC = () => {
           <div className={s.h_left_section}>
             <div className={s.h_box}>
               <Title level={5} className={s.h_title}>
-                {totalJobsCount || 0}
+                {user?.totalJobs || 0}
               </Title>
               <span>Total Jobs</span>
             </div>
@@ -303,18 +328,21 @@ const FreelancerDetailView: React.FC = () => {
 
           <div className={s.h_user_detail_section}>
             <h5>Total Hours Worked</h5>
-            <Paragraph className={s.h_description}>{freelancerData?.totalWorkedHrs || 0}</Paragraph>
+            <Paragraph className={s.h_description}>{user?.workedHours || 0}</Paragraph>
           </div>
 
-          <RenderIf isTrue={freelancerData?.skills?.length > 0}>
+          <RenderIf isTrue={user?.skills?.length > 0}>
             <div className={s.h_user_detail_section}>
               <h5>Skills</h5>
               <ul className={s.h_user_skills_main}>
-                {freelancerData?.skills?.map((item: any) => (
-                  <li key={uuid()} className={s.h_skill}>
-                    {item?.title}
-                  </li>
-                ))}
+                {user?.skills?.map(
+                  (item: any) =>
+                    item?.title && (
+                      <li key={uuid()} className={s.h_skill}>
+                        {item?.title}
+                      </li>
+                    )
+                )}
               </ul>
             </div>
           </RenderIf>
@@ -324,9 +352,9 @@ const FreelancerDetailView: React.FC = () => {
             <ul className={s.h_user_languages}>
               <li className={s.h_language}>
                 <Paragraph className={s.h_language_name}>English</Paragraph>
-                {getCapitalizeStartWord(freelancerData?.englishProficiency)}
+                {getCapitalizeStartWord(user?.englishProficiency)}
               </li>
-              <RenderIf isTrue={freelancerData?.newLan?.length > 0}>
+              <RenderIf isTrue={user?.newLan?.length > 0}>
                 <li className={s.h_language}>
                   <Paragraph className={s.h_language_name}>Russian</Paragraph>Native or Bilingual
                 </li>
@@ -337,16 +365,14 @@ const FreelancerDetailView: React.FC = () => {
             </ul>
           </div>
 
-          <RenderIf isTrue={freelancerData?.educationObj}>
+          <RenderIf isTrue={user?.educationObj}>
             <div className={`${s.h_user_detail_section} ${s.h_remove_border}`}>
               <h5>Education</h5>
               <ul className={s.h_user_languages}>
                 <li className={`${s.h_language} ${s.h_d_block}`}>
-                  <Paragraph className={s.h_language_name}>{freelancerData?.educationObj?.university || ""}</Paragraph>
-                  <Paragraph className={s.h_description}>
-                    {freelancerData?.educationObj?.specialization?.title || ""}
-                  </Paragraph>
-                  <Paragraph className={s.h_description}> {freelancerData?.educationObj?.passingYear || ""}</Paragraph>
+                  <Paragraph className={s.h_language_name}>{user?.educationObj?.university || ""}</Paragraph>
+                  <Paragraph className={s.h_description}>{user?.educationObj?.specialization?.title || ""}</Paragraph>
+                  <Paragraph className={s.h_description}> {user?.educationObj?.passingYear || ""}</Paragraph>
                 </li>
               </ul>
             </div>
@@ -356,18 +382,26 @@ const FreelancerDetailView: React.FC = () => {
         <Col xxl={16} xl={16} lg={16} md={24} sm={24} xs={24} className={s.h_user_right_section_col}>
           <div className={s.h_user_detail_desc}>
             <div className={s.h_user_role_wrapper}>
-              <Title level={5} className={s.h_title}>
-                Lead Architecture Developer | PHP | Wordpress
-              </Title>
-              <Title level={5} className={`${s.h_title} ${s.h_rate}`}>
-                ${freelancerData?.hourlyRate || "0"}/hr
-              </Title>
+              <Row style={{ width: "100%" }}>
+                <Col span={21}>
+                  <RenderIf isTrue={user?.profileTitle !== ""}>
+                    <Title level={5} className={s.h_title}>
+                      {user?.profileTitle || ""}
+                    </Title>
+                  </RenderIf>
+                </Col>
+                <Col span={3}>
+                  <Title level={5} className={`${s.h_title} ${s.h_rate}`}>
+                    {`$${user?.hourlyRate || "0"}/hr`}
+                  </Title>
+                </Col>
+              </Row>
             </div>
             <Paragraph
               className={s.h_user_bio}
               ellipsis={true ? { rows: 4, expandable: true, symbol: "See All" } : false}
             >
-              {freelancerData?.aboutYourSelf || ""}
+              {user?.aboutYourSelf || ""}
             </Paragraph>
           </div>
 
@@ -378,16 +412,16 @@ const FreelancerDetailView: React.FC = () => {
                 placement="bottom"
                 content={
                   <div className={s.h_action_content_main}>
-                    <Button className={s.h_btn} type="text">
+                    <Button className={s.h_btn} type="text" onClick={() => handleFilterOnJobs("newestFirst")}>
                       Newest First
                     </Button>
-                    <Button className={s.h_btn} type="text">
+                    <Button className={s.h_btn} type="text" onClick={() => handleFilterOnJobs("highestRated")}>
                       Highest Rated
                     </Button>
-                    <Button className={s.h_btn} type="text">
+                    <Button className={s.h_btn} type="text" onClick={() => handleFilterOnJobs("lowestRated")}>
                       Lowest Rated
                     </Button>
-                    <Button className={s.h_btn} type="text">
+                    <Button className={s.h_btn} type="text" onClick={() => handleFilterOnJobs("largestProject")}>
                       Largest Projects
                     </Button>
                   </div>
@@ -416,8 +450,10 @@ const FreelancerDetailView: React.FC = () => {
             <Tabs defaultActiveKey="1">
               <TabPane tab={`Completed Job (${completed?.length || 0})`} key="1">
                 <RenderIf isTrue={completed?.length > 0}>
-                  <ul className={s.h_work_history_list}>{completed?.map((job: any) => renderWorkHistoryItems(job))}</ul>
-                  <PaginationComponent totalRecords={20} handlePageChange={() => {}} pageSize={10} />
+                  <ul className={s.h_work_history_list}>
+                    {completed?.map((job: any) => renderWorkHistoryItems(job?.jobId))}
+                  </ul>
+                  {/* <PaginationComponent totalRecords={20} handlePageChange={() => {}} pageSize={10} /> */}
                 </RenderIf>
                 <RenderIf isTrue={completed?.length === 0}>
                   <Empty
@@ -425,9 +461,7 @@ const FreelancerDetailView: React.FC = () => {
                     style={{
                       margin: "50px auto",
                     }}
-                    description={
-                      <span>{getCapitalizeStartWord(freelancerData?.firstName)} does't completed any job yet.</span>
-                    }
+                    description={<span>{getCapitalizeStartWord(user?.firstName)} does't completed any job yet.</span>}
                   />
                 </RenderIf>
               </TabPane>
@@ -435,9 +469,9 @@ const FreelancerDetailView: React.FC = () => {
               <TabPane tab={`In Progress (${inProgress?.length || 0})`} key="2">
                 <RenderIf isTrue={inProgress?.length > 0}>
                   <ul className={s.h_work_history_list}>
-                    {inProgress?.map((job: any) => renderWorkHistoryItems(job))}
+                    {inProgress?.map((job: any) => renderWorkHistoryItems(job?.jobId))}
                   </ul>
-                  <PaginationComponent totalRecords={20} handlePageChange={() => {}} pageSize={10} />
+                  {/* <PaginationComponent totalRecords={20} handlePageChange={() => {}} pageSize={10} /> */}
                 </RenderIf>
                 <RenderIf isTrue={inProgress?.length === 0}>
                   <Empty
@@ -445,7 +479,7 @@ const FreelancerDetailView: React.FC = () => {
                     style={{
                       margin: "50px auto",
                     }}
-                    description={<span>{getCapitalizeStartWord(freelancerData?.firstName)} does't have any job.</span>}
+                    description={<span>{getCapitalizeStartWord(user?.firstName)} does't have any job.</span>}
                   />
                 </RenderIf>
               </TabPane>
@@ -455,57 +489,49 @@ const FreelancerDetailView: React.FC = () => {
             <Title level={5} className={s.h_title}>
               Employment History
             </Title>
-            <RenderIf isTrue={freelancerData?.organizationArr?.length > 0}>
+            <RenderIf isTrue={user?.organizationArr?.length > 0}>
               <ul className={s.h_work_history_list}>
-                {freelancerData?.organizationArr?.map((organization: any) =>
-                  renderEmploymentHistoryItems(organization)
-                )}
+                {user?.organizationArr?.map((organization: any) => renderEmploymentHistoryItems(organization))}
               </ul>
             </RenderIf>
-            <RenderIf isTrue={freelancerData?.organizationArr?.length === 0}>
+            <RenderIf isTrue={user?.organizationArr?.length === 0}>
               <Empty
                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                 style={{
                   margin: "50px auto",
                 }}
-                description={
-                  <span>{getCapitalizeStartWord(freelancerData?.firstName)} does't have any experience.</span>
-                }
+                description={<span>{getCapitalizeStartWord(user?.firstName)} does't have any experience.</span>}
               />
             </RenderIf>
           </div>
-          <div className={`h_freelancer_work ${s.h_user_work_history_wrapper}`}>
-            <Title level={5} className={s.h_title}>
-              Other Experience
-            </Title>
-            <RenderIf isTrue={freelancerData?.otherExperiences?.length > 0}>
+          <RenderIf isTrue={user?.otherExperiences?.length > 0}>
+            <div className={`h_freelancer_work ${s.h_user_work_history_wrapper}`}>
+              <Title level={5} className={s.h_title}>
+                Other Experience
+              </Title>
+
               <ul className={s.h_work_history_list}>
-                {freelancerData?.otherExperiences?.map((experience: any) =>
-                  renderOtherExperienceHistoryItems(experience)
-                )}
+                {user?.otherExperiences?.map((experience: any) => renderOtherExperienceHistoryItems(experience))}
               </ul>
-            </RenderIf>
-            <RenderIf isTrue={freelancerData?.otherExperiences?.length === 0 || true}>
-              <Empty
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                style={{
-                  margin: "50px auto",
-                }}
-                description={
-                  <span>{getCapitalizeStartWord(freelancerData?.firstName)} does't have any other experience.</span>
-                }
-              />
-            </RenderIf>
-          </div>
+              {/* <RenderIf isTrue={user?.otherExperiences?.length === 0 || true}>
+                <Empty
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  style={{
+                    margin: "50px auto",
+                  }}
+                  description={<span>{getCapitalizeStartWord(user?.firstName)} does't have any other experience.</span>}
+                />
+              </RenderIf> */}
+            </div>
+          </RenderIf>
         </Col>
       </Row>
       <FreelancerAddNote
-        freelancerId={freelancerData?.id}
-        freelancerName={getCapitalizeStartWord(
-          `${freelancerData?.firstName} ${freelancerData?.lastName?.charAt(0) || ""}`
-        )}
+        freelancerId={user?.id}
+        freelancerName={getCapitalizeStartWord(`${user?.firstName} ${user?.lastName?.charAt(0) || ""}`)}
+        noteFormData={note}
       />
-      <FreelancerFlagAsInappropriate freelancerId={freelancerData?.id} />
+      <FreelancerFlagAsInappropriate freelancerId={user?.id} inappropriateFormData={inappropriate} />
     </Layout>
   );
 };

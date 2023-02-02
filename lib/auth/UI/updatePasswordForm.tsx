@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import CaptchaComponent from "@/components/RecaptchaComponent";
 import { useAppSelector } from "@/hooks/redux";
+import RenderIf from "@/utils/RenderIf/renderIf";
 
 import { selectAuthLoading } from "../authSlice";
 import { passwordRegex } from "../constants/validationRegx";
@@ -12,9 +13,10 @@ import s from "../login.module.less";
 interface UpdatePasswordFormProps {
   form: any;
   handleOnFinish: any;
+  captchaValiadate: boolean;
 }
 
-const UpdatePasswordForm: FC<UpdatePasswordFormProps> = ({ form, handleOnFinish }) => {
+const UpdatePasswordForm: FC<UpdatePasswordFormProps> = ({ form, handleOnFinish, captchaValiadate }) => {
   const { t } = useTranslation();
   const authStoreLoading: boolean = useAppSelector(selectAuthLoading);
 
@@ -66,6 +68,11 @@ const UpdatePasswordForm: FC<UpdatePasswordFormProps> = ({ form, handleOnFinish 
         <Input.Password placeholder={t("formItem.confirmPassword")} />
       </Form.Item>
       <CaptchaComponent formName="userUpdatePassword" />
+      <RenderIf isTrue={captchaValiadate}>
+        <div className="ant-form-item-explain ant-form-item-explain-connected" role="alert">
+          <div className="ant-form-item-explain-error">This is required field.</div>
+        </div>
+      </RenderIf>
       <Form.Item shouldUpdate>
         {() => (
           <Button style={{ width: "100%" }} type="primary" htmlType="submit" size="large" loading={authStoreLoading}>

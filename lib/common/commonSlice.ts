@@ -24,6 +24,8 @@ const initialState: ICommonStoreData = {
   dislikeReasonsList: null,
   softSkillsList: null,
   flagAsInappropriateList: null,
+  withdrawReasonsList: null,
+  interviewReasonsList: null,
   error: null,
 };
 

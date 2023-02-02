@@ -6,7 +6,7 @@ import s from "@lib/auth/login.module.less";
 
 const CompleteProfile: FC = () => (
   <div className={s.h_register_wrapper}>
-    <AuthController authType="freelancerCompleteProfile" />
+    <AuthController authType="freelancerCompleteProfile" isVisibleAfterLogin />
   </div>
 );
 

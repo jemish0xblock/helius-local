@@ -88,13 +88,7 @@ export const asyncFetchAllFreelancerDetailScreenDropdownList = createAsyncThunk(
                   softSkillsList: option?.options,
                 };
               }
-              if (option.name === "Flag as Inappropriate") {
-                newDataObj = {
-                  ...newDataObj,
-                  flagAsInappropriateList: option?.options,
-                };
-              }
-              if (option.name === "Job inappropriate reasons") {
+              if (option.name === "Flag as Inappropriate" || option.name === "Job inappropriate reasons") {
                 newDataObj = {
                   ...newDataObj,
                   flagAsInappropriateList: option?.options,
@@ -104,6 +98,18 @@ export const asyncFetchAllFreelancerDetailScreenDropdownList = createAsyncThunk(
                 newDataObj = {
                   ...newDataObj,
                   dislikeReasonsList: option?.options,
+                };
+              }
+              if (option.name === "Withdraw proposal") {
+                newDataObj = {
+                  ...newDataObj,
+                  withdrawReasonsList: option?.options,
+                };
+              }
+              if (option.name === "Decline Interview") {
+                newDataObj = {
+                  ...newDataObj,
+                  interviewReasonsList: option?.options,
                 };
               }
               return newDataObj;

@@ -22,7 +22,7 @@ const DashboardView: React.FC<IDashboardViewProps> = ({ userData }) => (
               href={userData.authType === "client" ? "/client/company-details" : "/freelancer/complete-profile"}
               passHref
             >
-              <a href="replace">{`${userData.authType === "client" ? "company details." : "complete profile."}`}</a>
+              <a href="replace">{`${userData.authType === "client" ? "company details." : "profile."}`}</a>
             </Link>
           </div>
         }
@@ -37,19 +37,39 @@ const DashboardView: React.FC<IDashboardViewProps> = ({ userData }) => (
     </Row>
     Welcome to helius dashboard! <br />
     <RenderIf isTrue={userData?.authType === "client"}>
-      <Link href="/freelancers" passHref>
+      <Link href="/freelancers?tab=search" passHref>
         <a href="replace">List all freelancers</a>
       </Link>
       <br />
       <Link href="/job-post/getting-started" passHref>
         <a href="replace">Create Job</a>
       </Link>
+      <br />
+      <Link href="/all-jobs" passHref>
+        <a href="replace">My Jobs</a>
+      </Link>
     </RenderIf>
     <RenderIf isTrue={userData?.authType !== "client"}>
       <Link href="/jobs/listing" passHref>
         <a href="/jobs/listing">Job Listing</a>
       </Link>
+      <br />
+      <Link href="/proposals" passHref>
+        <a href="/proposals">Proposals</a>
+      </Link>
     </RenderIf>
+    <br />
+    <Link href="/notifications" passHref>
+      <a href="replace">See all notifications</a>
+    </Link>
+    <br />
+    <Link href="/messages" passHref>
+      <a href="replace">Messages</a>
+    </Link>
+    <br />
+    <Link href="/contracts" passHref>
+      <a href="replace">All Contracts</a>
+    </Link>
   </>
 );
 

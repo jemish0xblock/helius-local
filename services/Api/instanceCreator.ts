@@ -10,7 +10,6 @@ const instanceCreator = (baseUrl = null) => {
     baseURL: baseUrl || appConfig.BASE_URL,
     timeout: 120000, // 60000
   };
-
   // All custom header will pass into below object
   options.headers = {
     customHeader: "customHeader",
@@ -40,7 +39,7 @@ const instanceCreator = (baseUrl = null) => {
   const asyncLogout = async () =>
     new Promise((resolve, reject) => {
       const email = readCookie(localStorageKeys.userEmail) || "";
-      axios.post(`${options.baseURL}auth/logout`, { email }).then(async (res: any) => {
+      axios.post(`${options.baseURL}/auth/logout`, { email }).then(async (res: any) => {
         if (res && res?.data?.successCode) {
           localStorage.clear();
           eraseCookie(localStorageKeys.authKey);

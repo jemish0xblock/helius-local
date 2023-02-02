@@ -8,4 +8,7 @@ export const titleValidationRegex = /^[\s\S]{0,100}$/;
 export const onlyAllowNumbersRegex = /^[0-9]{0,2}$/;
 
 // Verify that the “Project Title” field contains 100 characters. Display an error message if I write more than 100 characters.
-export const onlyAllowNumbersForMaxBudgetAndMin = /^[0-9]{1,4}$/;
+export const onlyAllowNumbersForMaxBudgetAndMin = /^[0-9]{1,3}$/;
+
+// Verify that the “Project Title” field contains 500 characters. Display an error message if I write more than 500 characters.
+export const milestoneDescriptionValidationRegex = /^[\s\S]{0,500}$/;

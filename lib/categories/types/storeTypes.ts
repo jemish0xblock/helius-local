@@ -6,9 +6,11 @@ export interface ICategoryObj {
 
 export interface categoriesDataProps {
   categoriesList: ICategoryObj | null;
+  newISLoading: boolean;
   subCategoriesSkills: string[];
   specialityAllSkills: string[];
   currentRequestId: string;
+  newRequestId: string;
   isLoading: boolean;
   error: any;
 }

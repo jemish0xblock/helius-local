@@ -8,7 +8,11 @@ import { userRatedSvg, userRisingTalentSvg, userTopRatedSvg } from "./allSvgs";
 import { getRedirectUrl } from "./config";
 
 export const AUTH_COOKIE_EXPIRATION_TIME_IN_DAYS = 15;
-export const PAGINATION_DEFAULT_LIMIT = 5; // Freelancers list, jobs list
+export const PAGINATION_DEFAULT_LIMIT = 10; // Freelancers list, jobs list
+
+export const commonConstant = {
+  socket: null,
+};
 
 export const localStorageKeys = {
   authKey: "token",
@@ -21,6 +25,9 @@ export const errorString = {
   authError: "INVALID_AUTH_CRED",
   userIsNotLoggedIn: "USER_IS_NOT_LOGGED_IN",
   freelancerNotFound: "FREELANCE_PROFILE_NOT_FOUND",
+  jobDetailNotFound: "JOB_DETAIL_NOT_FOUND",
+  submitProposalConnectsNotFound: "SUBMIT_PROPOSAL_CONNECTS_NOT_FOUND",
+  contractDetailNotFound: "CONTRACT_DETAIL_NOT_FOUND",
 };
 
 export const staticImagesUrl = {
@@ -97,9 +104,9 @@ export const FreelancerSidebarFilterOptionsList = [
     id: uuid(),
     title: "Talent Quality",
     options: [
-      { id: uuid(), label: "Top Rated Plus", value: "topRatedPlus", isIcon: true, icon: userRatedSvg },
-      { id: uuid(), label: "Top Rated", value: "topRated", isIcon: true, icon: userTopRatedSvg },
-      { id: uuid(), label: "Rising Talent", value: "risingTalent", isIcon: true, icon: userRisingTalentSvg },
+      { id: uuid(), label: "Top Rated Plus", value: "Top Rated Plus", isIcon: true, icon: userRatedSvg },
+      { id: uuid(), label: "Top Rated", value: "Top Rated", isIcon: true, icon: userTopRatedSvg },
+      { id: uuid(), label: "Rising Talent", value: "Rising Talent", isIcon: true, icon: userRisingTalentSvg },
     ],
     isCheckbox: true,
     isRadio: false,
@@ -114,7 +121,10 @@ export const FreelancerSidebarFilterOptionsList = [
   {
     id: uuid(),
     title: "Category",
-    options: [{ id: uuid(), label: "Sales & Marketing", value: "salesAndMarketing", isIcon: false, icon: "" }],
+    options: [
+      { id: uuid(), label: "Sales & Marketing", value: "salesAndMarketing", isIcon: false, icon: "" },
+      { id: uuid(), label: "digital & Marketing", value: "salesAndMarketing", isIcon: false, icon: "" },
+    ],
     isCheckbox: false,
     isRadio: false,
     isDropDown: false,
@@ -133,6 +143,13 @@ export const FreelancerSidebarFilterOptionsList = [
         id: uuid(),
         label: "Marketing, PR & Brand Strategy",
         value: "marketing,PR,And,BrandStrategy",
+        isIcon: false,
+        icon: "",
+      },
+      {
+        id: uuid(),
+        label: "digital, PR & Brand Strategy",
+        value: "digital,PR,And,BrandStrategy",
         isIcon: false,
         icon: "",
       },
@@ -158,6 +175,13 @@ export const FreelancerSidebarFilterOptionsList = [
         isIcon: false,
         icon: "",
       },
+      {
+        id: uuid(),
+        label: "test Strategy",
+        value: "marketingStrategy",
+        isIcon: false,
+        icon: "",
+      },
     ],
     isCheckbox: false,
     isRadio: false,
@@ -167,7 +191,7 @@ export const FreelancerSidebarFilterOptionsList = [
     isOptCollapsable: true,
     isList: true,
     selectedValue: null,
-    key: "specialties",
+    key: "specialities",
   },
   {
     id: uuid(),
@@ -205,12 +229,12 @@ export const FreelancerSidebarFilterOptionsList = [
     isCheckbox: true,
     isDropDown: false,
     isRadio: false,
-    isOptCollapsable: true,
+    isOptCollapsable: false,
     dropdownOptions: null,
     selectedOptions: [],
-    isList: false,
+    isList: true,
     selectedValue: null,
-    key: "marketingStrategyType",
+    key: "skills",
   },
   {
     id: uuid(),
@@ -241,7 +265,7 @@ export const FreelancerSidebarFilterOptionsList = [
       {
         id: uuid(),
         label: "Freelancer",
-        value: "freelancerAndAgency",
+        value: "freelancer",
         isIcon: false,
         icon: "",
       },
@@ -286,13 +310,13 @@ export const FreelancerSidebarFilterOptionsList = [
       {
         id: uuid(),
         label: "Any Job Success",
-        value: 0,
+        value: "Any Job Success",
         isIcon: false,
         icon: "",
       },
       {
         id: uuid(),
-        label: "80$ & up",
+        label: "80% & up",
         value: 80,
         isIcon: false,
         icon: "",
@@ -305,12 +329,13 @@ export const FreelancerSidebarFilterOptionsList = [
         icon: "",
       },
     ],
-    isCheckbox: true,
+    isCheckbox: false,
+    isSearchable: false,
     isDropDown: false,
-    isRadio: false,
+    isOptCollapsable: true,
+    isRadio: true,
     dropdownOptions: null,
     selectedOptions: [],
-    isOptCollapsable: true,
     isList: false,
     selectedValue: null,
     key: "jobSuccess",
@@ -321,36 +346,36 @@ export const FreelancerSidebarFilterOptionsList = [
     options: [
       {
         id: uuid(),
-        label: "Any amount Earned",
-        value: "any",
+        label: "$0 to $1000 earned",
+        value: "0-1000",
         isIcon: false,
         icon: "",
       },
       {
         id: uuid(),
         label: "$1k+   earned",
-        value: "$1k+",
+        value: "1000-",
         isIcon: false,
         icon: "",
       },
       {
         id: uuid(),
         label: "$2k+   earned",
-        value: "$2k+",
+        value: "2000-",
         isIcon: false,
         icon: "",
       },
       {
         id: uuid(),
         label: "$5k and below",
-        value: "$5k-",
+        value: "0-5000",
         isIcon: false,
         icon: "",
       },
       {
         id: uuid(),
         label: "$10k  and below",
-        value: "$10k-",
+        value: "0-10000",
         isIcon: false,
         icon: "",
       },
@@ -371,29 +396,29 @@ export const FreelancerSidebarFilterOptionsList = [
     options: [
       {
         id: uuid(),
-        label: "Any Hours",
-        value: "any",
+        label: "0 to 10 hour billed",
+        value: "0-10",
         isIcon: false,
         icon: "",
       },
       {
         id: uuid(),
-        label: "1+ hour billed",
-        value: "1+",
+        label: "10+ hour billed",
+        value: "10-",
         isIcon: false,
         icon: "",
       },
       {
         id: uuid(),
         label: "100+ hours billed",
-        value: "100+",
+        value: "100-",
         isIcon: false,
         icon: "",
       },
       {
         id: uuid(),
         label: "1000+  hours billed",
-        value: "1000+",
+        value: "1000-",
         isIcon: false,
         icon: "",
       },
@@ -415,7 +440,7 @@ export const FreelancerSidebarFilterOptionsList = [
       {
         id: uuid(),
         label: "Any",
-        value: "any",
+        value: "Any",
         isIcon: false,
         icon: "",
       },
@@ -441,12 +466,13 @@ export const FreelancerSidebarFilterOptionsList = [
         icon: "",
       },
     ],
-    isCheckbox: true,
+    isCheckbox: false,
+    isSearchable: false,
     isDropDown: false,
-    isRadio: false,
+    isOptCollapsable: true,
+    isRadio: true,
     dropdownOptions: null,
     selectedOptions: [],
-    isOptCollapsable: true,
     isList: false,
     selectedValue: null,
     key: "englishProficiency",
@@ -458,7 +484,7 @@ export const FreelancerSidebarFilterOptionsList = [
       {
         id: uuid(),
         label: "Any Hour Rates",
-        value: "any",
+        value: "Any Hour Rates",
         isIcon: false,
         icon: "",
       },
@@ -486,24 +512,25 @@ export const FreelancerSidebarFilterOptionsList = [
       {
         id: uuid(),
         label: "$60 & Above",
-        value: "60",
+        value: "60+",
         isIcon: false,
         icon: "",
       },
-      {
-        id: uuid(),
-        label: "No Earning Yet",
-        value: "noEarningYet",
-        isIcon: false,
-        icon: "",
-      },
+      // {
+      //   id: uuid(),
+      //   label: "No Earning Yet",
+      //   value: "noEarningYet",
+      //   isIcon: false,
+      //   icon: "",
+      // },
     ],
-    isCheckbox: true,
+    isCheckbox: false,
+    isSearchable: false,
     isDropDown: false,
-    isRadio: false,
+    isOptCollapsable: true,
+    isRadio: true,
     dropdownOptions: null,
     selectedOptions: [],
-    isOptCollapsable: true,
     isList: false,
     selectedValue: null,
     key: "hourlyRates",
@@ -578,7 +605,7 @@ export const JobPostSidebarFilterOptionsList = [
       {
         id: uuid(),
         label: "Entry Level-$ ",
-        value: "Entry Level",
+        value: "Entry",
         match: "entry",
         isIcon: false,
 
@@ -746,137 +773,65 @@ export const JobPostSidebarFilterOptionsList = [
     selectedOptions: [],
     isList: false,
     selectedValue: null,
-    key: "Job Type",
+    key: "paymentType",
   },
+  {
+    id: uuid(),
+    title: "Number of Proposals",
+    options: [
+      {
+        id: uuid(),
+        label: "Less than 5 ",
+        value: "0-5",
+        match: "proposal05",
+        isIcon: false,
+        icon: "",
+      },
+      {
+        id: uuid(),
+        label: "5 to 10 ",
+        value: "5-10",
+        match: "proposal510",
+        isIcon: false,
+        icon: "",
+      },
+      {
+        id: uuid(),
+        label: "10 to 15 ",
+        value: "10-15",
+        match: "proposal1015",
+        isIcon: false,
+        icon: "",
+      },
+      {
+        id: uuid(),
+        label: "15 to 20 ",
+        value: "15-20",
+        match: "proposal1520",
+        isIcon: false,
+        icon: "",
+      },
 
-  // {
-  //   id: uuid(),
-  //   title: "Fixed Price",
-  //   options: [
-  //     {
-  //       id: uuid(),
-  //       label: "Less than $100 (3245)",
-  //       value: "Less than $100",
-  //       isIcon: false,
-  //       icon: "",
-  //     },
-  //     {
-  //       id: uuid(),
-  //       label: "$100 - $500 (3245)",
-  //       value: "$100 - $500",
-  //       isIcon: false,
-  //       icon: "",
-  //     },
-  //     {
-  //       id: uuid(),
-  //       label: "$500 - $1k (3245)",
-  //       value: "$500 - $1k",
-  //       isIcon: false,
-  //       icon: "",
-  //     },
-  //     {
-  //       id: uuid(),
-  //       label: "$1k - $5k (3245)",
-  //       value: "$1k - $5k",
-  //       isIcon: false,
-  //       icon: "",
-  //     },
-  //     {
-  //       id: uuid(),
-  //       label: "$5k+ (3245)",
-  //       value: "$5k+",
-  //       isIcon: false,
-  //       icon: "",
-  //     },
-  //     {
-  //       inputOptionsList: [
-  //         {
-  //           id: uuid(),
-  //           label: "$ min",
-  //           value: "min",
-  //           isIcon: false,
-  //           isInput: true,
-  //           icon: "",
-  //         },
-  //         {
-  //           id: uuid(),
-  //           label: "$ max",
-  //           value: "max",
-  //           isIcon: false,
-  //           isInput: true,
-  //           icon: "",
-  //         },
-  //       ],
-  //       isIcon: false,
-  //       isInput: true,
-  //       icon: "",
-  //     }
-
-  //   ],
-  //   isCheckbox: true,
-  //   isDropDown: false,
-  //   isRadio: false,
-  //   isOptCollapsable: true,
-  //   isCheckboxWithSelectOption: false,
-  //   dropdownOptions: null,
-  //   selectedOptions: [],
-  //   isList: false,
-  //   selectedValue: null,
-  //   key: "Fixed Price",
-  // },
-  // TODO : We need to work on this
-  // {
-  //   id: uuid(),
-  //   title: "Number of Proposals",
-  //   options: [
-  //     {
-  //       id: uuid(),
-  //       label: "Less than 5 (41)",
-  //       value: "Less than 5",
-  //       isIcon: false,
-  //       icon: "",
-  //     },
-  //     {
-  //       id: uuid(),
-  //       label: "5 to 10 (37)",
-  //       value: "5 to 10",
-  //       isIcon: false,
-  //       icon: "",
-  //     },
-  //     {
-  //       id: uuid(),
-  //       label: "10 to 15 (379)",
-  //       value: "10 to 15",
-  //       isIcon: false,
-  //       icon: "",
-  //     },
-  //     {
-  //       id: uuid(),
-  //       label: "15 to 20 (37)",
-  //       value: "15 to 20",
-  //       isIcon: false,
-  //       icon: "",
-  //     },
-
-  //     {
-  //       id: uuid(),
-  //       label: "20 to 50 (37)",
-  //       value: "20 to 50",
-  //       isIcon: false,
-  //       isInput: false,
-  //       icon: "",
-  //     },
-  //   ],
-  //   isCheckbox: true,
-  //   isDropDown: false,
-  //   isRadio: false,
-  //   isOptCollapsable: true,
-  //   dropdownOptions: null,
-  //   selectedOptions: [],
-  //   isList: false,
-  //   selectedValue: null,
-  //   key: "Number of Proposals",
-  // },
+      {
+        id: uuid(),
+        label: "20 to 50 ",
+        value: "20-50",
+        match: "proposal2050",
+        isIcon: false,
+        isInput: false,
+        icon: "",
+      },
+    ],
+    isCheckbox: true,
+    isDropDown: false,
+    isRadio: false,
+    isOptCollapsable: true,
+    dropdownOptions: null,
+    selectedOptions: [],
+    isList: false,
+    selectedValue: null,
+    key: "proposal",
+  },
   {
     id: uuid(),
     title: "Client Info",
@@ -1062,43 +1017,132 @@ export const JobPostSidebarFilterOptionsList = [
   //   selectedValue: null,
   //   key: "Client time zones",
   // },
-  // TODO : We need to work on this
-  // {
-  //   id: uuid(),
-  //   title: "Connects Needed",
-  //   options: [
-  //     {
-  //       id: uuid(),
-  //       label: "2 or less Connects (65)",
-  //       value: "2 or less Connects (65)",
-  //       isIcon: false,
-  //       icon: "",
-  //     },
-  //     {
-  //       id: uuid(),
-  //       label: "4 Connects (94)",
-  //       value: "4 Connects (94)",
-  //       isIcon: false,
-  //       icon: "",
-  //     },
-  //     {
-  //       id: uuid(),
-  //       label: "6 Connects (0)",
-  //       value: "6 Connects (0)",
-  //       isIcon: false,
-  //       icon: "",
-  //     },
-  //   ],
-  //   isCheckbox: true,
-  //   isSearchable: false,
-  //   isDropDown: false,
-  //   isRadio: false,
-  //   isCheckboxWithSelectOption: false,
-  //   dropdownOptions: null,
-  //   isOptCollapsable: true,
-  //   selectedOptions: [],
-  //   isList: false,
-  //   selectedValue: null,
-  //   key: "Connects Needed",
-  // },
+
+  {
+    id: uuid(),
+    title: "Connects Needed",
+    options: [
+      {
+        id: uuid(),
+        label: "2 or less Connects ",
+        value: "2 or less Connects",
+        match: "connect12",
+        isIcon: false,
+        icon: "",
+      },
+      {
+        id: uuid(),
+        label: "4 Connects ",
+        value: "4 Connects",
+        match: "connect34",
+        isIcon: false,
+        icon: "",
+      },
+      {
+        id: uuid(),
+        label: "6 Connects ",
+        value: "6 Connects",
+        match: "connect56",
+        isIcon: false,
+        icon: "",
+      },
+    ],
+    isCheckbox: true,
+    isSearchable: false,
+    isDropDown: false,
+    isRadio: false,
+    isCheckboxWithSelectOption: false,
+    dropdownOptions: null,
+    isOptCollapsable: true,
+    selectedOptions: [],
+    isList: false,
+    selectedValue: null,
+    key: "connects",
+  },
+];
+
+// client side my jobs page options start
+export const openOptionsList = [
+  {
+    id: uuid(),
+    title: "editDraft",
+    label: "Edit draft",
+  },
+  {
+    id: uuid(),
+    title: "removeDraft",
+    label: "Remove draft",
+  },
+];
+
+export const completedOptionsList = [
+  {
+    id: uuid(),
+    title: "reusePosting",
+    label: "Reuse posting",
+  },
+  {
+    id: uuid(),
+    title: "ViewJobPosting",
+    label: "View job posting",
+  },
+];
+
+export const pendingOptionsList = [
+  {
+    id: uuid(),
+    title: "viewProposals",
+    label: "View proposals",
+  },
+  {
+    id: uuid(),
+    title: "inviteFreelancer",
+    label: "Invite freelancer",
+  },
+  {
+    id: uuid(),
+    title: "ViewJobPosting",
+    label: "View job posting",
+  },
+  {
+    id: uuid(),
+    title: "editPosting",
+    label: "Edit posting",
+  },
+  {
+    id: uuid(),
+    title: "reusePosting",
+    label: "Reuse posting",
+  },
+  {
+    id: uuid(),
+    title: "removeDraft",
+    label: "Remove posting",
+  },
+];
+
+export const activeOptionsList = [
+  {
+    id: uuid(),
+    title: "viewProposals",
+    label: "View proposals",
+  },
+  {
+    id: uuid(),
+    title: "completeJob",
+    label: "Complete Job",
+  },
+];
+
+export const expiredOptionsList = [
+  {
+    id: uuid(),
+    title: "reusePosting",
+    label: "Reuse posting",
+  },
+  {
+    id: uuid(),
+    title: "removeDraft",
+    label: "Remove posting",
+  },
 ];

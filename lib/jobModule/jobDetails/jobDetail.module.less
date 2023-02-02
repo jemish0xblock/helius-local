@@ -19,7 +19,7 @@
       .h_content_flex {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: self-start;
       }
       .h_date_show {
         font-weight: 400;
@@ -76,6 +76,16 @@
       .h_selected_search_main {
         display: flex;
         justify-content: space-between;
+        .h_disabled_button_styling {
+          margin-top: 8px;
+          border: none;
+          background: none;
+          svg {
+            path {
+              fill: @gray-color;
+            }
+          }
+        }
         .h_clear_filter {
           font-weight: 400;
           font-size: 14px;
@@ -101,6 +111,7 @@
             padding: 2px 4px 2px 8px;
             font-weight: 400;
             font-size: 12px;
+            cursor: pointer;
             line-height: 20px;
             color: @white;
             margin-right: 5px;
@@ -122,4 +133,11 @@
   margin-top: 18px;
   display: block;
   width: 5%;
+}
+
+.h_client_detail_span {
+  font-size: 12px;
+}
+.marginbottom_0 {
+  margin-bottom: 0px;
 }

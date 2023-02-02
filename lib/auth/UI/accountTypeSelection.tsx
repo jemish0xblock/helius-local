@@ -38,14 +38,24 @@ const AccountTypeSelection: FC<IAccountTypeSelectionProps> = ({
       >
         <Form.Item name="accountType">
           <Radio.Group style={{ width: "100%" }}>
-            <div className={`${s.h_form_radio_wrapper} ${accountType === "client" ? s.active : ""}`}>
-              <InlineSVG src={clientUserIcon} height="auto" />
-              <Radio value="client"> {t("registerScreen.joinAsClient")}</Radio>
+            <div
+              className={`h_radio_selector_box ${s.h_form_radio_wrapper} ${accountType === "client" ? s.active : ""}`}
+            >
+              <Radio value="client" className="h_radio_button">
+                <InlineSVG src={clientUserIcon} height="auto" />
+                <div className="h_radio_lable_text">{t("registerScreen.joinAsClient")}</div>
+              </Radio>
             </div>
 
-            <div className={`${s.h_form_radio_wrapper} ${accountType === "freelancer" ? s.active : ""}`}>
-              <InlineSVG src={computerIcon} height="auto" />
-              <Radio value="freelancer">{t("registerScreen.joinAsFreelancer")}</Radio>
+            <div
+              className={`h_radio_selector_box ${s.h_form_radio_wrapper} ${
+                accountType === "freelancer" ? s.active : ""
+              }`}
+            >
+              <Radio value="freelancer" className="h_radio_button">
+                <InlineSVG src={computerIcon} height="auto" />
+                <div className="h_radio_lable_text">{t("registerScreen.joinAsFreelancer")}</div>
+              </Radio>
             </div>
           </Radio.Group>
         </Form.Item>

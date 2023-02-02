@@ -1,0 +1,199 @@
+.h_proposal_interview_wrapper {
+  .referral_promo {
+    border-radius: 6px;
+    color: @white;
+    background: #206faf;
+    padding: 20px 30px;
+    margin-bottom: 30px;
+    .refferal_col {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .refferal_main {
+        .refferal_title {
+          font-size: 16px;
+          color: @white;
+        }
+      }
+    }
+  }
+
+  .h_content_wrapper {
+    .h_card_wrapper {
+      &:nth-child(1) {
+        margin: 0;
+      }
+      margin: 30px 0;
+      .h_card_main {
+        width: "100%";
+        border-radius: 10px !important;
+        .h_card_header {
+          font-size: 22px;
+          padding: 8px 0;
+        }
+        .h_card_content_main {
+          color: @gray-color5;
+          .h_card_row_border {
+            margin-bottom: 10px;
+            border-bottom: 0.4px solid #e0e0e0;
+            :last-child {
+              border-bottom: unset;
+            }
+          }
+          .h_action_btn {
+            margin-top: 10px;
+            :first-child {
+              margin-right: 10px;
+            }
+          }
+          .job_detail_col2 {
+            border-left: 0.4px solid #e0e0e0;
+          }
+          .h_job_detail {
+            font-size: 12px;
+            line-height: 1;
+          }
+          .h_job_title {
+            font-size: 18px;
+            color: @black;
+          }
+          .h_job_description {
+            font-size: 14px;
+          }
+          .h_job_detail_list {
+            list-style: none;
+            padding: 0px;
+            li {
+              margin-bottom: 20px;
+              display: flex;
+              flex-direction: column;
+              div {
+                display: flex;
+                .h_list_text {
+                  b {
+                    color: @black;
+                  }
+                  margin-left: 10px;
+                  color: @gray-color5;
+                }
+              }
+            }
+            .h_list_icon {
+              width: 15px;
+              height: 15px;
+            }
+          }
+          .h_user_details {
+            display: flex;
+            flex-direction: column;
+            &.h_border {
+              padding: 10px 0;
+              border-bottom: 0.4px solid #e0e0e0;
+            }
+
+            p {
+              margin-bottom: 10px;
+              font-weight: 500;
+              color: black;
+            }
+            &.h_update_proposal {
+              .proposal_terms_section_styling {
+                :first-child {
+                  padding: 0px 0;
+                }
+                padding: 20px 0;
+                border-bottom: 0.5px solid @gray-color;
+                p {
+                  font-size: 14px;
+                  margin-bottom: unset;
+                }
+                .h_custom_error_message {
+                  color: #9b211b;
+                }
+              }
+              .h_postJob_input_field {
+                display: block;
+                // margin: 20px 0px;
+                input {
+                  padding: 8px !important;
+                  text-align: right;
+                }
+                .h_fixed_price_rate {
+                  text-align: end;
+                  margin-top: 40px;
+                }
+              }
+              .h_proposal_terms_Text {
+                font-size: 14px;
+                font-weight: 700;
+                .h_explain_button {
+                  border: none;
+                  color: @primary-color;
+                  box-shadow: none;
+                  font-size: 14px;
+                  font-weight: 700;
+                  span {
+                    text-decoration: underline;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .h_list_inline {
+    padding-left: 0;
+    list-style: none;
+    display: flex;
+    flex-flow: wrap;
+  }
+
+  .h_user_action_main {
+    .h_margin {
+      margin-bottom: 10px;
+      .h_action_btn {
+        width: 100%;
+        padding: 8px;
+        height: auto;
+      }
+    }
+  }
+  .h_client_info {
+    span {
+      color: @gray-color;
+    }
+  }
+  .h_skill_tag {
+    --skill-height: 25px;
+    display: inline-flex;
+    align-items: center;
+    height: var(--skill-height);
+    margin: 0 5px 10px 0;
+    padding: 0 10px;
+    color: @gray-color;
+    background-color: @gray-color4;
+    border-radius: 12px;
+    cursor: default;
+  }
+}
+.h_form_item {
+  display: block !important;
+  .ant-form-item-required {
+    &.ant-form-item-no-colon {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 22px;
+    }
+  }
+  &.h_form_row {
+    width: 194px;
+    margin-right: 6px;
+    &:last-child {
+      margin-left: 6px;
+      margin-right: unset;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import _ from "lodash";
+import _, { has } from "lodash";
 
 import { DataProps } from "@/lib/jobModule/jobDetails/types/storeTypes";
 import Api from "@services/Api";
@@ -81,9 +81,8 @@ export const jobPostApiPost: any = createAsyncThunk(
         )
         .then((res: any) => {
           if (res && res?.isSuccess) {
-            commonAlert("success", "job_created");
+            commonAlert("success", res.data?.successCode);
             values.resolve(res.data);
-
             return res.data;
           }
           return thunkAPI.rejectWithValue(res);
@@ -142,7 +141,7 @@ export const jobPostApiUpdate: any = createAsyncThunk(
         risingTalent = true;
       }
 
-      const req = {
+      const req: any = {
         title: ObjectValues?.jobPostTitle ? _.capitalize(ObjectValues?.jobPostTitle) : ObjectValues?.jobPostTitle,
         description: ObjectValues?.jobPostDescription,
         document: ObjectValues?.fileUpload,
@@ -175,11 +174,13 @@ export const jobPostApiUpdate: any = createAsyncThunk(
         workingHours: ObjectValues?.hourPerWeek,
         saveAsDraft: ObjectValues?.submitButtonType,
       };
+      if (has(ObjectValues, "status")) {
+        req.status = ObjectValues?.status;
+      }
 
       const response = await api.post(`/job/updateJob`, req, {}, true, false).then((res: any) => {
         if (res && res?.isSuccess) {
           resolve(res.data);
-
           return res.data;
         }
         return thunkAPI.rejectWithValue(res);
@@ -192,14 +193,18 @@ export const jobPostApiUpdate: any = createAsyncThunk(
   }
 );
 
-export const asyncGetClientJobPostReuse = () =>
+export const asyncGetClientJobPostReuse = ({ flag }: any) =>
   new Promise<any>((resolve, reject) => {
     try {
+      let apiEndPoint = `/job/client-all-jobs`;
+      if (flag === "pendingJobs") {
+        apiEndPoint = `/job/get-pending-jobs`;
+      }
       api
-        .get(`/job/client-all-jobs`, {}, false, false)
+        .get(apiEndPoint, {}, false, false)
         .then(async (res: any) => {
-          if (res && res?.data?.result?.jobs && res?.isSuccess) {
-            resolve(res?.data?.result?.jobs);
+          if (res && res?.data?.data && res?.isSuccess) {
+            resolve(res?.data?.data);
           }
         })
         .catch((error: any) => {

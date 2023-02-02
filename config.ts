@@ -3,11 +3,11 @@ const apiPath = {
 };
 
 const ports = {
-  backendPort: 8000,
+  backendPort: 4000,
 };
 
 const getEnvironment = () => {
-  switch (process.env.PROJECT_ENV) {
+  switch (process.env.NEXT_PUBLIC_ENV_MODE) {
     case "production":
       return "production";
     case "development":
@@ -18,7 +18,7 @@ const getEnvironment = () => {
 };
 
 const getLiveUrl = () => {
-  switch (process.env.PROJECT_ENV) {
+  switch (process.env.NEXT_PUBLIC_ENV_MODE) {
     case "production":
       return "https://app.helius.work";
     case "development":
@@ -29,24 +29,37 @@ const getLiveUrl = () => {
 };
 
 const getBaseUrl = () => {
-  switch (process.env.PROJECT_ENV) {
+  switch (process.env.NEXT_PUBLIC_ENV_MODE) {
     case "production":
-      return `http://localhost:${ports.backendPort}`;
+      return `https://api.helius.work`;
     case "development":
-      return `http://localhost:${ports.backendPort}`;
+      return `https://api.helius.work`;
     default:
       return `http://localhost:${ports.backendPort}`;
+  }
+};
+
+const getSocketUrl = () => {
+  switch (process.env.NEXT_PUBLIC_ENV_MODE) {
+    case "production":
+      return `https://api.helius.work`;
+    case "development":
+      return `https://api.helius.work`;
+    default:
+      return `ws://localhost:${ports.backendPort}`;
   }
 };
 
 const Url = {
   baseUrl: getBaseUrl(),
   liveUrl: getLiveUrl(),
+  socketUrl: getSocketUrl(),
 };
 
 const appConfig = {
   BASE_URL: `${Url.baseUrl}${apiPath.v1}`,
   LIVE_URL: `${Url.liveUrl}`,
+  SOCKET_URL: `${Url.socketUrl}`,
   environment: getEnvironment(),
   getBaseUrl: getBaseUrl(),
 };

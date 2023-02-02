@@ -1,28 +1,24 @@
-import { GetServerSideProps } from "next";
 import { useEffect } from "react";
 
-import PostJobController from "@/lib/jobModule/jobPost/postJobController";
+import PostJobController from "@/lib/jobModule/jobPost/postJobController1";
 import s from "@lib/jobModule/jobPost/postJob.module.less";
+import { useRouter } from "next/router";
+import { has } from "lodash";
+import AuthenticatedRoute from "@/HOC/AuthenticatedRoute/authenticatedRoute";
 
-const ContentPage = (props: any) => {
-  const { query } = props;
-
-  useEffect(() => {}, []);
+const ReusePreviousJobPost = () => {
+  const router = useRouter();
+  useEffect(() => {
+    if (!has(router.query, "jobId")) {
+      router.back();
+    }
+  }, []);
 
   return (
     <div className={s.h_jobPost_wrapper}>
-      <PostJobController jobPostType="jobPostCreate" jobIdFromUrl={query} />
+      <PostJobController jobPostType="jobPostCreate" jobIdFromUrl={router.query.jobId} />
     </div>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const params = {
-    query: context?.query?.jobId,
-  };
-  return {
-    props: params, // will be passed to the page component as props
-  };
-};
-
-export default ContentPage;
+export default AuthenticatedRoute(ReusePreviousJobPost);

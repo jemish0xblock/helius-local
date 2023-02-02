@@ -4,14 +4,12 @@
 
   justify-content: center;
   .h_content_alignment {
-    width: 98%;
+    width: auto;
     text-align: right;
     display: block;
-    margin-bottom: 15px;
+    margin: 15px;
     color: #2b85cf;
-    span {
-      margin-right: 16px;
-    }
+
     button {
       border: none;
       color: #2b85cf;
@@ -103,7 +101,7 @@
     border: 0.5px solid #ededed;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
     border-radius: 3px;
-    padding: 15px 20px;
+    padding: unset;
     display: flex;
     margin: 20px 25px;
     flex-direction: row;
@@ -211,14 +209,14 @@
     width: 200px;
     text-align: center;
 
-    color: #8c8c8c;
+    color: @gray-color;
   }
   .h_jobPost_edit_skill {
     padding: 15px;
     text-align: left;
     width: 100%;
     height: 50vh;
-    border-right: 0.8px dashed #8c8c8c;
+    border-right: 0.8px dashed @gray-color;
   }
   .h_jobPost_edit_text {
     padding: 15px;
@@ -284,7 +282,7 @@
     .h_postJob_ant_form_item {
       display: contents;
       input {
-        padding: 8px !important;
+        // padding: 8px !important;
       }
       .h_jobSkill_Search {
         display: flex;
@@ -292,6 +290,7 @@
           height: 44px;
         }
         input {
+          height: auto;
           padding: 0px !important;
         }
       }
@@ -356,13 +355,14 @@
       color: #000000d9;
       margin: 10px 0px 10px 10px;
       border-radius: 4px;
-      height: 36px;
+      height: auto;
       align-items: center;
       display: flex;
       flex-direction: row-reverse;
       line-height: 26px;
       border: none;
       background: @gray-color4;
+      padding: 1px;
     }
 
     button:hover {
@@ -376,13 +376,13 @@
       color: @white;
       margin: 10px 0px 10px 10px;
       border-radius: 4px;
-      height: 36px;
+      height: auto;
       align-items: center;
       display: flex;
       flex-direction: row-reverse;
-      line-height: 26px;
       border: none;
       background: @primary-color;
+      padding: 1px;
     }
 
     button:hover {

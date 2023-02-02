@@ -12,6 +12,7 @@ export interface IFreelancerContext {
   isShowFlagAsInappropriateModal?: boolean;
   countriesStoreDataList?: ICountryObj[] | null | undefined;
   commonStoreDataList?: ICommonStoreData;
+  isShowInviteFreelancerForJobModal?: boolean;
 
   onClickAddNoteToFreelancer?: () => void;
   handlePageChange?: (page: number, initialCall: boolean) => void;
@@ -22,6 +23,11 @@ export interface IFreelancerContext {
   setIsShowAddNoteModal?: (isShow: boolean) => void;
   setIsHidePopover?: (isShow: boolean) => void;
   setIsShowFlagAsInappropriateModal?: (isShow: boolean) => void;
+  inviteFreelancerForJobByClient?: (freelancerData: any) => void;
+  setIsShowInviteFreelancerForJobModal?: (isShow: boolean) => void;
+  showSavedModel: boolean;
+  handleChangeForSearch: (value: any) => void;
+  handleFilterOnJobs: (value: string) => void;
 }
 
 const FreelancersContext = React.createContext<IFreelancerContext | any>({});
