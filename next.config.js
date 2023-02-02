@@ -9,7 +9,7 @@ const getRedirectUrl = (path) => {
   console.log("process.env ::", process.env.NEXT_PUBLIC_ENV_MODE);
   switch (process.env.NEXT_PUBLIC_ENV_MODE) {
     case "production":
-      return `http://65.2.158.180${path}`;
+      return `http://helius-local.vercel.app${path}`;
       // return `http:/app.helius.work${path}`;
     case "development":
     return `https://app.0xblock.work${path}`;
@@ -79,9 +79,7 @@ const nextConfig = withAntdLess(
       webpack5: true,
     },
     swcMinify: true,
-    experimental: {
-      outputStandalone: true,
-    },
+ yarn
   })
 );
 
